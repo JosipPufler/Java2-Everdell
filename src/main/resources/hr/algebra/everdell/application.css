@@ -1,0 +1,8 @@
+.anchor {
+    -fx-background-image:url('file:/C:/Users/josip/IdeaProjects/everdell/src/main/resources/hr/algebra/everdell/images/board.jpg');
+    -fx-background-size: cover;
+}
+
+* :disabled {
+    -fx-opacity: 1;
+}
