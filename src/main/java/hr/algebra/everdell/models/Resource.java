@@ -4,5 +4,7 @@ public enum Resource {
     BERRIES,
     TWIGS,
     RESIN,
-    PEBBLES
+    PEBBLES,
+    CARD,
+    POINT
 }

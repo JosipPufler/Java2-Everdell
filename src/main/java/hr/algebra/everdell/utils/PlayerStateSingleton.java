@@ -1,4 +1,4 @@
-package hr.algebra.everdell.utils;
+/*package hr.algebra.everdell.utils;
 
 import hr.algebra.everdell.models.PlayerState;
 
@@ -19,3 +19,4 @@ public class PlayerStateSingleton {
         return instance;
     }
 }
+*/

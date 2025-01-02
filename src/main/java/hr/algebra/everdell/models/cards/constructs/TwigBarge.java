@@ -1,9 +1,6 @@
 package hr.algebra.everdell.models.cards.constructs;
 
-import hr.algebra.everdell.models.CardType;
-import hr.algebra.everdell.models.Construct;
-import hr.algebra.everdell.models.PlayerState;
-import hr.algebra.everdell.models.ResourceGroup;
+import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.utils.FileUtils;
 import hr.algebra.everdell.utils.ResourceManager;
 
@@ -24,7 +21,8 @@ public class TwigBarge extends Construct {
     }
 
     @Override
-    public void playEffect(PlayerState playerState, PlayerState opponentState, ResourceManager resourceManager) {
-        resourceManager.tryTakeTwigs(playerState.resources, 2);
+    public boolean play() {
+        GameState.getResourceManager().tryTakeTwigs(GameState.getPlayerState().resources, 2);
+        return super.play();
     }
 }

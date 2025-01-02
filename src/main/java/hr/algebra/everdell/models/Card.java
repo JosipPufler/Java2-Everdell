@@ -1,14 +1,23 @@
 package hr.algebra.everdell.models;
 
-import hr.algebra.everdell.utils.ResourceManager;
+import hr.algebra.everdell.utils.GameUtils;
+import lombok.Getter;
+
+import java.util.Objects;
 
 public abstract class Card{
+    @Getter
     CardType type;
+    @Getter
     ResourceGroup cost;
+    @Getter
     String name;
+    @Getter
     String imageFilePath;
+    @Getter
     Boolean unique;
     int inherentPointValue;
+    @Getter
     int numberInDeck;
 
     public Card(ResourceGroup cost, CardType type, String name, String imageFilePath, Boolean unique, Integer inherentPointValue, int numberInDeck) {
@@ -25,41 +34,19 @@ public abstract class Card{
         return unique;
     }
 
-    public Boolean getUnique() {
-        return unique;
+    public Boolean takesSpace(){
+        return true;
     }
 
-    public int getNumberInDeck() {
-        return numberInDeck;
-    }
-
-    public int calculatePoints(PlayerState playerState) {
+    public int calculatePoints() {
         return inherentPointValue;
     }
 
-
-    public String getImageFilePath() {
-        return imageFilePath;
+    public boolean play(){
+        GameUtils.addCardToCity(this, false);
+        GameUtils.updatePlayer();
+        return true;
     }
-
-    public String getName(){
-        return name;
-    }
-
-    public CardType getType() {
-        return type;
-    }
-
-    public ResourceGroup getCost()
-    {
-        return cost;
-    }
-
-    public Boolean CanPlay(ResourceGroup stockpile){
-        return stockpile.compareTo(cost) > 0;
-    }
-
-    public abstract void playEffect(PlayerState playerState, PlayerState opponentState, ResourceManager resourceManager);
 
     @Override
     public boolean equals(Object obj) {
@@ -72,9 +59,6 @@ public abstract class Card{
         }
 
         final Card other = (Card) obj;
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.name, other.name);
     }
 }

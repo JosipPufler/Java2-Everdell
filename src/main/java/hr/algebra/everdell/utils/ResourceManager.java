@@ -6,9 +6,11 @@ import hr.algebra.everdell.models.ResourceGroup;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class ResourceManager {
     static final int STARTING_MAIN_DECK_SIZE = 128;
+    static final int MEADOW_SIZE = 8;
     static final int STARTING_PEBBLES = 20;
     static final int STARTING_RESIN = 25;
     static final int STARTING_BERRIES = 30;
@@ -16,6 +18,7 @@ public class ResourceManager {
     ResourceGroup resourcePool = new ResourceGroup(STARTING_BERRIES, STARTING_TWIGS, STARTING_RESIN, STARTING_PEBBLES);
 
     private static final List<Card> deck = new ArrayList<>();
+    private static final List<Card> meadow = new ArrayList<>();
 
     public ResourceManager(List<Card> cards) {
         deck.addAll(cards);
@@ -79,5 +82,45 @@ public class ResourceManager {
             depositingPool.addTwigs(resourcePool.getTwigs());
             resourcePool.removeTwigs(resourcePool.getTwigs());
         }
+    }
+
+    public void tryTakeGroup(ResourceGroup depositingPool, ResourceGroup resourcePool) {
+        tryTakeBerries(depositingPool, resourcePool.getBerries());
+        tryTakePebbles(depositingPool, resourcePool.getPebbles());
+        tryTakeResin(depositingPool, resourcePool.getResin());
+        tryTakeTwigs(depositingPool, resourcePool.getTwigs());
+    }
+
+    public void deposit(ResourceGroup deposit) {
+        resourcePool.addBerries(deposit.getBerries());
+        resourcePool.addResin(deposit.getResin());
+        resourcePool.addPebbles(deposit.getPebbles());
+        resourcePool.addResin(deposit.getResin());
+    }
+
+    public List<Card> getMeadow() {
+        return meadow;
+    }
+
+    public List<Card> tryDrawCardsFromMeadow(int numberOfCards) {
+        List<Card> cardsDrawn = new ArrayList<>();
+        Optional<Card> card = Optional.empty();
+        if (numberOfCards > 0) {
+            for (int i = 0; i < numberOfCards; i++) {
+                card = DialogUtils.showCardChooseDialog(getMeadow(), "Choose cards");
+                if (card.isPresent()){
+                    cardsDrawn.add(card.get());
+                    meadow.remove(card.get());
+                }
+            }
+        }
+        return cardsDrawn;
+    }
+
+    public List<Card> replenishMeadow(){
+        int cardsToDraw = MEADOW_SIZE - meadow.size();
+        List<Card> cards = tryDrawFromMainDeck(cardsToDraw);
+        meadow.addAll(cards);
+        return cards;
     }
 }

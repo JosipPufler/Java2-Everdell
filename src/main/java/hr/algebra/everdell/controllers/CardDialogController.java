@@ -7,7 +7,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Spinner;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -37,8 +36,8 @@ public class CardDialogController extends CardListable implements CardInsertable
         popUpStage.setAlwaysOnTop(true);
     }
 
-    public ImageView addCard(Card card){
-
+    @Override
+    public ImageView createCardImageView(Card card){
         File file = new File(card.getImageFilePath());
         Image image = new Image(file.toURI().toString());
         ImageView iv = new ImageView(image);
@@ -94,11 +93,11 @@ public class CardDialogController extends CardListable implements CardInsertable
 
     @Override
     public void insertCards(List<Card> cards) {
-        cardPane.getChildren().addAll(addCards(cards));
+        cardPane.getChildren().addAll(createImageViews(cards));
     }
 
     @Override
     public void insertCard(Card card) {
-        cardPane.getChildren().add(addCard(card));
+        cardPane.getChildren().add(createCardImageView(card));
     }
 }

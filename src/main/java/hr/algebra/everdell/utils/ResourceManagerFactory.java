@@ -1,6 +1,6 @@
 package hr.algebra.everdell.utils;
 
-public class ResourcePoolManagerFactory {
+public class ResourceManagerFactory {
     static ResourceManager instance;
 
     static {
@@ -15,6 +15,6 @@ public class ResourcePoolManagerFactory {
         return instance;
     }
 
-    private ResourcePoolManagerFactory() {
+    private ResourceManagerFactory() {
     }
 }

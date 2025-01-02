@@ -13,7 +13,7 @@ public class MultiResourceDialogPane extends DialogPane {
     List<Card> cards;
     MultiResourceDialogController controller;
 
-    public MultiResourceDialogPane(int maxResources) {
+    public MultiResourceDialogPane(int maxResources, ResourceGroup referenceGroup) {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/hr/algebra/everdell/MultiResourceDialog.fxml"));
         loader.setRoot(this);
@@ -21,7 +21,7 @@ public class MultiResourceDialogPane extends DialogPane {
         try {
             loader.load();
             controller = loader.getController();
-            controller.setMaxResources(maxResources);
+            controller.setParameters(maxResources, referenceGroup);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -98,6 +98,21 @@ public class ResourceGroup implements Comparable<ResourceGroup> {
         }
     }
 
+    public void merge(ResourceGroup resourceGroup){
+        addBerries(resourceGroup.getBerries());
+        addTwigs(resourceGroup.getTwigs());
+        addResin(resourceGroup.getResin());
+        addPebbles(resourceGroup.getPebbles());
+        resourceGroup.clear();
+    }
+
+    public void clear(){
+        this.berries = 0;
+        this.twigs = 0;
+        this.resin = 0;
+        this.pebbles = 0;
+    }
+
     @Override
     public int compareTo(ResourceGroup o) {
         if (berries >= o.berries

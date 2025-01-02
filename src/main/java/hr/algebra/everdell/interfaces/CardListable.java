@@ -1,8 +1,6 @@
 package hr.algebra.everdell.interfaces;
 
 import hr.algebra.everdell.models.Card;
-import hr.algebra.everdell.models.PlayerState;
-import hr.algebra.everdell.utils.PlayerStateSingleton;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
@@ -21,24 +19,17 @@ import java.util.List;
 
 public abstract class CardListable {
     @FXML
-    public final Stage popUpStage = new Stage();
+    public final Stage popUpStage = new Stage(StageStyle.UNDECORATED);
 
-    private final PlayerState playerState = PlayerStateSingleton.getInstance();
     Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
 
-    protected ImageView addCard(Card card){
-        if ((playerState.cardsInPlay.contains(card) && card.isUnique()) || playerState.cardsInPlay.size() >= 15){
-            return null;
-        }
-
-        playerState.cardsInPlay.add(card);
-
+    protected ImageView createCardImageView(Card card){
         File file = new File(card.getImageFilePath());
         Image image = new Image(file.toURI().toString());
         ImageView iv = new ImageView(image);
+        iv.setId(card.getName());
         iv.setFitHeight(200);
         iv.setPreserveRatio(true);
-        popUpStage.initStyle(StageStyle.UNDECORATED);
         popUpStage.setMaxHeight(700);
 
         iv.setOnMouseMoved(new EventHandler<MouseEvent>() {
@@ -74,15 +65,15 @@ public abstract class CardListable {
         return iv;
     }
 
-    protected List<ImageView> addCards(List<Card> cards){
+    protected List<ImageView> createImageViews(List<Card> cards){
         List<ImageView> imageViews = new ArrayList<>();
         for(Card card : cards){
-            ImageView imageView = addCard(card);
+            ImageView imageView = createCardImageView(card);
             if (imageView == null){
                 return imageViews;
             }
             imageViews.add(imageView);
         }
-        return  imageViews;
+        return imageViews;
     }
 }

@@ -1,9 +1,7 @@
 package hr.algebra.everdell.models.cards.critters;
 
-import hr.algebra.everdell.models.CardType;
-import hr.algebra.everdell.models.Critter;
-import hr.algebra.everdell.models.PlayerState;
-import hr.algebra.everdell.models.ResourceGroup;
+import hr.algebra.everdell.models.*;
+import hr.algebra.everdell.models.cards.constructs.Farm;
 import hr.algebra.everdell.models.cards.constructs.TwigBarge;
 import hr.algebra.everdell.utils.FileUtils;
 import hr.algebra.everdell.utils.ResourceManager;
@@ -23,7 +21,14 @@ public class BargeToad extends Critter<TwigBarge>  {
     }
 
     @Override
-    public void playEffect(PlayerState playerState, PlayerState opponentState, ResourceManager resourceManager) {
-
+    public boolean play() {
+        int farmCount = 0;
+        for (Card card : GameState.getPlayerState().cardsInPlay){
+            if (card instanceof Farm){
+                farmCount++;
+            }
+        }
+        GameState.getResourceManager().tryTakeTwigs(GameState.getPlayerState().resources, farmCount*2);
+        return super.play();
     }
 }

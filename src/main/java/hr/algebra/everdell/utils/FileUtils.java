@@ -4,11 +4,11 @@ import java.io.File;
 import java.util.Objects;
 
 public class FileUtils {
-    private static File root = new File("");
-    private static File cardImageFolder = new File(root.getAbsolutePath(), "src\\main\\resources\\hr\\algebra\\everdell\\images\\cards");
-    private static File imageFolder = new File(root.getAbsolutePath(), "src\\main\\resources\\hr\\algebra\\everdell\\images");
-    private static File cardClassFolder = new File(root.getAbsolutePath(), "src\\main\\java\\hr\\algebra\\everdell\\cards\\critters");
-    private static String boardFileName = "board.jpg";
+    private static final File root = new File("");
+    private static final File imageFolder = new File(root.getAbsolutePath(), "src\\main\\resources\\hr\\algebra\\everdell\\images");
+    private static final File cardImageFolder = new File(imageFolder.getAbsolutePath(), "cards");
+    private static final File cardClassFolder = new File(imageFolder.getAbsolutePath(), "critters");
+    private static final String boardFileName = "board.jpg";
 
     public static String getAbsoluteCardImagePath(String cardName){
         File[] jpgs = cardImageFolder.listFiles((dir, name) -> name.startsWith(cardName) && name.endsWith("jpg"));

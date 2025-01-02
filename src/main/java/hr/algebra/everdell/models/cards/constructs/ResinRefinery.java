@@ -1,9 +1,6 @@
 package hr.algebra.everdell.models.cards.constructs;
 
-import hr.algebra.everdell.models.CardType;
-import hr.algebra.everdell.models.Construct;
-import hr.algebra.everdell.models.PlayerState;
-import hr.algebra.everdell.models.ResourceGroup;
+import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.utils.FileUtils;
 import hr.algebra.everdell.utils.ResourceManager;
 
@@ -24,7 +21,8 @@ public class ResinRefinery extends Construct {
     }
 
     @Override
-    public void playEffect(PlayerState playerState, PlayerState opponentState, ResourceManager resourceManager) {
-
+    public boolean play() {
+        GameState.getResourceManager().tryTakeResin(GameState.getPlayerState().resources, 1);
+        return super.play();
     }
 }

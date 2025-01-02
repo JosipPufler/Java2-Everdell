@@ -1,20 +1,18 @@
 package hr.algebra.everdell.models.cards.constructs;
 
 import hr.algebra.everdell.interfaces.Destination;
-import hr.algebra.everdell.models.CardType;
-import hr.algebra.everdell.models.Construct;
-import hr.algebra.everdell.models.PlayerState;
-import hr.algebra.everdell.models.ResourceGroup;
+import hr.algebra.everdell.models.*;
+import hr.algebra.everdell.utils.DialogUtils;
 import hr.algebra.everdell.utils.FileUtils;
-import hr.algebra.everdell.utils.ResourceManager;
+import hr.algebra.everdell.utils.GameUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class University extends Construct implements Destination {
     int workerSlots = 1;
-    int workersDeployed = 0;
-    final List<String> workers = new ArrayList<>();
+    final List<PlayerNumber> workers = new ArrayList<>();
     boolean isOpen = false;
 
 
@@ -34,7 +32,8 @@ public class University extends Construct implements Destination {
     }
 
     @Override
-    public void playEffect(PlayerState playerState, PlayerState opponentState, ResourceManager resourceManager) {
+    public boolean play() {
+        return super.play();
     }
 
     @Override
@@ -43,13 +42,8 @@ public class University extends Construct implements Destination {
     }
 
     @Override
-    public int getNumberOfFreeWorkerSlots() {
-        return workerSlots - workersDeployed;
-    }
-
-    @Override
     public int getNumberOfDeployedWorkers() {
-        return workersDeployed;
+        return workers.size();
     }
 
     @Override
@@ -58,16 +52,27 @@ public class University extends Construct implements Destination {
     }
 
     @Override
-    public void clearWorkers(PlayerState playerState) {
-        for (int i = workers.size()-1 ; i > 0 ; i--){
-            if (workers.get(i).equals(PlayerState.playerName)){
-                workers.remove(i);
-            }
-        }
+    public List<PlayerNumber> getWorkers() {
+        return workers;
     }
 
     @Override
-    public void placeWorker(PlayerState playerState, PlayerState opponentState, ResourceManager resourceManager) {
-
+    public Boolean placeWorker() {
+        PlayerState playerState = GameState.getPlayerState();
+        Optional<Card> card = DialogUtils.showCardChooseDialog(playerState.cardsInPlay, getName());
+        if (card.isPresent()){
+            GameUtils.removeCardFromCity(card.get());
+            GameState.getResourceManager().tryTakeGroup(playerState.resources, card.get().getCost());
+        } else {
+            return false;
+        }
+        Optional<ResourceGroup> resource = DialogUtils.showMultiResourceDialog(1, GameState.getResourceManager().getResourcePool(), getName());
+        if (resource.isPresent()){
+            GameState.getResourceManager().tryTakeGroup(playerState.resources, resource.get());
+            playerState.addPoints(1);
+            workers.add(playerState.getPlayerNumber());
+            return true;
+        }
+        return false;
     }
 }

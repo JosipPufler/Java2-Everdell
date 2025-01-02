@@ -1,8 +1,6 @@
 package hr.algebra.everdell.controllers;
 
 import hr.algebra.everdell.models.ResourceGroup;
-import hr.algebra.everdell.utils.ResourceManager;
-import hr.algebra.everdell.utils.ResourcePoolManagerFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
@@ -25,27 +23,28 @@ public class MultiResourceDialogController {
 
     int maxResources;
 
-    final ResourceManager resourceManager = ResourcePoolManagerFactory.getInstance();
+    ResourceGroup referenceResourceGroup;
 
     public void initialize() {
-        berrySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, resourceManager.getResourcePool().getBerries()));
-        resinSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, resourceManager.getResourcePool().getResin()));
-        pebbleSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, resourceManager.getResourcePool().getPebbles()));
-        twigSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, resourceManager.getResourcePool().getTwigs()));
-
         spinners = new ArrayList<>(Arrays.asList(twigSpinner, pebbleSpinner, resinSpinner, berrySpinner));
+    }
+
+    public void setParameters(int maxResources, ResourceGroup referenceResourceGroup) {
+        this.maxResources = maxResources;
+        this.referenceResourceGroup = referenceResourceGroup;
+
+        resinSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, referenceResourceGroup.getResin()));
+        pebbleSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, referenceResourceGroup.getPebbles()));
+        berrySpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, referenceResourceGroup.getBerries()));
+        twigSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, referenceResourceGroup.getTwigs()));
 
         for(var spinner: spinners) {
             spinner.valueProperty().addListener((observable, oldValue, newValue) -> {
-               if(getResourcePool().sumAllResources() > maxResources) {
+                if(getResourcePool().sumAllResources() > maxResources) {
                     spinner.getValueFactory().setValue(oldValue);
-               }
+                }
             });
         }
-    }
-
-    public void setMaxResources(int maxResources) {
-        this.maxResources = maxResources;
     }
 
     public ResourceGroup getResourcePool(){
