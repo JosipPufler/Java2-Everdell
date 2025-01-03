@@ -2,14 +2,16 @@ package hr.algebra.everdell.utils;
 
 import hr.algebra.everdell.models.Card;
 import hr.algebra.everdell.models.ResourceGroup;
+import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class ResourceManager {
-    static final int STARTING_MAIN_DECK_SIZE = 128;
+@Getter
+public class ResourceManager implements Serializable {
     static final int MEADOW_SIZE = 8;
     static final int STARTING_PEBBLES = 20;
     static final int STARTING_RESIN = 25;
@@ -17,16 +19,13 @@ public class ResourceManager {
     static final int STARTING_TWIGS = 30;
     ResourceGroup resourcePool = new ResourceGroup(STARTING_BERRIES, STARTING_TWIGS, STARTING_RESIN, STARTING_PEBBLES);
 
-    private static final List<Card> deck = new ArrayList<>();
-    private static final List<Card> meadow = new ArrayList<>();
+    private final List<Card> deck = new ArrayList<>();
+    @Getter
+    private final List<Card> meadow = new ArrayList<>();
 
     public ResourceManager(List<Card> cards) {
         deck.addAll(cards);
         Collections.shuffle(deck);
-    }
-
-    public void updatePool(ResourceGroup resourcePool) {
-        this.resourcePool = resourcePool;
     }
 
     public List<Card> tryDrawFromMainDeck(int numberOfCards){
@@ -42,10 +41,6 @@ public class ResourceManager {
 
     public int getDeckSize() {
         return deck.size();
-    }
-
-    public ResourceGroup getResourcePool() {
-        return resourcePool;
     }
 
     public void tryTakeBerries(ResourceGroup depositingPool, int berries) {
@@ -96,10 +91,6 @@ public class ResourceManager {
         resourcePool.addResin(deposit.getResin());
         resourcePool.addPebbles(deposit.getPebbles());
         resourcePool.addResin(deposit.getResin());
-    }
-
-    public List<Card> getMeadow() {
-        return meadow;
     }
 
     public List<Card> tryDrawCardsFromMeadow(int numberOfCards) {

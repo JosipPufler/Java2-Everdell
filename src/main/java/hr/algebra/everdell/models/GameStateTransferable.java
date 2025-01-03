@@ -1,27 +1,20 @@
 package hr.algebra.everdell.models;
 
 import hr.algebra.everdell.utils.ResourceManager;
+import javafx.scene.Group;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
 import java.io.Serializable;
+import java.util.List;
 
+@Getter
 @Data
 @AllArgsConstructor
 public class GameStateTransferable implements Serializable {
     ResourceManager resourceManager;
     PlayerState playerState;
     PlayerState opponentState;
-
-    public ResourceManager getResourceManager() {
-        return resourceManager;
-    }
-
-    public PlayerState getPlayerState() {
-        return playerState;
-    }
-
-    public PlayerState getOpponentState() {
-        return opponentState;
-    }
+    List<Marker> markerGroup;
 }

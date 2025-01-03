@@ -4,12 +4,13 @@ import hr.algebra.everdell.interfaces.Triggered;
 import hr.algebra.everdell.utils.GameUtils;
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class PlayerState {
+public class PlayerState implements Serializable {
     @Getter
     private final String playerName;
     @Getter

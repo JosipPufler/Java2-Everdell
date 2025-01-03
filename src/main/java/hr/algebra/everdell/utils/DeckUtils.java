@@ -5,6 +5,7 @@ import hr.algebra.everdell.models.Card;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public class DeckUtils {
@@ -16,10 +17,10 @@ public class DeckUtils {
     static final String constructStart = "hr.algebra.everdell.models.cards.constructs.";
 
     public static List<Card> generateDeck() throws Exception{
-        List<String> critterList = new ArrayList<>(Stream.of(new File(critterPath).listFiles())
+        List<String> critterList = new ArrayList<>(Stream.of(Objects.requireNonNull(new File(critterPath).listFiles()))
                 .filter(file -> !file.isDirectory())
                 .map(File::getName).toList());
-        List<String> constructList = new ArrayList<>(Stream.of(new File(constructPath).listFiles())
+        List<String> constructList = new ArrayList<>(Stream.of(Objects.requireNonNull(new File(constructPath).listFiles()))
                 .filter(file -> !file.isDirectory())
                 .map(File::getName).toList());
         List<Card> deck = new ArrayList<>();
@@ -33,7 +34,6 @@ public class DeckUtils {
         List<String> classList = new ArrayList<>(critterList);
         classList.addAll(constructList);
         for (String file : classList){
-            System.out.println(file);
             Class<?> aClass = Class.forName(file);
             Card o = (Card) aClass.newInstance();
             deck.add(o);

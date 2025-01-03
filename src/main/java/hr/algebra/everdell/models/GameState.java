@@ -4,6 +4,7 @@ import hr.algebra.everdell.EverdellApplication;
 import hr.algebra.everdell.utils.GameUtils;
 import hr.algebra.everdell.utils.ResourceManager;
 import hr.algebra.everdell.utils.ResourceManagerFactory;
+import javafx.scene.shape.Circle;
 import lombok.Getter;
 
 public class GameState {
@@ -37,10 +38,9 @@ public class GameState {
         opponentState = gameStateTransferable.playerState;
         playerState = gameStateTransferable.opponentState;
         resourceManager = gameStateTransferable.resourceManager;
-    }
-
-    public static GameStateTransferable packageGameState(){
-        return new GameStateTransferable(resourceManager, playerState, opponentState);
+        GameUtils.updatePlayer();
+        GameUtils.updateMarkers(gameStateTransferable.markerGroup);
+        GameUtils.updateMeadow();
     }
 
     public static void switchPlayers(){
@@ -60,7 +60,10 @@ public class GameState {
         }
     }
 
-    public static GameStateTransferable generatePackage(){
-        return new GameStateTransferable(getResourceManager(), getPlayerState(), getOpponentState());
+    public static GameStateTransferable packageGameState(){
+        return new GameStateTransferable(getResourceManager(), getPlayerState(), getOpponentState(), GameUtils.getMarkerGroup().getChildren().stream().map(x -> {
+            Circle circle = (Circle) x;
+            return new Marker(circle.getCenterX(), circle.getCenterY(), circle.getId(), (Location) circle.getUserData());
+        }).toList());
     }
 }

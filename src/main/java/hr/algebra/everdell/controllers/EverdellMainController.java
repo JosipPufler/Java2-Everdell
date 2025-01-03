@@ -1,8 +1,6 @@
 package hr.algebra.everdell.controllers;
 
 import hr.algebra.everdell.models.*;
-import hr.algebra.everdell.models.cards.constructs.Inn;
-import hr.algebra.everdell.models.cards.constructs.Lookout;
 import hr.algebra.everdell.utils.*;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -11,13 +9,11 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,13 +21,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class EverdellMainController {
-    static final int STARTING_FOREST_DECK_SIZE = 11;
-    static final int STARTING_EVENT_DECK_SIZE = 16;
-    static final int STARTING_HAND_SIZE = 8;
-    static final int MAX_HAND_SIZE = 8;
-
-    static final ResourceManager resourceManager = ResourceManagerFactory.getInstance();
-
     @FXML
     public Ellipse location_2T1C;
     @FXML
@@ -50,9 +39,9 @@ public class EverdellMainController {
     public Ellipse location_1B;
 
     final List<Ellipse> locations = new ArrayList<>();
-
-    Group playerOneGroup = new Group();
-    Group playerTwoGroup = new Group();
+    public Group playerOneGroup = new Group();
+    public Group playerTwoGroup = new Group();
+    Text statsText = new Text();
 
     @FXML
     AnchorPane anchorPane;
@@ -69,12 +58,9 @@ public class EverdellMainController {
     @FXML
     StackPane stpYourStockpile;
 
-
     CityController cityController;
     PlayableCardController handController;
     PlayableCardController meadowController;
-
-    Text statsText = new Text();
 
     public static void disable(boolean b) {
     }
@@ -83,8 +69,6 @@ public class EverdellMainController {
         cityController = GameUtils.showCity(this);
         handController = GameUtils.showHand(this);
         meadowController = GameUtils.generateMeadow(this);
-
-        updateResourcePool();
 
         location_2T1C.setUserData(new Location(new ResourceGroup(0, 2, 0, 0), 1, 0, true));
         location_3T.setUserData(new Location(new ResourceGroup(0, 3, 0, 0), 0, 0, false));
@@ -100,10 +84,11 @@ public class EverdellMainController {
         for (Ellipse location : locations){
             location.setOnMouseClicked(event -> {
                 Object userData = location.getUserData();
-                if (userData instanceof Location && placeMarker(event.getSceneX(), event.getSceneY(), ((Location) userData).toShorthandString())){
+                if (userData instanceof Location && placeMarker(new Marker(event.getSceneX(), event.getSceneY(), ((Location) userData).toShorthandString(), (Location) userData), false)){
                     ((Location) userData).activate(GameState.getPlayerState(), true);
-                    GameState.switchPlayers();
                     updateResourcePool();
+                    Location.addLocations((Location) userData);
+                    GameState.switchPlayers();
                 }
             });
         }
@@ -112,30 +97,49 @@ public class EverdellMainController {
         anchorPane.getChildren().add(playerTwoGroup);
         stpYourStockpile.getChildren().add(statsText);
         GameUtils.setUpGame();
+        updateResourcePool();
     }
 
     public void updateResourcePool() {
+        ResourceManager resourceManager = GameState.getResourceManager();
         PlayerState playerState = GameState.getPlayerState();
         btnBerries.setText(String.valueOf(resourceManager.getResourcePool().getBerries()));
         btnPebbles.setText(String.valueOf(resourceManager.getResourcePool().getPebbles()));
         btnTwigs.setText(String.valueOf(resourceManager.getResourcePool().getTwigs()));
         btnResin.setText(String.valueOf(resourceManager.getResourcePool().getResin()));
         lblDeck.setText(String.valueOf(resourceManager.getDeckSize()));
+        System.out.println(resourceManager.getDeckSize());
         statsText.setText(String.format("Your stats:\nPoints: %s\nPebbles: %s\nTwigs: %s\nResin: %s\nBerries: %s\nWorkers: %s/%s\nSeason: %s", playerState.calculatePoints(), playerState.resources.getPebbles(), playerState.resources.getTwigs(), playerState.resources.getResin(), playerState.resources.getBerries(), playerState.getFreeWorkers(), playerState.getMaxWorkers(), playerState.getCurrentSeason()));
     }
 
-    public Boolean placeMarker(double x, double y, String locationName) {
-        PlayerState playerState = GameState.getPlayerState();
-        Group playerGroup;
-        if (playerState.getPlayerNumber() == PlayerNumber.ONE)
+    public Boolean placeMarker(Marker marker, Boolean opponent) {
+        PlayerState playerState, opponentState;
+        if (opponent) {
+            playerState = GameState.getOpponentState();
+            opponentState = GameState.getPlayerState();
+        } else {
+            playerState = GameState.getPlayerState();
+            opponentState = GameState.getOpponentState();
+        }
+        Group playerGroup, opponentGroup;
+        if (playerState.getPlayerNumber() == PlayerNumber.ONE){
             playerGroup = playerOneGroup;
-        else
+            opponentGroup = playerTwoGroup;
+        }
+        else {
             playerGroup = playerTwoGroup;
-        String id = playerState.getPlayerName() + '_' + locationName.split("_", 2)[1];
-        if (playerGroup.getChildren().stream().noneMatch(o -> Objects.equals(o.getId(), id)) && playerState.getFreeWorkers() > 0){
-            Circle marker = new Circle(x, y, 10, Paint.valueOf(String.format("#%06x", playerState.getPlayerNumber().getPlayerColor().getRGB() & 0xFFFFFF)));
-            playerGroup.getChildren().add(marker);
-            marker.setId(playerState.getPlayerName() + '_' + locationName.split("_", 2)[1]);
+            opponentGroup = playerOneGroup;
+        }
+        String id = playerState.getPlayerName() + '_' + marker.name.split("_", 2)[1];
+        String opponentId = opponentState.getPlayerName() + '_' + marker.name.split("_", 2)[1];
+        if ((marker.location.isOpen()
+                || opponentGroup.getChildren().stream().noneMatch(o -> Objects.equals(o.getId(), opponentId)))
+                && playerGroup.getChildren().stream().noneMatch(o -> Objects.equals(o.getId(), id))
+                && playerState.getFreeWorkers() > 0){
+            Circle circle = new Circle(marker.x, marker.y, 10, Paint.valueOf(String.format("#%06x", playerState.getPlayerNumber().getPlayerColor().getRGB() & 0xFFFFFF)));
+            circle.setUserData(marker.location);
+            playerGroup.getChildren().add(circle);
+            circle.setId(id);
             playerState.deployWorker(false);
             return true;
         }
@@ -157,6 +161,26 @@ public class EverdellMainController {
             }
         });
         updateResourcePool();
+    }
+
+    public void updateOpponentGroup(List<Marker> markers){
+        if (GameState.getPlayerState().getPlayerNumber() == PlayerNumber.ONE){
+            playerTwoGroup.getChildren().clear();
+            for (Marker marker : markers){
+                Circle circle = new Circle(marker.x, marker.y, 10, Paint.valueOf(String.format("#%06x", PlayerNumber.TWO.getPlayerColor().getRGB() & 0xFFFFFF)));
+                circle.setUserData(marker.location);
+                circle.setId(GameState.getOpponentState().getPlayerName() + '_' + marker.name.split("_", 2)[1]);
+                playerTwoGroup.getChildren().add(circle);
+            }
+        } else {
+            playerOneGroup.getChildren().clear();
+            for (Marker marker : markers){
+                Circle circle = new Circle(marker.x, marker.y, 10, Paint.valueOf(String.format("#%06x", PlayerNumber.ONE.getPlayerColor().getRGB() & 0xFFFFFF)));
+                circle.setUserData(marker.location);
+                circle.setId(GameState.getOpponentState().getPlayerName() + '_' + marker.name.split("_", 2)[1]);
+                playerOneGroup.getChildren().add(circle);
+            }
+        }
     }
 
     public void showMeadow (MouseEvent event){

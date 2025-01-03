@@ -3,9 +3,10 @@ package hr.algebra.everdell.models;
 import hr.algebra.everdell.utils.GameUtils;
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Card{
+public abstract class Card implements Serializable {
     @Getter
     CardType type;
     @Getter

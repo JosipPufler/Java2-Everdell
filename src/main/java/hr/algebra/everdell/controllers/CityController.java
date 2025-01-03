@@ -5,8 +5,11 @@ import hr.algebra.everdell.interfaces.CardListable;
 import hr.algebra.everdell.interfaces.Destination;
 import hr.algebra.everdell.models.Card;
 import hr.algebra.everdell.models.GameState;
+import hr.algebra.everdell.models.PlayerNumber;
 import hr.algebra.everdell.models.PlayerState;
+import hr.algebra.everdell.utils.GameUtils;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.TransferMode;
@@ -34,7 +37,7 @@ public class CityController extends CardListable implements CardInsertable {
             try {
                 Card card = (Card) Class.forName(cardName).getConstructor().newInstance();
                 if (GameState.getPlayerState().playCard(card).isPresent()){
-                    updateMainController();
+                    GameUtils.updatePlayer();
                     event.setDropCompleted(true);
                 } else {
                     event.setDropCompleted(false);
@@ -82,11 +85,6 @@ public class CityController extends CardListable implements CardInsertable {
 
     public void setParentController(EverdellMainController parentController){
         mainController = parentController;
-    }
-
-    public void updateMainController(){
-        mainController.updateResourcePool();
-        mainController.updateTitle("Player " + GameState.getPlayerState().getPlayerName() + " turn");
     }
 
     public void removeCard(Card card){

@@ -3,11 +3,12 @@ package hr.algebra.everdell.models;
 import hr.algebra.everdell.utils.GameUtils;
 import lombok.Getter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Location {
+public class Location implements Serializable {
     @Getter
     static final List<Location> locations = new ArrayList<>();
 

@@ -6,7 +6,6 @@ import hr.algebra.everdell.models.GameState;
 import hr.algebra.everdell.models.GameStateTransferable;
 import hr.algebra.everdell.models.PlayerNumber;
 import hr.algebra.everdell.utils.ConfigurationReader;
-import hr.algebra.everdell.utils.DialogUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -68,7 +67,12 @@ public class EverdellApplication extends Application {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.err.printf("Client connected from port %s%n", clientSocket.getPort());
-                new Thread(() -> processSerializableClient(clientSocket)).start();
+                Runnable task = () -> {
+                    Platform.runLater(() -> {
+                        processSerializableClient(clientSocket);
+                    });
+                };
+                new Thread(task).start();
             }
         }  catch (IOException e) {
             e.printStackTrace();
@@ -101,6 +105,7 @@ public class EverdellApplication extends Application {
             }
 
             System.out.println("Game state successfuly received: " + gameState);
+            GameState.loadGameState(gameState);
             oos.writeObject("Success!");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -120,7 +125,9 @@ public class EverdellApplication extends Application {
     private static void sendSerializableRequest(Socket client) throws IOException, ClassNotFoundException {
         ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream());
         ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
-        oos.writeObject(GameState.generatePackage());
-        System.out.printf("Received from the server: ", ois.readObject());
+        oos.writeObject(GameState.packageGameState());
+        if (ois.available() > 0){
+            System.out.printf("Received from the server: ", ois.readObject());
+        }
     }
 }

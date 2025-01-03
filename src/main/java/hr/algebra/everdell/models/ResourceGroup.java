@@ -1,8 +1,12 @@
 package hr.algebra.everdell.models;
 
+import lombok.Getter;
+
+import java.io.Serializable;
 import java.text.MessageFormat;
 
-public class ResourceGroup implements Comparable<ResourceGroup> {
+@Getter
+public class ResourceGroup implements Comparable<ResourceGroup>, Serializable {
     private int berries;
     private int twigs;
     private int resin;
@@ -13,22 +17,6 @@ public class ResourceGroup implements Comparable<ResourceGroup> {
         this.twigs = twigs;
         this.resin = resin;
         this.pebbles = pebbles;
-    }
-
-    public int getPebbles() {
-        return pebbles;
-    }
-
-    public int getResin() {
-        return resin;
-    }
-
-    public int getTwigs() {
-        return twigs;
-    }
-
-    public int getBerries() {
-        return berries;
     }
 
     public void addBerries(int berries) {
