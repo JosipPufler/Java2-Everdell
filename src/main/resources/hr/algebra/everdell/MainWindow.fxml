@@ -1,56 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="800.0" prefWidth="900.0"
-      xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="hr.algebra.everdell.controllers.EverdellMainController">
-    <AnchorPane fx:id="anchorPane" prefHeight="800.0" prefWidth="900.0" styleClass="anchor"
-                xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
-        <stylesheets>
-            <URL value="@application.css"/>
-        </stylesheets>
-        <Label layoutX="738.0" layoutY="210.0" text="Berries"/>
-        <Button fx:id="btnBerries" disable="true" layoutX="742.0" layoutY="228.0" mnemonicParsing="false"/>
-        <Button fx:id="btnPebbles" disable="true" layoutX="505.0" layoutY="254.0" mnemonicParsing="false"/>
-        <Button fx:id="btnResin" disable="true" layoutX="325.0" layoutY="228.0" mnemonicParsing="false"/>
-        <Button fx:id="btnTwigs" disable="true" layoutX="185.0" layoutY="228.0" mnemonicParsing="false"/>
-        <Label layoutX="184.0" layoutY="210.0" text="Twigs"/>
-        <Label layoutX="325.0" layoutY="210.0" text="Resin"/>
-        <Label layoutX="498.0" layoutY="233.0" text="Pebbles"/>
-        <Ellipse fx:id="location_2T1C" fill="#00ff0024" layoutX="251.0" layoutY="320.0" radiusX="30.0"
-                 radiusY="13.0" stroke="TRANSPARENT" strokeType="INSIDE"/>
-        <Ellipse fx:id="location_3T" fill="#00ff0024" layoutX="164.0" layoutY="289.0" radiusX="21.0" radiusY="9.0"
-                 stroke="TRANSPARENT" strokeType="INSIDE"/>
-        <Ellipse fx:id="location_2R" fill="#00ff0024" layoutX="345.0" layoutY="302.0" radiusX="26.0" radiusY="9.0"
-                 stroke="TRANSPARENT" strokeType="INSIDE"/>
-        <Ellipse fx:id="location_1R1C" fill="#00ff0024" layoutX="429.0" layoutY="320.0" radiusX="30.0"
-                 radiusY="13.0" stroke="TRANSPARENT" strokeType="INSIDE"/>
-        <Ellipse fx:id="location_2C1Pt" fill="#00ff0024" layoutX="494.0" layoutY="307.0" radiusX="26.0"
-                 radiusY="13.0" stroke="TRANSPARENT" strokeType="INSIDE"/>
-        <Ellipse fx:id="location_1P" fill="#00ff0024" layoutX="592.0" layoutY="311.0" radiusX="21.0" radiusY="9.0"
-                 stroke="TRANSPARENT" strokeType="INSIDE"/>
-        <Ellipse fx:id="location_1B" fill="#00ff0024" layoutX="762.0" layoutY="293.0" radiusX="34.0" radiusY="13.0"
-                 stroke="TRANSPARENT" strokeType="INSIDE"/>
-        <Ellipse fx:id="location_1B1C" fill="#00ff0024" layoutX="712.0" layoutY="320.0" radiusX="26.0" radiusY="9.0"
-                 stroke="TRANSPARENT" strokeType="INSIDE"/>
-        <StackPane fx:id="stpYourStockpile" layoutX="14.0" layoutY="14.0" prefHeight="122.0" prefWidth="122.0"/>
-        <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#1fff46" height="110.0" layoutX="416.0" layoutY="647.0"
-                   stroke="BLACK" strokeLineJoin="ROUND" strokeMiterLimit="100.0" strokeType="INSIDE" width="68.0"/>
-        <Label fx:id="lblDeck" alignment="CENTER" layoutX="416.0" layoutY="648.0" prefHeight="110.0"
-               prefWidth="68.0" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS"/>
-        <Circle id="btnNextSeason" fill="DODGERBLUE" layoutX="810.0" layoutY="710.0"
-                onMouseClicked="#changeSeason" radius="76.0" stroke="BLACK" strokeType="INSIDE"/>
-        <Label layoutX="762.0" layoutY="696.0" onMouseClicked="#changeSeason" text="Next season">
-            <font>
-                <Font size="18.0"/>
-            </font>
-        </Label>
-        <Button layoutX="380.0" layoutY="411.0" mnemonicParsing="false" onMouseClicked="#showMeadow"
-                prefHeight="122.0" prefWidth="158.0" text="View meadow"/>
-    </AnchorPane>
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="830.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hr.algebra.everdell.controllers.EverdellMainController">
+    <TabPane fx:id="tabPane" prefHeight="832.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE">
+        <Tab text="Game">
+            <AnchorPane fx:id="anchorPane" prefHeight="800.0" prefWidth="900.0" styleClass="anchor">
+                <MenuBar prefHeight="20.0" prefWidth="900.0">
+                    <Menu mnemonicParsing="false" text="Game">
+                        <MenuItem mnemonicParsing="false" onAction="#saveGameState" text="Save" />
+                    </Menu>
+                    <Menu mnemonicParsing="false" text="Documentation">
+                        <MenuItem mnemonicParsing="false" onAction="#generateDocumentation" text="Generate" />
+                    </Menu>
+                </MenuBar>
+                <Label layoutX="738.0" layoutY="210.0" text="Berries" />
+                <Button fx:id="btnBerries" disable="true" layoutX="742.0" layoutY="228.0" mnemonicParsing="false" />
+                <Button fx:id="btnPebbles" disable="true" layoutX="505.0" layoutY="254.0" mnemonicParsing="false" />
+                <Button fx:id="btnResin" disable="true" layoutX="325.0" layoutY="228.0" mnemonicParsing="false" />
+                <Button fx:id="btnTwigs" disable="true" layoutX="185.0" layoutY="228.0" mnemonicParsing="false" />
+                <Label layoutX="184.0" layoutY="210.0" text="Twigs" />
+                <Label layoutX="325.0" layoutY="210.0" text="Resin" />
+                <Label layoutX="498.0" layoutY="233.0" text="Pebbles" />
+                <Ellipse fx:id="location_2T1C" fill="#00ff0024" layoutX="251.0" layoutY="320.0" radiusX="30.0" radiusY="13.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+                <Ellipse fx:id="location_3T" fill="#00ff0024" layoutX="164.0" layoutY="289.0" radiusX="21.0" radiusY="9.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+                <Ellipse fx:id="location_2R" fill="#00ff0024" layoutX="345.0" layoutY="302.0" radiusX="26.0" radiusY="9.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+                <Ellipse fx:id="location_1R1C" fill="#00ff0024" layoutX="429.0" layoutY="320.0" radiusX="30.0" radiusY="13.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+                <Ellipse fx:id="location_2C1Pt" fill="#00ff0024" layoutX="494.0" layoutY="307.0" radiusX="26.0" radiusY="13.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+                <Ellipse fx:id="location_1P" fill="#00ff0024" layoutX="592.0" layoutY="311.0" radiusX="21.0" radiusY="9.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+                <Ellipse fx:id="location_1B" fill="#00ff0024" layoutX="762.0" layoutY="293.0" radiusX="34.0" radiusY="13.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+                <Ellipse fx:id="location_1B1C" fill="#00ff0024" layoutX="712.0" layoutY="320.0" radiusX="26.0" radiusY="9.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+                <StackPane fx:id="stpYourStockpile" layoutX="8.0" layoutY="26.0" prefHeight="122.0" prefWidth="122.0" />
+                <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#1fff46" height="110.0" layoutX="416.0" layoutY="647.0" stroke="BLACK" strokeLineJoin="ROUND" strokeMiterLimit="100.0" strokeType="INSIDE" width="68.0" />
+                <Label fx:id="lblDeck" alignment="CENTER" layoutX="416.0" layoutY="648.0" prefHeight="110.0" prefWidth="68.0" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" />
+                <Circle id="btnNextSeason" fill="DODGERBLUE" layoutX="810.0" layoutY="710.0" onMouseClicked="#changeSeason" radius="76.0" stroke="BLACK" strokeType="INSIDE" />
+                <Label layoutX="762.0" layoutY="696.0" onMouseClicked="#changeSeason" text="Next season">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+                <Button layoutX="380.0" layoutY="411.0" mnemonicParsing="false" onMouseClicked="#showMeadow" prefHeight="122.0" prefWidth="158.0" text="View meadow" />
+            <Pane fx:id="blockPane" layoutY="26.0" opacity="0.58" prefHeight="775.0" prefWidth="900.0" style="-fx-background-color: grey;" visible="false">
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+               <effect>
+                  <ColorAdjust />
+               </effect>
+            </Pane>
+                <stylesheets>
+                    <URL value="@application.css" />
+                </stylesheets>
+            </AnchorPane>
+        </Tab>
+        <Tab fx:id="chatTab" text="Chat">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <Button fx:id="btnSend" layoutX="834.0" layoutY="29.0" mnemonicParsing="false" onMouseClicked="#sendChatMessage" prefHeight="26.0" prefWidth="51.0" text="Send" />
+                <TextField fx:id="tfMessage" layoutX="33.0" layoutY="29.0" prefHeight="26.0" prefWidth="791.0" />
+                <TextArea fx:id="taChat" editable="false" layoutX="33.0" layoutY="64.0" prefHeight="724.0" prefWidth="854.0" />
+            </AnchorPane>
+        </Tab>
+    </TabPane>
 </VBox>

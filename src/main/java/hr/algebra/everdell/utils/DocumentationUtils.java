@@ -51,11 +51,15 @@ public class DocumentationUtils {
                             classPath.toString().length() - CLASS_FILE_EXTENSION.length())
                     .replace("\\", ".");
 
+            String simpleName = className.substring(className.lastIndexOf(".") + 1);
+
             try {
                 Class<?> clazz =
                         Class.forName(className);
 
-                sb.append("<h2>Class name: ").append(className).append("</h2>");
+                sb.append("<h2>Simple name: ").append(simpleName).append("</h2>");
+
+                sb.append("<h3>Full class name: ").append(className).append("</h3>");
 
                 if(clazz.getConstructors().length > 0) {
                     sb.append("<h3>List of constructors:</h3>");

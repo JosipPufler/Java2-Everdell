@@ -32,22 +32,23 @@ public class CityController extends CardListable implements CardInsertable {
         cityPane.setVgap(5);
         super.popUpStage.setAlwaysOnTop(true);
         cityPane.setOnDragDropped(event -> {
-            String cardName = event.getDragboard().getString();
-            System.out.println(cardName);
-            try {
-                Card card = (Card) Class.forName(cardName).getConstructor().newInstance();
-                if (GameState.getPlayerState().playCard(card).isPresent()){
-                    GameUtils.updatePlayer();
-                    event.setDropCompleted(true);
-                } else {
+            if(GameState.getPlayerState().getTurnPriority()){
+                String cardName = event.getDragboard().getString();
+                System.out.println(cardName);
+                try {
+                    Card card = (Card) Class.forName(cardName).getConstructor().newInstance();
+                    if (GameState.getPlayerState().playCard(card).isPresent()){
+                        GameUtils.updatePlayer();
+                        event.setDropCompleted(true);
+                    } else {
+                        event.setDropCompleted(false);
+                    }
+                    System.out.println(GameState.getPlayerState().cardsInPlay.size());
+                    System.out.println(GameState.getOpponentState().cardsInPlay.size());
+                } catch (Exception e) {
                     event.setDropCompleted(false);
+                    e.printStackTrace();
                 }
-                System.out.println(GameState.getPlayerState().cardsInPlay.size());
-                System.out.println(GameState.getOpponentState().cardsInPlay.size());
-
-            } catch (Exception e) {
-                event.setDropCompleted(false);
-                e.printStackTrace();
             }
         });
 

@@ -77,4 +77,10 @@ public class DialogUtils {
         }
         return Optional.empty();
     }
+
+    public static void showAlert(Alert.AlertType alertType, String title, String contentText){
+        Alert alert = new Alert(alertType, contentText, ButtonType.OK);
+        alert.setTitle(title);
+        alert.showAndWait();
+    }
 }

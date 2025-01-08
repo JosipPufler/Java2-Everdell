@@ -21,14 +21,11 @@ import java.util.List;
 
 public class GameUtils {
     private GameUtils() {}
-
     static EverdellMainController mainController;
     static CityController cityController;
     static PlayableCardController handController;
     static PlayableCardController meadowController;
-
     private static Stage meadowStage;
-
     static final int PLAYER_ONE_STARTING_HAND_SIZE = 5;
     static final int PLAYER_TWO_STARTING_HAND_SIZE = PLAYER_ONE_STARTING_HAND_SIZE + 1;
 
@@ -117,12 +114,6 @@ public class GameUtils {
         }
     }
 
-    private static void addCardsToCity(List<Card> cards, Boolean play) {
-        for (Card card : cards){
-            addCardToCity(card, play);
-        }
-    }
-
     public static void addCardToHand(Card card) {
         if (GameState.getPlayerState().cardsInHand.size() < GameState.getPlayerState().MAX_CARDS_IN_HAND) {
             GameState.getPlayerState().cardsInHand.add(card);
@@ -199,5 +190,11 @@ public class GameUtils {
     public static void updateMeadow() {
         meadowController.clearCards();
         meadowController.insertCards(GameState.getResourceManager().getMeadow());
+    }
+
+    public static void blockScreen(boolean block) {
+        GameState.getPlayerState().setTurnPriority(!block);
+        GameState.getOpponentState().setTurnPriority(block);
+        mainController.blockScreen(block);
     }
 }

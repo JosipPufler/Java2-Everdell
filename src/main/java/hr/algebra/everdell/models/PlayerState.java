@@ -3,6 +3,7 @@ package hr.algebra.everdell.models;
 import hr.algebra.everdell.interfaces.Triggered;
 import hr.algebra.everdell.utils.GameUtils;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,6 +31,9 @@ public class PlayerState implements Serializable {
     Boolean gameOver = false;
     public final int MAX_CARDS_IN_HAND = 8;
     public final int MAX_CARDS_IN_PLAY = 15;
+    @Getter
+    @Setter
+    Boolean turnPriority = false;
 
     public PlayerState(PlayerNumber playerNumber) {
         playerName = playerNumber.toString();

@@ -12,4 +12,5 @@ module hr.algebra.everdell {
     exports hr.algebra.everdell;
     exports hr.algebra.everdell.controllers;
     opens hr.algebra.everdell.controllers to javafx.fxml;
+    exports hr.algebra.everdell.rmi to java.rmi;
 }

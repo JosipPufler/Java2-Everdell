@@ -41,6 +41,11 @@ public class GameState {
         GameUtils.updatePlayer();
         GameUtils.updateMarkers(gameStateTransferable.markerGroup);
         GameUtils.updateMeadow();
+        if (playerState.turnPriority){
+            GameUtils.blockScreen(false);
+        }else if (opponentState.turnPriority){
+            GameUtils.blockScreen(true);
+        }
     }
 
     public static void switchPlayers(){
@@ -56,11 +61,13 @@ public class GameState {
 
             GameUtils.switchPlayers();
         } else {
+            GameUtils.blockScreen(true);
             GameUtils.sendUpdate();
         }
     }
 
     public static GameStateTransferable packageGameState(){
+        GameUtils.blockScreen(true);
         return new GameStateTransferable(getResourceManager(), getPlayerState(), getOpponentState(), GameUtils.getMarkerGroup().getChildren().stream().map(x -> {
             Circle circle = (Circle) x;
             return new Marker(circle.getCenterX(), circle.getCenterY(), circle.getId(), (Location) circle.getUserData());

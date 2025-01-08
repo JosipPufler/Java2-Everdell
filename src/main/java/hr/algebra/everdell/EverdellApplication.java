@@ -6,6 +6,7 @@ import hr.algebra.everdell.models.GameState;
 import hr.algebra.everdell.models.GameStateTransferable;
 import hr.algebra.everdell.models.PlayerNumber;
 import hr.algebra.everdell.utils.ConfigurationReader;
+import hr.algebra.everdell.utils.GameUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -88,7 +89,7 @@ public class EverdellApplication extends Application {
             Boolean gameOver = GameState.getPlayerState().getGameOver() && GameState.getOpponentState().getGameOver();
 
             if (gameOver){
-                EverdellMainController.disable(true);
+                GameUtils.blockScreen(true);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Game over");
                 if (GameState.getPlayerState().calculatePoints() != GameState.getOpponentState().calculatePoints()){
@@ -101,10 +102,10 @@ public class EverdellApplication extends Application {
                 else
                     alert.setHeaderText("It's a tie");
             } else {
-                EverdellMainController.disable(false);
+                GameUtils.blockScreen(false);
             }
 
-            System.out.println("Game state successfuly received: " + gameState);
+            System.out.println("Game state successfully received: " + gameState);
             GameState.loadGameState(gameState);
             oos.writeObject("Success!");
         } catch (IOException | ClassNotFoundException e) {
