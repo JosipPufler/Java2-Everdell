@@ -1,6 +1,9 @@
 package hr.algebra.everdell.utils;
 
-public class ResourceManagerFactory {
+import lombok.Getter;
+
+public class ResourceManagerSingleton {
+    @Getter
     static ResourceManager instance;
 
     static {
@@ -11,10 +14,5 @@ public class ResourceManagerFactory {
         }
     }
 
-    public static ResourceManager getInstance() {
-        return instance;
-    }
-
-    private ResourceManagerFactory() {
-    }
+    private ResourceManagerSingleton() {}
 }

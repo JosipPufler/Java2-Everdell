@@ -1,10 +1,11 @@
 package hr.algebra.everdell.models.cards.constructs;
 
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.interfaces.Destination;
 import hr.algebra.everdell.models.*;
+import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.DialogUtils;
 import hr.algebra.everdell.utils.FileUtils;
-import hr.algebra.everdell.utils.GameUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,14 +54,14 @@ public class PostOffice extends Construct implements Destination {
     @Override
     public Boolean placeWorker() {
         PlayerState playerState = GameState.getPlayerState();
-        GameUtils.addCardsToOpponentsHand(GameState.getResourceManager().tryDrawFromMainDeck(2));
+        CardUtils.addCardsToOpponentsHand(GameState.getResourceManager().tryDrawFromMainDeck(2));
         Optional<Integer> cardsToDiscard = DialogUtils.showSingleResourceDialog(playerState.cardsInHand.size(), Resource.CARD, "Cards to discard");
         if (cardsToDiscard.isPresent()) {
             for (int i = cardsToDiscard.get() - 1; i > 0; i--) {
                 Optional<Card> card = DialogUtils.showCardChooseDialog(playerState.cardsInHand, "Card to discard");
-                card.ifPresent(GameUtils::removeCardFromHand);
+                card.ifPresent(CardUtils::removeCardFromHand);
             }
-            GameUtils.addCardsToHand(GameState.getResourceManager().tryDrawFromMainDeck(cardsToDiscard.get()));
+            CardUtils.addCardsToHand(GameState.getResourceManager().tryDrawFromMainDeck(cardsToDiscard.get()));
             workers.add(GameState.getPlayerState().getPlayerNumber());
             return true;
         }

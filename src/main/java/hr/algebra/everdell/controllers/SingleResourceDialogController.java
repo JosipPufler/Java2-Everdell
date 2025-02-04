@@ -1,9 +1,8 @@
 package hr.algebra.everdell.controllers;
 
 import hr.algebra.everdell.models.Resource;
-import hr.algebra.everdell.utils.ResourceManager;
-import hr.algebra.everdell.utils.ResourceManagerFactory;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import lombok.Setter;
@@ -11,6 +10,8 @@ import lombok.Setter;
 public class SingleResourceDialogController {
     @FXML
     public Spinner<Integer> spinner;
+    @FXML
+    public Label lblResourceType;
 
     @Setter
     Resource resourceType;
@@ -18,12 +19,15 @@ public class SingleResourceDialogController {
     @Setter
     int maxResources;
 
-    final ResourceManager resourceManager = ResourceManagerFactory.getInstance();
+    public void initialize() {}
 
-    public void initialize() {
+    public void setParameters(int maxResources, Resource resourceType) {
+        lblResourceType.setText(resourceType.toString());
+        this.maxResources = maxResources;
+
         spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, maxResources));
 
-        spinner.valueProperty().addListener((observable, oldValue, newValue) -> {
+        spinner.valueProperty().addListener((_, oldValue, newValue) -> {
             if(newValue > maxResources) {
                 spinner.getValueFactory().setValue(oldValue);
             }

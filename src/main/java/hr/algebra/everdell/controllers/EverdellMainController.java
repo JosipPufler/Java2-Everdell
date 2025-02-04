@@ -9,7 +9,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -73,14 +72,12 @@ public class EverdellMainController {
     public Group playerTwoGroup = new Group();
     Text statsText = new Text();
     CityController cityController;
-    PlayableCardController handController;
-    PlayableCardController meadowController;
     private static ChatRemoteService chatRemoteService;
 
     public void initialize() throws IOException {
         cityController = GameUtils.showCity(this);
-        handController = GameUtils.showHand(this);
-        meadowController = GameUtils.generateMeadow(this);
+        GameUtils.showHand(this);
+        GameUtils.generateMeadow(this);
 
         location_2T1C.setUserData(new Location(new ResourceGroup(0, 2, 0, 0), 1, 0, true));
         location_3T.setUserData(new Location(new ResourceGroup(0, 3, 0, 0), 0, 0, false));
@@ -94,7 +91,6 @@ public class EverdellMainController {
 
         for (Ellipse location : locations){
             location.setOnMouseClicked(event -> {
-                Object userData = location.getUserData();
                 Group playerGroup, opponentGroup;
                 if (GameState.getPlayerState().getPlayerNumber() == PlayerNumber.ONE){
                     playerGroup = playerOneGroup;
@@ -103,13 +99,11 @@ public class EverdellMainController {
                     playerGroup = playerTwoGroup;
                     opponentGroup = playerOneGroup;
                 }
-                System.out.println(event.getSceneX());
-                System.out.println(event.getSceneY());
-                if (userData instanceof Location && UiUtils.placeMarker(new Marker(event.getSceneX(), event.getSceneY(), ((Location) userData).toShorthandString(), (Location) userData), false, playerGroup, opponentGroup)){
-                    ((Location) userData).activate(GameState.getPlayerState(), true);
+                if (location.getUserData() instanceof Location markerLocation && UiUtils.placeMarker(new Marker(event.getSceneX(), event.getSceneY(), markerLocation.toShorthandString(), markerLocation), false, playerGroup, opponentGroup)){
+                    markerLocation.activate(GameState.getPlayerState(), true);
                     updateResourcePool();
-                    Location.addLocations((Location) userData);
-                    GameState.switchPlayers();
+                    Location.addLocations(markerLocation);
+                    GameState.switchPlayers(new GameAction(GameState.getPlayerState().getPlayerNumber(), GameActionType.PLACE_WORKER, markerLocation));
                 }
             });
         }
@@ -121,9 +115,8 @@ public class EverdellMainController {
                 throw new RuntimeException(e);
             }
             ChatUtils.createAndRunChatTimeline(chatRemoteService, taChat);
-        } else {
+        } else
             tabPane.getTabs().remove(chatTab);
-        }
         anchorPane.getChildren().add(playerOneGroup);
         anchorPane.getChildren().add(playerTwoGroup);
         stpYourStockpile.getChildren().add(statsText);
@@ -139,11 +132,10 @@ public class EverdellMainController {
         btnTwigs.setText(String.valueOf(resourceManager.getResourcePool().getTwigs()));
         btnResin.setText(String.valueOf(resourceManager.getResourcePool().getResin()));
         lblDeck.setText(String.valueOf(resourceManager.getDeckSize()));
-        System.out.println(resourceManager.getDeckSize());
-        statsText.setText(String.format("Your stats:\nPoints: %s\nPebbles: %s\nTwigs: %s\nResin: %s\nBerries: %s\nWorkers: %s/%s\nSeason: %s", playerState.calculatePoints(), playerState.resources.getPebbles(), playerState.resources.getTwigs(), playerState.resources.getResin(), playerState.resources.getBerries(), playerState.getFreeWorkers(), playerState.getMaxWorkers(), playerState.getCurrentSeason()));
+        statsText.setText(String.format("Your stats:" + "%nPoints: %s" + "%nPebbles: %s" + "%nTwigs: %s" + "%nResin: %s" + "%nBerries: %s" + "%nWorkers: %s/%s" + "%nSeason: %s", playerState.calculatePoints(), playerState.resources.getPebbles(), playerState.resources.getTwigs(), playerState.resources.getResin(), playerState.resources.getBerries(), playerState.getFreeWorkers(), playerState.getMaxWorkers(), playerState.getCurrentSeason()));
     }
 
-    public void changeSeason (MouseEvent event) {
+    public void changeSeason () {
         if (GameState.getPlayerState().getPlayerNumber() == PlayerNumber.ONE)
             playerOneGroup.getChildren().clear();
         else
@@ -151,10 +143,8 @@ public class EverdellMainController {
         cityController.returnWorkers(GameState.getPlayerState());
         GameState.getPlayerState().nextSeason();
         locations.forEach(x -> {
-            Object userData = x.getUserData();
-            if (userData instanceof Location){
-                ((Location) userData).deactivate();
-            }
+            if (x.getUserData() instanceof Location location)
+                location.deactivate();
         });
         updateResourcePool();
     }
@@ -163,23 +153,23 @@ public class EverdellMainController {
         if (GameState.getPlayerState().getPlayerNumber() == PlayerNumber.ONE){
             playerTwoGroup.getChildren().clear();
             for (Marker marker : markers){
-                Circle circle = new Circle(marker.x, marker.y, 10, Paint.valueOf(String.format("#%06x", PlayerNumber.TWO.getPlayerColor().getRGB() & 0xFFFFFF)));
-                circle.setUserData(marker.location);
-                circle.setId(GameState.getOpponentState().getPlayerName() + '_' + marker.name.split("_", 2)[1]);
+                Circle circle = new Circle(marker.getX(), marker.getY(), 10, Paint.valueOf(String.format("#%06x", PlayerNumber.TWO.getPlayerColor().getRGB() & 0xFFFFFF)));
+                circle.setUserData(marker.getLocation());
+                circle.setId(GameState.getOpponentState().getPlayerName() + '_' + marker.getName().split("_", 2)[1]);
                 playerTwoGroup.getChildren().add(circle);
             }
         } else {
             playerOneGroup.getChildren().clear();
             for (Marker marker : markers){
-                Circle circle = new Circle(marker.x, marker.y, 10, Paint.valueOf(String.format("#%06x", PlayerNumber.ONE.getPlayerColor().getRGB() & 0xFFFFFF)));
-                circle.setUserData(marker.location);
-                circle.setId(GameState.getOpponentState().getPlayerName() + '_' + marker.name.split("_", 2)[1]);
+                Circle circle = new Circle(marker.getX(), marker.getY(), 10, Paint.valueOf(String.format("#%06x", PlayerNumber.ONE.getPlayerColor().getRGB() & 0xFFFFFF)));
+                circle.setUserData(marker.getLocation());
+                circle.setId(GameState.getOpponentState().getPlayerName() + '_' + marker.getName().split("_", 2)[1]);
                 playerOneGroup.getChildren().add(circle);
             }
         }
     }
 
-    public void showMeadow (MouseEvent event){
+    public void showMeadow (){
         GameUtils.showMeadow();
     }
 
@@ -191,7 +181,7 @@ public class EverdellMainController {
         ChatUtils.sendChatMessage(tfMessage, taChat, chatRemoteService);
     }
 
-    public void generateDocumentation(ActionEvent actionEvent) {
+    public void generateDocumentation() {
         DocumentationUtils.generateDocumentation();
     }
 
@@ -200,6 +190,15 @@ public class EverdellMainController {
     }
 
     public void saveGameState(ActionEvent actionEvent) {
+        GameActionUtils.saveGameToFile();
+    }
 
+    public List<Location> getLocationsDeployable(){
+        List<Location> availableLocations = new ArrayList<>();
+        for (Ellipse ellipse : locations){
+            if (ellipse.getUserData() instanceof Location location)
+                availableLocations.add(location);
+        }
+        return availableLocations;
     }
 }

@@ -1,10 +1,11 @@
 package hr.algebra.everdell.models.cards.constructs;
 
+import hr.algebra.everdell.interfaces.Card;
+import hr.algebra.everdell.interfaces.GreenProduction;
 import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.utils.FileUtils;
-import hr.algebra.everdell.utils.ResourceManager;
 
-public class GeneralStore extends Construct {
+public class GeneralStore extends Construct implements GreenProduction {
 
     public GeneralStore() {
         super(new ResourceGroup(0, 0, 1, 1),
@@ -18,6 +19,13 @@ public class GeneralStore extends Construct {
 
     @Override
     public boolean play() {
+        Activate();
+        return super.play();
+    }
+
+
+    @Override
+    public Boolean Activate() {
         boolean hasFarm = false;
         for (Card card : GameState.getPlayerState().cardsInPlay){
             if (card instanceof Farm){
@@ -30,6 +38,6 @@ public class GeneralStore extends Construct {
         } else {
             GameState.getResourceManager().tryTakeBerries(GameState.getPlayerState().resources, 1);
         }
-        return super.play();
+        return true;
     }
 }

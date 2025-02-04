@@ -1,7 +1,9 @@
 package hr.algebra.everdell.models.cards.constructs;
 
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.interfaces.Triggered;
 import hr.algebra.everdell.models.*;
+import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.DialogUtils;
 import hr.algebra.everdell.utils.FileUtils;
 import hr.algebra.everdell.utils.GameUtils;
@@ -37,7 +39,7 @@ public class Crane extends Construct implements Triggered {
             if (craneDiscardReward.isPresent()) {
                 GameState.getPlayerState().resources.merge(craneDiscardReward.get());
                 Optional<Card> first = GameState.getPlayerState().cardsInPlay.stream().filter(x -> Objects.equals(x.getName(), getName())).findFirst();
-                first.ifPresent(GameUtils::removeCardFromCity);
+                first.ifPresent(CardUtils::removeCardFromCity);
                 GameUtils.updatePlayer();
             }
         }

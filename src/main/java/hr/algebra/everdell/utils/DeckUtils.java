@@ -1,6 +1,7 @@
 package hr.algebra.everdell.utils;
 
-import hr.algebra.everdell.models.Card;
+import hr.algebra.everdell.interfaces.Card;
+import hr.algebra.everdell.models.BaseCard;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,35 +11,31 @@ import java.util.stream.Stream;
 
 public class DeckUtils {
     private DeckUtils(){}
-
-    static final String critterPath = "C:\\Users\\josip\\IdeaProjects\\everdell\\src\\main\\java\\hr\\algebra\\everdell\\models\\cards\\critters";
-    static final String constructPath = "C:\\Users\\josip\\IdeaProjects\\everdell\\src\\main\\java\\hr\\algebra\\everdell\\models\\cards\\constructs";
-    static final String critterStart = "hr.algebra.everdell.models.cards.critters.";
-    static final String constructStart = "hr.algebra.everdell.models.cards.constructs.";
+    static final File root = new File("");
+    static final File CRITTER_FOLDER = new File(root.getAbsolutePath(), "src\\main\\java\\hr\\algebra\\everdell\\models\\cards\\critters");
+    static final File CONSTRUCT_FOLDER = new File(root.getAbsolutePath(), "src\\main\\java\\hr\\algebra\\everdell\\models\\cards\\constructs");
+    static final String CRITTER_START = "hr.algebra.everdell.models.cards.critters.";
+    static final String CONSTRUCT_START = "hr.algebra.everdell.models.cards.constructs.";
 
     public static List<Card> generateDeck() throws Exception{
-        List<String> critterList = new ArrayList<>(Stream.of(Objects.requireNonNull(new File(critterPath).listFiles()))
+        List<String> critterList = new ArrayList<>(Stream.of(Objects.requireNonNull(CRITTER_FOLDER.listFiles()))
                 .filter(file -> !file.isDirectory())
                 .map(File::getName).toList());
-        List<String> constructList = new ArrayList<>(Stream.of(Objects.requireNonNull(new File(constructPath).listFiles()))
+        List<String> constructList = new ArrayList<>(Stream.of(Objects.requireNonNull(CONSTRUCT_FOLDER.listFiles()))
                 .filter(file -> !file.isDirectory())
                 .map(File::getName).toList());
         List<Card> deck = new ArrayList<>();
-        for (int i = 0; i < critterList.size(); i++) {
-            critterList.set(i, critterStart + critterList.get(i).split("\\.")[0]);
-        }
+        critterList.replaceAll(s -> CRITTER_START + s.split("\\.")[0]);
 
-        for (int i = 0; i < constructList.size(); i++) {
-            constructList.set(i, constructStart + constructList.get(i).split("\\.")[0]);
-        }
+        constructList.replaceAll(s -> CONSTRUCT_START + s.split("\\.")[0]);
         List<String> classList = new ArrayList<>(critterList);
         classList.addAll(constructList);
         for (String file : classList){
             Class<?> aClass = Class.forName(file);
-            Card o = (Card) aClass.newInstance();
+            BaseCard o = (BaseCard) aClass.getDeclaredConstructor().newInstance();
             deck.add(o);
             for (int i = 0 ; i < o.getNumberInDeck()-1 ; i++){
-                deck.add((Card) aClass.newInstance());
+                deck.add((BaseCard) aClass.getDeclaredConstructor().newInstance());
             }
         }
         System.out.println(deck.size());

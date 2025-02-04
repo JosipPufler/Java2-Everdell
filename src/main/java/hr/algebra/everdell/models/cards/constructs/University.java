@@ -1,10 +1,11 @@
 package hr.algebra.everdell.models.cards.constructs;
 
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.interfaces.Destination;
 import hr.algebra.everdell.models.*;
+import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.DialogUtils;
 import hr.algebra.everdell.utils.FileUtils;
-import hr.algebra.everdell.utils.GameUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +62,7 @@ public class University extends Construct implements Destination {
         PlayerState playerState = GameState.getPlayerState();
         Optional<Card> card = DialogUtils.showCardChooseDialog(playerState.cardsInPlay, getName());
         if (card.isPresent()){
-            GameUtils.removeCardFromCity(card.get());
+            CardUtils.removeCardFromCity(card.get());
             GameState.getResourceManager().tryTakeGroup(playerState.resources, card.get().getCost());
         } else {
             return false;

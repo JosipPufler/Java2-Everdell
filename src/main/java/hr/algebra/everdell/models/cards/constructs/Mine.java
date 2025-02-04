@@ -1,10 +1,10 @@
 package hr.algebra.everdell.models.cards.constructs;
 
+import hr.algebra.everdell.interfaces.GreenProduction;
 import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.utils.FileUtils;
-import hr.algebra.everdell.utils.ResourceManager;
 
-public class Mine extends Construct {
+public class Mine extends Construct implements GreenProduction {
     public Mine(){
         super(
                 new ResourceGroup(0,
@@ -22,7 +22,13 @@ public class Mine extends Construct {
 
     @Override
     public boolean play() {
-        GameState.getResourceManager().tryTakePebbles(GameState.getPlayerState().resources, 1);
+        Activate();
         return super.play();
+    }
+
+    @Override
+    public Boolean Activate() {
+        GameState.getResourceManager().tryTakePebbles(GameState.getPlayerState().resources, 1);
+        return true;
     }
 }

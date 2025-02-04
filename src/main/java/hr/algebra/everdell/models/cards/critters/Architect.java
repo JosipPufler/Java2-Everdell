@@ -1,10 +1,8 @@
 package hr.algebra.everdell.models.cards.critters;
 
-import hr.algebra.everdell.interfaces.Triggered;
 import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.models.cards.constructs.Crane;
 import hr.algebra.everdell.utils.FileUtils;
-import hr.algebra.everdell.utils.ResourceManager;
 
 public class Architect extends Critter<Crane>{
     public Architect() {
@@ -24,10 +22,5 @@ public class Architect extends Critter<Crane>{
         if (unspent > 6)
             unspent = 6;
         return unspent + super.calculatePoints();
-    }
-
-    @Override
-    public boolean play() {
-        return super.play();
     }
 }

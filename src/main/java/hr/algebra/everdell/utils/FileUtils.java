@@ -2,7 +2,6 @@ package hr.algebra.everdell.utils;
 
 import hr.algebra.everdell.models.GameStateTransferable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 
 import java.io.*;
 import java.util.Objects;
@@ -16,10 +15,10 @@ public class FileUtils {
     private static final File cardClassFolder = new File(imageFolder.getAbsolutePath(), "critters");
     private static final String boardFileName = "board.jpg";
     private static final String SAVE_GAME_FILE_NAME = "game/savedGame.dat";
-    public static final String GAME_MOVES_FILE_NAME = "game/gameMoves.dat";
+    public static final String GAME_MOVES_FILE_NAME = "game/gameActions.dat";
 
     public static String getAbsoluteCardImagePath(String cardName){
-        File[] jpgs = cardImageFolder.listFiles((dir, name) -> name.startsWith(cardName) && name.endsWith("jpg"));
+        File[] jpgs = cardImageFolder.listFiles((_, name) -> name.startsWith(cardName) && name.endsWith("jpg"));
         if(Objects.requireNonNull(jpgs).length == 0){
             return null;
         }
@@ -39,7 +38,7 @@ public class FileUtils {
     }
 
     public static GameStateTransferable loadGameStateFromFile(){
-        GameStateTransferable loadedGameState = null;
+        GameStateTransferable loadedGameState;
         try(ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(SAVE_GAME_FILE_NAME))) {
             loadedGameState = (GameStateTransferable) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {

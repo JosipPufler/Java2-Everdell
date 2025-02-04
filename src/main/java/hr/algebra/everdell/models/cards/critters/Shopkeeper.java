@@ -3,7 +3,6 @@ package hr.algebra.everdell.models.cards.critters;
 import hr.algebra.everdell.interfaces.Triggered;
 import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.models.cards.constructs.GeneralStore;
-import hr.algebra.everdell.models.cards.constructs.School;
 import hr.algebra.everdell.utils.FileUtils;
 import hr.algebra.everdell.utils.GameUtils;
 

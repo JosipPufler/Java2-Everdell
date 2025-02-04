@@ -8,7 +8,7 @@ public enum PlayerNumber {
 
     public Color getPlayerColor() {
         return playerColor;
-    };
+    }
 
     final Color playerColor;
     PlayerNumber(Color color) {

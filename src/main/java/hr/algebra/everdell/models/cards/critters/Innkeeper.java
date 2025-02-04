@@ -1,9 +1,10 @@
 package hr.algebra.everdell.models.cards.critters;
 
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.interfaces.Triggered;
 import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.models.cards.constructs.Inn;
-import hr.algebra.everdell.models.cards.constructs.Monastery;
+import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.DialogUtils;
 import hr.algebra.everdell.utils.FileUtils;
 import hr.algebra.everdell.utils.GameUtils;
@@ -38,7 +39,7 @@ public class Innkeeper extends Critter<Inn> implements Triggered {
         if (result) {
             GameState.getResourceManager().tryTakeBerries(GameState.getPlayerState().resources, 3);
             Optional<Card> first = GameState.getPlayerState().cardsInPlay.stream().filter(x -> Objects.equals(x.getName(), getName())).findFirst();
-            first.ifPresent(GameUtils::removeCardFromCity);
+            first.ifPresent(CardUtils::removeCardFromCity);
             GameUtils.updatePlayer();
         }
     }

@@ -1,9 +1,12 @@
 package hr.algebra.everdell.controllers;
 
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.interfaces.CardInsertable;
 import hr.algebra.everdell.interfaces.CardListable;
-import hr.algebra.everdell.models.Card;
+import hr.algebra.everdell.models.GameAction;
+import hr.algebra.everdell.models.GameActionType;
 import hr.algebra.everdell.models.GameState;
+import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.GameUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -51,8 +54,8 @@ public class PlayableCardController extends CardListable implements CardInsertab
 
         imageView.setOnDragDone(event -> {
             if (event.isAccepted()) {
-                GameUtils.removeCardFromHand(card);
-                GameState.switchPlayers();
+                CardUtils.removeCardFromHand(card);
+                GameState.switchPlayers(new GameAction(GameState.getPlayerState().getPlayerNumber(), GameActionType.PLAY_CARD, card));
             }
         });
 

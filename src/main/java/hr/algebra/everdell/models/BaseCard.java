@@ -1,12 +1,12 @@
 package hr.algebra.everdell.models;
 
-import hr.algebra.everdell.utils.GameUtils;
+import hr.algebra.everdell.interfaces.Card;
 import lombok.Getter;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Card implements Serializable {
+public abstract class BaseCard implements Card, Serializable {
     @Getter
     CardType type;
     @Getter
@@ -15,13 +15,12 @@ public abstract class Card implements Serializable {
     String name;
     @Getter
     String imageFilePath;
-    @Getter
     Boolean unique;
     int inherentPointValue;
     @Getter
     int numberInDeck;
 
-    public Card(ResourceGroup cost, CardType type, String name, String imageFilePath, Boolean unique, Integer inherentPointValue, int numberInDeck) {
+    protected BaseCard(ResourceGroup cost, CardType type, String name, String imageFilePath, Boolean unique, Integer inherentPointValue, int numberInDeck) {
         this.cost = cost;
         this.type = type;
         this.name = name;
@@ -31,22 +30,14 @@ public abstract class Card implements Serializable {
         this.numberInDeck = numberInDeck;
     }
 
+    @Override
     public Boolean isUnique() {
         return unique;
     }
 
-    public Boolean takesSpace(){
-        return true;
-    }
-
+    @Override
     public int calculatePoints() {
         return inherentPointValue;
-    }
-
-    public boolean play(){
-        GameUtils.addCardToCity(this, false);
-        GameUtils.updatePlayer();
-        return true;
     }
 
     @Override
@@ -59,7 +50,12 @@ public abstract class Card implements Serializable {
             return false;
         }
 
-        final Card other = (Card) obj;
+        final BaseCard other = (BaseCard) obj;
         return Objects.equals(this.name, other.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, cost, name, imageFilePath, unique, inherentPointValue, numberInDeck);
     }
 }

@@ -1,6 +1,5 @@
 package hr.algebra.everdell;
 
-import hr.algebra.everdell.controllers.EverdellMainController;
 import hr.algebra.everdell.models.ConfigurationKey;
 import hr.algebra.everdell.models.GameState;
 import hr.algebra.everdell.models.GameStateTransferable;
@@ -63,16 +62,11 @@ public class EverdellApplication extends Application {
 
     private static void acceptRequestsFromPlayer(Integer port) {
         try (ServerSocket serverSocket = new ServerSocket(port)){
-            System.err.printf("Server listening on port: %d%n", serverSocket.getLocalPort());
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 System.err.printf("Client connected from port %s%n", clientSocket.getPort());
-                Runnable task = () -> {
-                    Platform.runLater(() -> {
-                        processSerializableClient(clientSocket);
-                    });
-                };
+                Runnable task = () -> Platform.runLater(() -> processSerializableClient(clientSocket));
                 new Thread(task).start();
             }
         }  catch (IOException e) {
@@ -82,11 +76,11 @@ public class EverdellApplication extends Application {
 
     private static void processSerializableClient(Socket clientSocket) {
         try (ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
-            ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());){
+            ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream())){
             GameStateTransferable gameState = (GameStateTransferable)ois.readObject();
             Platform.runLater(() -> GameState.loadGameState(gameState));
 
-            Boolean gameOver = GameState.getPlayerState().getGameOver() && GameState.getOpponentState().getGameOver();
+            boolean gameOver = GameState.getPlayerState().getGameOver() && GameState.getOpponentState().getGameOver();
 
             if (gameOver){
                 GameUtils.blockScreen(true);
@@ -105,9 +99,7 @@ public class EverdellApplication extends Application {
                 GameUtils.blockScreen(false);
             }
 
-            System.out.println("Game state successfully received: " + gameState);
             GameState.loadGameState(gameState);
-            oos.writeObject("Success!");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -115,7 +107,6 @@ public class EverdellApplication extends Application {
 
     public static void sendRequestFromPlayer(String hostName, Integer port) {
         try (Socket clientSocket = new Socket(hostName, port)){
-            System.err.printf("Client is connecting to %s:%d%n", clientSocket.getInetAddress(), clientSocket.getPort());
 
             sendSerializableRequest(clientSocket);
         } catch (IOException | ClassNotFoundException e) {
@@ -127,8 +118,5 @@ public class EverdellApplication extends Application {
         ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream());
         ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
         oos.writeObject(GameState.packageGameState());
-        if (ois.available() > 0){
-            System.out.printf("Received from the server: ", ois.readObject());
-        }
     }
 }

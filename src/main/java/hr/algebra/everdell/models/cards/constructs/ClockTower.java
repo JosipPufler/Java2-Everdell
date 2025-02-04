@@ -8,7 +8,7 @@ import hr.algebra.everdell.utils.GameUtils;
 
 import java.util.Optional;
 
-public class ClockTower extends Construct implements Triggered {
+public class    ClockTower extends Construct implements Triggered {
     int points;
     TriggerType triggerType;
 

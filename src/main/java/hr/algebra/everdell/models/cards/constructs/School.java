@@ -1,7 +1,6 @@
 package hr.algebra.everdell.models.cards.constructs;
 
 import hr.algebra.everdell.models.*;
-import hr.algebra.everdell.models.cards.critters.Bard;
 import hr.algebra.everdell.utils.FileUtils;
 
 public class School extends Construct {

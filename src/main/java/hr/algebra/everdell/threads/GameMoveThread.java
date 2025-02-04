@@ -2,6 +2,7 @@ package hr.algebra.everdell.threads;
 
 import hr.algebra.everdell.models.GameAction;
 import hr.algebra.everdell.utils.FileUtils;
+import hr.algebra.everdell.utils.XmlUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -13,7 +14,7 @@ public abstract class GameMoveThread {
 
     protected static Boolean FILE_ACCESS_IN_PROGRESS = false;
 
-    public synchronized void saveTheLastGameMove(GameAction gameMove) {
+    public synchronized void saveTheLastGameMove(GameAction gameAction) {
 
         while(FILE_ACCESS_IN_PROGRESS) {
             try {
@@ -34,7 +35,7 @@ public abstract class GameMoveThread {
             }
         }
 
-        finalGameMoveList.add(gameMove);
+        finalGameMoveList.add(gameAction);
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FileUtils.GAME_MOVES_FILE_NAME))) {
             oos.writeObject(finalGameMoveList);
@@ -42,12 +43,14 @@ public abstract class GameMoveThread {
             throw new RuntimeException(e);
         }
 
+        XmlUtils.saveGameAction(gameAction);
+
         FILE_ACCESS_IN_PROGRESS = false;
 
         notifyAll();
     }
 
-    public synchronized List<?> loadGameMoveList() throws IOException, ClassNotFoundException {
+    public synchronized List<GameAction> loadGameMoveList() throws IOException, ClassNotFoundException {
 
         while(FILE_ACCESS_IN_PROGRESS) {
             try {
@@ -59,9 +62,14 @@ public abstract class GameMoveThread {
 
         FILE_ACCESS_IN_PROGRESS = true;
 
-        ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FileUtils.GAME_MOVES_FILE_NAME));
-
-        List<GameAction> gameMoveList = new ArrayList<>((List<GameAction>) ois.readObject());
+        List<GameAction> gameMoveList = new ArrayList<>();
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FileUtils.GAME_MOVES_FILE_NAME))) {
+            if (ois.available() > 0) {
+                gameMoveList = new ArrayList<>((List<GameAction>) ois.readObject());
+            }
+        } catch (EOFException e){
+            System.err.println("Unexpected end of file");
+        }
 
         FILE_ACCESS_IN_PROGRESS = false;
 

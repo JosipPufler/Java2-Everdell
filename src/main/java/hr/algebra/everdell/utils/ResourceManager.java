@@ -1,6 +1,6 @@
 package hr.algebra.everdell.utils;
 
-import hr.algebra.everdell.models.Card;
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.models.ResourceGroup;
 import lombok.Getter;
 
@@ -95,7 +95,7 @@ public class ResourceManager implements Serializable {
 
     public List<Card> tryDrawCardsFromMeadow(int numberOfCards) {
         List<Card> cardsDrawn = new ArrayList<>();
-        Optional<Card> card = Optional.empty();
+        Optional<Card> card;
         if (numberOfCards > 0) {
             for (int i = 0; i < numberOfCards; i++) {
                 card = DialogUtils.showCardChooseDialog(getMeadow(), "Choose cards");

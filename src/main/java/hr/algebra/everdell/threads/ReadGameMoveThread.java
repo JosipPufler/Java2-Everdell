@@ -25,7 +25,7 @@ public class ReadGameMoveThread extends GameMoveThread implements Runnable {
             if(!gameMoves.isEmpty()) {
                 GameAction gameMove = (GameAction) gameMoves.get(gameMoves.size() - 1);
                 Platform.runLater(() -> {
-                    label.setText(gameMove.getGameAction().getGameActionText()
+                    label.setText(gameMove.getGameActionType().getGameActionText()
                             + ": "
                             + gameMove.getGameActionObject().toString()
                             + " at "

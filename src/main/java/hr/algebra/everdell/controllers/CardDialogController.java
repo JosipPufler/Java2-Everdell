@@ -1,20 +1,19 @@
 package hr.algebra.everdell.controllers;
 
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.interfaces.CardInsertable;
 import hr.algebra.everdell.interfaces.CardListable;
-import hr.algebra.everdell.models.Card;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import lombok.Getter;
 
 import java.io.File;
 import java.util.List;
@@ -26,6 +25,7 @@ public class CardDialogController extends CardListable implements CardInsertable
     @FXML
     private final Stage popUpStage = new Stage();
 
+    @Getter
     private Card selectedCard;
 
     Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
@@ -46,29 +46,22 @@ public class CardDialogController extends CardListable implements CardInsertable
         popUpStage.initStyle(StageStyle.UNDECORATED);
         popUpStage.setMaxHeight(700);
 
-        iv.setOnMouseMoved(new EventHandler<>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (event.getScreenX() + popUpStage.getWidth() > primaryScreenBounds.getMaxX()) {
-                    popUpStage.setX(event.getScreenX() - popUpStage.getWidth() - 20);
-                } else {
-                    popUpStage.setX(event.getScreenX() + 20);
-                }
-                if (event.getScreenY() + popUpStage.getHeight() + 20 > primaryScreenBounds.getMaxY()) {
-                    popUpStage.setY(event.getScreenY() - (event.getScreenY() + popUpStage.getHeight() - primaryScreenBounds.getMaxY()));
-                } else {
-                    popUpStage.setY(event.getScreenY() + 20);
-                }
+        iv.setOnMouseMoved(event -> {
+            if (event.getScreenX() + popUpStage.getWidth() > primaryScreenBounds.getMaxX()) {
+                popUpStage.setX(event.getScreenX() - popUpStage.getWidth() - 20);
+            } else {
+                popUpStage.setX(event.getScreenX() + 20);
+            }
+            if (event.getScreenY() + popUpStage.getHeight() + 20 > primaryScreenBounds.getMaxY()) {
+                popUpStage.setY(event.getScreenY() - (event.getScreenY() + popUpStage.getHeight() - primaryScreenBounds.getMaxY()));
+            } else {
+                popUpStage.setY(event.getScreenY() + 20);
             }
         });
 
-        iv.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent event) {
-                selectedCard = card;
-            }
-        });
+        iv.setOnMouseClicked(_ -> selectedCard = card);
 
-        iv.hoverProperty().addListener((observableValue, oldValue, newValue) -> {
+        iv.hoverProperty().addListener((_, _, newValue) -> {
             if (newValue){
                 Image popUpImage = iv.getImage();
                 ImageView popUpImageView = new ImageView(popUpImage);
@@ -85,10 +78,6 @@ public class CardDialogController extends CardListable implements CardInsertable
         });
 
         return iv;
-    }
-
-    public Card getSelectedCard() {
-        return selectedCard;
     }
 
     @Override

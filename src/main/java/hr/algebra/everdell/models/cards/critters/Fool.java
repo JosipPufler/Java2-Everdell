@@ -1,9 +1,11 @@
 package hr.algebra.everdell.models.cards.critters;
 
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.models.CardType;
 import hr.algebra.everdell.models.Critter;
 import hr.algebra.everdell.models.ResourceGroup;
 import hr.algebra.everdell.models.cards.constructs.FairGrounds;
+import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.FileUtils;
 import hr.algebra.everdell.utils.GameUtils;
 
@@ -21,7 +23,7 @@ public class Fool extends Critter<FairGrounds> {
 
     @Override
     public boolean play() {
-        GameUtils.addCardToOpponentsCity(this);
+        CardUtils.addCardToOpponentsCity(this);
         return true;
     }
 }

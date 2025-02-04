@@ -1,10 +1,11 @@
 package hr.algebra.everdell.models.cards.constructs;
 
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.interfaces.Destination;
 import hr.algebra.everdell.models.*;
+import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.DialogUtils;
 import hr.algebra.everdell.utils.FileUtils;
-import hr.algebra.everdell.utils.GameUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class Inn extends Construct implements Destination {
         if (!GameState.getResourceManager().getMeadow().isEmpty()){
             Optional<Card> card = DialogUtils.showCardChooseDialog(GameState.getResourceManager().getMeadow(), "Choose card from the meadow");
             if (card.isPresent()){
-                Optional<ResourceGroup> discount = Optional.empty();
+                Optional<ResourceGroup> discount;
 
                 if (card.get().getCost().sumAllResources() > 3){
                     discount = DialogUtils.showMultiResourceDialog(3, card.get().getCost(), "Discount for " + card.get().getName());
@@ -60,7 +61,7 @@ public class Inn extends Construct implements Destination {
                 ResourceGroup cost = card.get().getCost();
                 if (discount.isPresent() && cost.subtract(discount.get()) && cost.compareTo(GameState.getPlayerState().resources) < 0){
                     GameState.getPlayerState().playCard(card.get());
-                    GameUtils.removeCardFromMeadow(card.get());
+                    CardUtils.removeCardFromMeadow(card.get());
                 }
             }
         }

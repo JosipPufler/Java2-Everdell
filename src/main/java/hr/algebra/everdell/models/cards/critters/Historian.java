@@ -1,8 +1,10 @@
 package hr.algebra.everdell.models.cards.critters;
 
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.interfaces.Triggered;
 import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.models.cards.constructs.School;
+import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.FileUtils;
 import hr.algebra.everdell.utils.GameUtils;
 
@@ -36,7 +38,7 @@ public class Historian extends Critter<School> implements Triggered {
     @Override
     public void trigger() {
         List<Card> cards = GameState.getResourceManager().tryDrawFromMainDeck(1);
-        GameUtils.addCardsToHand(cards);
+        CardUtils.addCardsToHand(cards);
         GameUtils.updatePlayer();
     }
 }

@@ -1,6 +1,6 @@
 package hr.algebra.everdell.interfaces;
 
-import hr.algebra.everdell.models.Card;
+import hr.algebra.everdell.models.BaseCard;
 
 import java.util.List;
 

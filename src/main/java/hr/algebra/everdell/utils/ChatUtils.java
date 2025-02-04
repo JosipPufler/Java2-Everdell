@@ -15,7 +15,7 @@ import java.util.List;
 public class ChatUtils {
     public static void createAndRunChatTimeline(ChatRemoteService chatRemoteService,
                                                 TextArea chatMessagesTextArea) {
-        Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+        Timeline clock = new Timeline(new KeyFrame(Duration.ZERO, _ -> {
             try {
                 List<String> chatMessages = chatRemoteService.getAllChatMessages();
 

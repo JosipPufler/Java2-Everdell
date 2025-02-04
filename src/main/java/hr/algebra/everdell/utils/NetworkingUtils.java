@@ -6,6 +6,8 @@ import hr.algebra.everdell.models.GameState;
 import hr.algebra.everdell.models.PlayerNumber;
 
 public class NetworkingUtils {
+    private NetworkingUtils(){}
+
     public static void sendGameState() {
         if(PlayerNumber.ONE.name().equals(GameState.getPlayerState().getPlayerNumber().name())) {
             EverdellApplication.sendRequestFromPlayer(

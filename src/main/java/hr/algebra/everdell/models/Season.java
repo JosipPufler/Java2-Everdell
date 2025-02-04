@@ -1,10 +1,10 @@
 package hr.algebra.everdell.models;
 
 public enum Season {
-    Winter,
-    Spring,
-    Summer,
-    Autumn;
+    WINTER,
+    SPRING,
+    SUMMER,
+    AUTUMN;
 
     private static final Season[] vals = values();
 

@@ -1,8 +1,10 @@
 package hr.algebra.everdell.models.cards.critters;
 
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.interfaces.Destination;
 import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.models.cards.constructs.Palace;
+import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.DialogUtils;
 import hr.algebra.everdell.utils.FileUtils;
 import hr.algebra.everdell.utils.GameUtils;
@@ -55,7 +57,7 @@ public class Queen extends Critter<Palace> implements Destination {
         if (!options.isEmpty()){
             Optional<Card> card = DialogUtils.showCardChooseDialog(cards, "Choose card to play");
             if (card.isPresent()){
-                GameUtils.addCardToCity(card.get(), true);
+                CardUtils.addCardToCity(card.get(), true);
                 GameState.getPlayerState().playCard(card.get());
                 workers.add(GameState.getPlayerState().getPlayerNumber());
                 return true;

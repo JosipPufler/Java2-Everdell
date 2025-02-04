@@ -1,10 +1,11 @@
 package hr.algebra.everdell.models.cards.constructs;
 
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.interfaces.Destination;
 import hr.algebra.everdell.models.*;
+import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.FileUtils;
 import hr.algebra.everdell.utils.GameUtils;
-import hr.algebra.everdell.utils.ResourceManager;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class Chapel extends Construct implements Destination {
     int maxWorkerSlots = 1;
-    final List<PlayerNumber> workers = new ArrayList<>();
+    private final List<PlayerNumber> workers = new ArrayList<>();
     boolean isOpen = false;
 
     @Getter
@@ -57,7 +58,7 @@ public class Chapel extends Construct implements Destination {
     public Boolean placeWorker() {
         pointsPlaced++;
         List<Card> cards = GameState.getResourceManager().tryDrawFromMainDeck(pointsPlaced * 2);
-        GameUtils.addCardsToHand(cards);
+        CardUtils.addCardsToHand(cards);
         workers.add(GameState.getPlayerState().getPlayerNumber());
         return true;
     }

@@ -1,7 +1,6 @@
 package hr.algebra.everdell.utils;
 
-import hr.algebra.everdell.models.Card;
-import hr.algebra.everdell.models.Location;
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.models.Resource;
 import hr.algebra.everdell.models.ResourceGroup;
 import hr.algebra.everdell.utils.dialogs.CardChooseDialogPane;

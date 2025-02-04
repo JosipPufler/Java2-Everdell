@@ -1,12 +1,11 @@
 package hr.algebra.everdell.models.cards.critters;
 
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.models.cards.constructs.Theater;
-import hr.algebra.everdell.models.cards.constructs.TwigBarge;
+import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.DialogUtils;
 import hr.algebra.everdell.utils.FileUtils;
-import hr.algebra.everdell.utils.GameUtils;
-import hr.algebra.everdell.utils.ResourceManager;
 
 import java.util.Optional;
 
@@ -29,7 +28,7 @@ public class Bard extends Critter<Theater> {
         for (int i = 0; i < 5; i++){
             Optional<Card> card = DialogUtils.showCardChooseDialog(GameState.getPlayerState().cardsInHand, getName());
             if (card.isPresent()){
-                GameUtils.removeCardFromHand(card.get());
+                CardUtils.removeCardFromHand(card.get());
                 GameState.getPlayerState().addPoints(1);
             }else {
                 return super.play();

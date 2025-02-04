@@ -30,6 +30,7 @@ public class ConfigurationReader {
     }
 
     public static String getStringValueForKey(ConfigurationKey key) {
+        String property = properties.getProperty(key.getKey());
         return properties.getProperty(key.getKey());
     }
 

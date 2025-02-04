@@ -1,13 +1,12 @@
 package hr.algebra.everdell.models.cards.critters;
 
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.models.cards.constructs.PostOffice;
-import hr.algebra.everdell.models.cards.constructs.Ruins;
+import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.DialogUtils;
 import hr.algebra.everdell.utils.FileUtils;
-import hr.algebra.everdell.utils.GameUtils;
 
-import javax.tools.Diagnostic;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +30,7 @@ public class PostalPigeon extends Critter<PostOffice> {
         }
         Optional<Card> card = DialogUtils.showCardChooseDialog(cards, "Choose card");
         if (card.isPresent()) {
-            GameUtils.addCardToCity(card.get(), true);
+            CardUtils.addCardToCity(card.get(), true);
             return super.play();
         }
         return false;

@@ -1,9 +1,10 @@
 package hr.algebra.everdell.models;
 
 import hr.algebra.everdell.EverdellApplication;
+import hr.algebra.everdell.utils.GameActionUtils;
 import hr.algebra.everdell.utils.GameUtils;
 import hr.algebra.everdell.utils.ResourceManager;
-import hr.algebra.everdell.utils.ResourceManagerFactory;
+import hr.algebra.everdell.utils.ResourceManagerSingleton;
 import javafx.scene.shape.Circle;
 import lombok.Getter;
 
@@ -14,7 +15,7 @@ public class GameState {
     static PlayerNumber opponentNumber;
 
     @Getter
-    static ResourceManager resourceManager = ResourceManagerFactory.getInstance();
+    static ResourceManager resourceManager = ResourceManagerSingleton.getInstance();
     @Getter
     static PlayerState playerState = new PlayerState(PlayerNumber.ONE);
     @Getter
@@ -48,7 +49,7 @@ public class GameState {
         }
     }
 
-    public static void switchPlayers(){
+    public static void switchPlayers(GameAction gameAction){
         if (EverdellApplication.solo){
             PlayerNumber tempNumber = playerNumber;
             playerNumber = opponentNumber;
@@ -64,6 +65,7 @@ public class GameState {
             GameUtils.blockScreen(true);
             GameUtils.sendUpdate();
         }
+        GameActionUtils.createAndSaveGameAction(gameAction);
     }
 
     public static GameStateTransferable packageGameState(){

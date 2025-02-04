@@ -2,8 +2,6 @@ package hr.algebra.everdell.models.cards.constructs;
 
 import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.utils.FileUtils;
-import hr.algebra.everdell.utils.GameUtils;
-import hr.algebra.everdell.utils.ResourceManager;
 
 public class EverTree extends Construct {
 

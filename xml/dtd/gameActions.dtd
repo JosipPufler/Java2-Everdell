@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!ELEMENT GameActions (GameAction+)>
+<!ELEMENT GameAction (PlayerNumber, GameActionType, GameActionObject, Time)>
+<!ELEMENT PlayerNumber (#PCDATA)>
+<!ELEMENT GameActionType (#PCDATA)>
+<!ELEMENT GameActionObject (#PCDATA)>
+<!ELEMENT Time (#PCDATA)>

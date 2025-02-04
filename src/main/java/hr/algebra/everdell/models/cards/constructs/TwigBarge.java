@@ -1,10 +1,10 @@
 package hr.algebra.everdell.models.cards.constructs;
 
+import hr.algebra.everdell.interfaces.GreenProduction;
 import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.utils.FileUtils;
-import hr.algebra.everdell.utils.ResourceManager;
 
-public class TwigBarge extends Construct {
+public class TwigBarge extends Construct implements GreenProduction {
     public TwigBarge() {
         super(
                 new ResourceGroup(0,
@@ -22,7 +22,13 @@ public class TwigBarge extends Construct {
 
     @Override
     public boolean play() {
-        GameState.getResourceManager().tryTakeTwigs(GameState.getPlayerState().resources, 2);
+        Activate();
         return super.play();
+    }
+
+    @Override
+    public Boolean Activate() {
+        GameState.getResourceManager().tryTakeTwigs(GameState.getPlayerState().resources, 2);
+        return true;
     }
 }

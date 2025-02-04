@@ -1,15 +1,13 @@
 package hr.algebra.everdell.controllers;
 
+import hr.algebra.everdell.EverdellApplication;
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.interfaces.CardInsertable;
 import hr.algebra.everdell.interfaces.CardListable;
 import hr.algebra.everdell.interfaces.Destination;
-import hr.algebra.everdell.models.Card;
-import hr.algebra.everdell.models.GameState;
-import hr.algebra.everdell.models.PlayerNumber;
-import hr.algebra.everdell.models.PlayerState;
+import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.utils.GameUtils;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.TransferMode;
@@ -32,11 +30,11 @@ public class CityController extends CardListable implements CardInsertable {
         cityPane.setVgap(5);
         super.popUpStage.setAlwaysOnTop(true);
         cityPane.setOnDragDropped(event -> {
-            if(GameState.getPlayerState().getTurnPriority()){
+            if(GameState.getPlayerState().getTurnPriority() || EverdellApplication.solo){
                 String cardName = event.getDragboard().getString();
                 System.out.println(cardName);
                 try {
-                    Card card = (Card) Class.forName(cardName).getConstructor().newInstance();
+                    BaseCard card = (BaseCard) Class.forName(cardName).getConstructor().newInstance();
                     if (GameState.getPlayerState().playCard(card).isPresent()){
                         GameUtils.updatePlayer();
                         event.setDropCompleted(true);
@@ -69,7 +67,7 @@ public class CityController extends CardListable implements CardInsertable {
                 if (GameState.getPlayerState().getFreeWorkers() > 0 && ((Destination) card).tryPlaceWorker()){
                     GameState.getPlayerState().deployWorker(true);
                     container.getChildren().add(new Circle(event.getX(), event.getY(), 5, Paint.valueOf(String.format("#%06x", GameState.getPlayerState().getPlayerNumber().getPlayerColor().getRGB() & 0xFFFFFF))));
-                    GameState.switchPlayers();
+                    GameState.switchPlayers(new GameAction(GameState.getPlayerState().getPlayerNumber(), GameActionType.PLACE_WORKER, cardImageView.getUserData()));
                 }
             });
             container.getChildren().add(cardImageView);

@@ -1,13 +1,10 @@
 package hr.algebra.everdell.interfaces;
 
-import hr.algebra.everdell.models.Card;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -32,22 +29,20 @@ public abstract class CardListable {
         iv.setPreserveRatio(true);
         popUpStage.setMaxHeight(700);
 
-        iv.setOnMouseMoved(new EventHandler<MouseEvent>() {
-            @Override public void handle(MouseEvent event) {
-                if (event.getScreenX() + popUpStage.getWidth()> primaryScreenBounds.getMaxX()) {
-                    popUpStage.setX(event.getScreenX() - popUpStage.getWidth() - 20);
-                } else {
-                    popUpStage.setX(event.getScreenX() + 20);
-                }
-                if (event.getScreenY() + popUpStage.getHeight() + 20 > primaryScreenBounds.getMaxY()) {
-                    popUpStage.setY(event.getScreenY() - (event.getScreenY() + popUpStage.getHeight() - primaryScreenBounds.getMaxY()));
-                } else {
-                    popUpStage.setY(event.getScreenY() + 20);
-                }
+        iv.setOnMouseMoved(event -> {
+            if (event.getScreenX() + popUpStage.getWidth()> primaryScreenBounds.getMaxX()) {
+                popUpStage.setX(event.getScreenX() - popUpStage.getWidth() - 20);
+            } else {
+                popUpStage.setX(event.getScreenX() + 20);
+            }
+            if (event.getScreenY() + popUpStage.getHeight() + 20 > primaryScreenBounds.getMaxY()) {
+                popUpStage.setY(event.getScreenY() - (event.getScreenY() + popUpStage.getHeight() - primaryScreenBounds.getMaxY()));
+            } else {
+                popUpStage.setY(event.getScreenY() + 20);
             }
         });
 
-        iv.hoverProperty().addListener((observableValue, oldValue, newValue) -> {
+        iv.hoverProperty().addListener((_, _, newValue) -> {
             if (newValue){
                 Image popUpImage = iv.getImage();
                 ImageView popUpImageView = new ImageView(popUpImage);

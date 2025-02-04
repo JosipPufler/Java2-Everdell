@@ -1,12 +1,16 @@
 package hr.algebra.everdell.models.cards.critters;
 
+import hr.algebra.everdell.interfaces.Card;
+import hr.algebra.everdell.interfaces.GreenProduction;
 import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.models.cards.constructs.Farm;
 import hr.algebra.everdell.utils.FileUtils;
+import lombok.Setter;
 
 import java.util.Optional;
 
-public class Wife extends Critter<Farm> {
+@Setter
+public class Wife extends Critter<Farm> implements GreenProduction {
     Boolean paired = false;
 
     public Wife() {
@@ -30,19 +34,21 @@ public class Wife extends Critter<Farm> {
 
     @Override
     public boolean play() {
+        Activate();
+        return super.play();
+    }
+
+    public Boolean isPaired(){
+        return paired;
+    }
+
+    @Override
+    public Boolean Activate() {
         Optional<Card> first = GameState.getPlayerState().cardsInPlay.stream().filter(x -> x instanceof Husband && !((Husband) x).isPaired()).findFirst();
         if (first.isPresent() && first.get() instanceof Husband) {
             setPaired(true);
             ((Husband) first.get()).setPaired(true);
         }
-        return super.play();
-    }
-
-    public void setPaired(Boolean paired){
-        this.paired = paired;
-    }
-
-    public Boolean isPaired(){
-        return paired;
+        return true;
     }
 }

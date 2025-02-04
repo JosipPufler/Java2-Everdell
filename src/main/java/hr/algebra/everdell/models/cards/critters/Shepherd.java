@@ -1,9 +1,9 @@
 package hr.algebra.everdell.models.cards.critters;
 
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.models.cards.constructs.Chapel;
 import hr.algebra.everdell.utils.FileUtils;
-import hr.algebra.everdell.utils.ResourceManager;
 
 public class Shepherd extends Critter<Chapel> {
 

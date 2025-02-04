@@ -1,7 +1,6 @@
 package hr.algebra.everdell.models;
 
 import hr.algebra.everdell.utils.ResourceManager;
-import javafx.scene.Group;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

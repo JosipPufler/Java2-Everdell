@@ -13,6 +13,8 @@ public class DocumentationUtils {
     private static final String HTML_DOCUMENTATION_FILE_NAME = "doc/documentation.html";
     private static final String CLASS_FILE_EXTENSION = ".class";
 
+    private DocumentationUtils() {}
+
     public static void generateDocumentation() throws RuntimeException {
 
         try (Stream<Path> paths = Files.walk(Paths.get(BASE_PATH))) {
@@ -71,7 +73,6 @@ public class DocumentationUtils {
                 else {
                     sb.append("<h3>No constructors</h3>");
                 }
-
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -83,7 +84,6 @@ public class DocumentationUtils {
                 """;
 
         sb.append(htmlEnd);
-
         return sb.toString();
     }
 }

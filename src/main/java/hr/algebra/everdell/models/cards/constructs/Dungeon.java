@@ -1,5 +1,6 @@
 package hr.algebra.everdell.models.cards.constructs;
 
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.interfaces.Locked;
 import hr.algebra.everdell.interfaces.Triggered;
 import hr.algebra.everdell.models.*;

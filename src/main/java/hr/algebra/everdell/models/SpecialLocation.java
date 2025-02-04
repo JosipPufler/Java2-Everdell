@@ -2,7 +2,6 @@ package hr.algebra.everdell.models;
 
 import hr.algebra.everdell.utils.GameUtils;
 
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class SpecialLocation extends Location{

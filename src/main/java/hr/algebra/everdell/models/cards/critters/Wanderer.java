@@ -1,10 +1,10 @@
 package hr.algebra.everdell.models.cards.critters;
 
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.models.*;
-import hr.algebra.everdell.models.cards.constructs.Farm;
 import hr.algebra.everdell.models.cards.constructs.Lookout;
+import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.FileUtils;
-import hr.algebra.everdell.utils.GameUtils;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class Wanderer extends Critter<Lookout> {
     @Override
     public boolean play() {
         List<Card> cards = GameState.getResourceManager().tryDrawFromMainDeck(3);
-        GameUtils.addCardsToHand(cards);
+        CardUtils.addCardsToHand(cards);
         return super.play();
     }
 }

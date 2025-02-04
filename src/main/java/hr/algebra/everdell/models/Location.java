@@ -1,13 +1,20 @@
 package hr.algebra.everdell.models;
 
+import hr.algebra.everdell.interfaces.Card;
+import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.GameUtils;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@NoArgsConstructor
+@XmlRootElement
 public class Location implements Serializable {
     @Getter
     static final List<Location> locations = new ArrayList<>();
@@ -16,13 +23,12 @@ public class Location implements Serializable {
         locations.add(location);
     }
 
-    public static void addLocations(List<Location> locationsToAdd){
-        locations.addAll(locationsToAdd);
-    }
-
-    final String separator = ", ";
+    static final String SEPARATOR = ", ";
+    @XmlElement
     int cards;
+    @XmlElement
     int points;
+    @XmlElement
     ResourceGroup resourceGroup;
     Boolean open;
 
@@ -45,7 +51,7 @@ public class Location implements Serializable {
         else if (!ignoreActivation)
             activated = true;
         List<Card> cardsDrawn = GameState.getResourceManager().tryDrawFromMainDeck(cards);
-        GameUtils.addCardsToHand(cardsDrawn);
+        CardUtils.addCardsToHand(cardsDrawn);
         playerState.addPoints(points);
         GameState.getResourceManager().tryTakeGroup(playerState.resources, resourceGroup);
         GameUtils.updatePlayer();
@@ -59,22 +65,22 @@ public class Location implements Serializable {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         if (cards > 0) {
-            builder.append("Cards: ").append(cards).append(separator);
+            builder.append("Cards: ").append(cards).append(SEPARATOR);
         }
         if (points > 0) {
-            builder.append("Points: ").append(points).append(separator);
+            builder.append("Points: ").append(points).append(SEPARATOR);
         }
         if (resourceGroup.getBerries() > 0) {
-            builder.append("Berries: ").append(resourceGroup.getBerries()).append(separator);
+            builder.append("Berries: ").append(resourceGroup.getBerries()).append(SEPARATOR);
         }
         if (resourceGroup.getResin() > 0){
-            builder.append("Resin: ").append(resourceGroup.getResin()).append(separator);
+            builder.append("Resin: ").append(resourceGroup.getResin()).append(SEPARATOR);
         }
         if (resourceGroup.getPebbles() > 0){
-            builder.append("Pebbles: ").append(resourceGroup.getPebbles()).append(separator);
+            builder.append("Pebbles: ").append(resourceGroup.getPebbles()).append(SEPARATOR);
         }
         if (resourceGroup.getTwigs() > 0){
-            builder.append("Twigs: ").append(resourceGroup.getTwigs()).append(separator);
+            builder.append("Twigs: ").append(resourceGroup.getTwigs()).append(SEPARATOR);
         }
         return builder.toString();
     }
@@ -115,6 +121,7 @@ public class Location implements Serializable {
         return Objects.hash(cards, points, resourceGroup);
     }
 
+    @XmlElement
     public Boolean isOpen(){
         return open;
     }

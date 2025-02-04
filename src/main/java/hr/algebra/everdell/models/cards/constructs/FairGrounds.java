@@ -1,13 +1,14 @@
 package hr.algebra.everdell.models.cards.constructs;
 
+import hr.algebra.everdell.interfaces.Card;
+import hr.algebra.everdell.interfaces.GreenProduction;
 import hr.algebra.everdell.models.*;
+import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.FileUtils;
-import hr.algebra.everdell.utils.GameUtils;
-import hr.algebra.everdell.utils.ResourceManager;
 
 import java.util.List;
 
-public class FairGrounds extends Construct {
+public class FairGrounds extends Construct implements GreenProduction {
     public FairGrounds() {
         super(
                 new ResourceGroup(0, 1, 2, 1),
@@ -21,8 +22,14 @@ public class FairGrounds extends Construct {
 
     @Override
     public boolean play() {
-        List<Card> cards = GameState.getResourceManager().tryDrawFromMainDeck(3);
-        GameUtils.addCardsToHand(cards);
+        Activate();
         return super.play();
+    }
+
+    @Override
+    public Boolean Activate() {
+        List<Card> cards = GameState.getResourceManager().tryDrawFromMainDeck(3);
+        CardUtils.addCardsToHand(cards);
+        return true;
     }
 }

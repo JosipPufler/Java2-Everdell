@@ -1,6 +1,6 @@
 package hr.algebra.everdell.models;
 
-public abstract class Construct extends Card{
+public abstract class Construct extends BaseCard {
     Boolean isOccupied;
 
     public Construct(ResourceGroup cost, CardType type, String name, String imageFilePath, Boolean unique, Integer inherentPointValue, int numberInDeck) {

@@ -1,12 +1,13 @@
 package hr.algebra.everdell.models.cards.critters;
 
+import hr.algebra.everdell.interfaces.Card;
+import hr.algebra.everdell.interfaces.GreenProduction;
 import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.models.cards.constructs.Farm;
 import hr.algebra.everdell.models.cards.constructs.TwigBarge;
 import hr.algebra.everdell.utils.FileUtils;
-import hr.algebra.everdell.utils.ResourceManager;
 
-public class BargeToad extends Critter<TwigBarge>  {
+public class BargeToad extends Critter<TwigBarge> implements GreenProduction {
     public BargeToad() {
         super(
                 new ResourceGroup(2, 0, 0, 0),
@@ -22,6 +23,12 @@ public class BargeToad extends Critter<TwigBarge>  {
 
     @Override
     public boolean play() {
+        Activate();
+        return super.play();
+    }
+
+    @Override
+    public Boolean Activate() {
         int farmCount = 0;
         for (Card card : GameState.getPlayerState().cardsInPlay){
             if (card instanceof Farm){
@@ -29,6 +36,6 @@ public class BargeToad extends Critter<TwigBarge>  {
             }
         }
         GameState.getResourceManager().tryTakeTwigs(GameState.getPlayerState().resources, farmCount*2);
-        return super.play();
+        return true;
     }
 }

@@ -1,6 +1,9 @@
 package hr.algebra.everdell.models;
 
+import hr.algebra.everdell.interfaces.Card;
+import hr.algebra.everdell.interfaces.GreenProduction;
 import hr.algebra.everdell.interfaces.Triggered;
+import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.GameUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +25,7 @@ public class PlayerState implements Serializable {
     public final List<Card> cardsInHand = new ArrayList<>();
     public final List<Location> locationsDeployed = new ArrayList<>();
     @Getter
-    Season currentSeason = Season.Winter;
+    Season currentSeason = Season.WINTER;
     @Getter
     int maxWorkers = 2;
     int freeWorkers = maxWorkers;
@@ -65,7 +68,8 @@ public class PlayerState implements Serializable {
         if (resourceGroup.isPresent() && GameState.getPlayerState().resources.subtract(resourceGroup.get())){
             GameState.getResourceManager().deposit(resourceGroup.get());
             boolean played = card.play();
-
+            if (!played)
+                return Optional.empty();
             fireTrigger(TriggerType.CARD_AFTER);
             if (card instanceof Critter<?>)
                 fireTrigger(TriggerType.CRITTER_AFTER);
@@ -84,7 +88,7 @@ public class PlayerState implements Serializable {
             ((Construct)construct.get()).setOccupied(true);
             return Optional.of(new ResourceGroup(0, 0, 0, 0));
         }
-        else if (resources.compareTo(card.cost) > 0){
+        else if (resources.compareTo(card.getCost()) > 0){
             return Optional.of(card.getCost());
         }
         return Optional.empty();
@@ -96,24 +100,24 @@ public class PlayerState implements Serializable {
         fireTrigger(TriggerType.SEASON_CHANGE);
         currentSeason = currentSeason.next();
         switch (currentSeason) {
-            case Winter:
+            case WINTER:
                 gameOver = true;
                 break;
-            case Summer:
+            case SUMMER:
                 maxWorkers = maxWorkers + 1;
-                GameUtils.addCardsToHand(GameState.getResourceManager().tryDrawCardsFromMeadow(2));
+                CardUtils.addCardsToHand(GameState.getResourceManager().tryDrawCardsFromMeadow(2));
                 break;
-            case Autumn:
+            case AUTUMN:
                 maxWorkers = maxWorkers + 2;
-                cardsInPlay.stream().filter(x -> x.getType() == CardType.GREEN_PRODUCTION).forEach(Card::play);
+                cardsInPlay.stream().filter(GreenProduction.class::isInstance).forEach(x -> ((GreenProduction) x).Activate());
                 break;
-            case Spring:
+            case SPRING:
                 maxWorkers = maxWorkers + 1;
-                cardsInPlay.stream().filter(x -> x.getType() == CardType.GREEN_PRODUCTION).forEach(Card::play);
+                cardsInPlay.stream().filter(GreenProduction.class::isInstance).forEach(x -> ((GreenProduction) x).Activate());
                 break;
         }
         callWorkersHome();
-        GameState.switchPlayers();
+        GameState.switchPlayers(new GameAction(GameState.getPlayerState().getPlayerNumber(), GameActionType.PREPARE_FOR_SEASON, currentSeason));
     }
 
     public void fireTrigger(TriggerType triggerType){
@@ -148,6 +152,12 @@ public class PlayerState implements Serializable {
         freeWorkers--;
         GameUtils.updatePlayer();
         return true;
+    }
+
+    public void returnWorkers(int numberOfWorkers){
+        if (numberOfWorkers + freeWorkers <= maxWorkers){
+            freeWorkers += numberOfWorkers;
+        }
     }
 
     public int numberOfCardsInPlay(){

@@ -1,10 +1,6 @@
 package hr.algebra.everdell.utils.dialogs;
 
 import hr.algebra.everdell.controllers.CustomListDialogController;
-import hr.algebra.everdell.controllers.SingleResourceDialogController;
-import hr.algebra.everdell.models.Card;
-import hr.algebra.everdell.models.Location;
-import hr.algebra.everdell.models.Resource;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.DialogPane;
 

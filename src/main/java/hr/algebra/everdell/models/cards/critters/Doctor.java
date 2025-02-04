@@ -1,15 +1,14 @@
 package hr.algebra.everdell.models.cards.critters;
 
+import hr.algebra.everdell.interfaces.GreenProduction;
 import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.models.cards.constructs.University;
 import hr.algebra.everdell.utils.DialogUtils;
 import hr.algebra.everdell.utils.FileUtils;
-import hr.algebra.everdell.utils.ResourceManager;
-import javafx.scene.control.Alert;
 
 import java.util.Optional;
 
-public class Doctor extends Critter<University> {
+public class Doctor extends Critter<University> implements GreenProduction {
 
     public Doctor() {
         super(
@@ -25,11 +24,19 @@ public class Doctor extends Critter<University> {
 
     @Override
     public boolean play() {
-        Optional<Integer> count = DialogUtils.showSingleResourceDialog(3, Resource.BERRIES, getName());
+        if (Activate()){
+            return super.play();
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean Activate() {
+        Optional<Integer> count = DialogUtils.showSingleResourceDialog(3, Resource.BERRIES, super.getName());
         if (count.isPresent()) {
             GameState.getPlayerState().addPoints(count.get());
-            return super.play();
-        }else {
+            return true;
+        } else {
             return false;
         }
     }

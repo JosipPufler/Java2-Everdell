@@ -1,6 +1,7 @@
 package hr.algebra.everdell.utils;
 
 import hr.algebra.everdell.models.GameState;
+import hr.algebra.everdell.models.Location;
 import hr.algebra.everdell.models.Marker;
 import hr.algebra.everdell.models.PlayerState;
 import javafx.scene.Group;
@@ -13,7 +14,21 @@ public class UiUtils {
     private UiUtils() {}
 
     public static Boolean placeMarker(Marker marker, Boolean opponent, Group playerGroup, Group opponentGroup) {
-        PlayerState playerState, opponentState;
+        PlayerState playerState = GameState.getPlayerState();
+        if (canPlaceMarker(marker.getLocation(), opponent, playerGroup, opponentGroup)){
+            Circle circle = new Circle(marker.getX(), marker.getY() - 28, 10, Paint.valueOf(String.format("#%06x", playerState.getPlayerNumber().getPlayerColor().getRGB() & 0xFFFFFF)));
+            circle.setUserData(marker.getLocation());
+            circle.setId(playerState.getPlayerName() + '_' + marker.getName().split("_", 2)[1]);
+            playerGroup.getChildren().add(circle);
+            playerState.deployWorker(false);
+            return true;
+        }
+        return false;
+    }
+
+    public static Boolean canPlaceMarker(Location location, Boolean opponent, Group playerGroup, Group opponentGroup) {
+        PlayerState playerState;
+        PlayerState opponentState;
         if (opponent) {
             playerState = GameState.getOpponentState();
             opponentState = GameState.getPlayerState();
@@ -21,19 +36,12 @@ public class UiUtils {
             playerState = GameState.getPlayerState();
             opponentState = GameState.getOpponentState();
         }
-        String id = playerState.getPlayerName() + '_' + marker.name.split("_", 2)[1];
-        String opponentId = opponentState.getPlayerName() + '_' + marker.name.split("_", 2)[1];
-        if ((marker.location.isOpen()
-                || opponentGroup.getChildren().stream().noneMatch(o -> Objects.equals(o.getId(), opponentId)))
-                && playerGroup.getChildren().stream().noneMatch(o -> Objects.equals(o.getId(), id))
-                && playerState.getFreeWorkers() > 0){
-            Circle circle = new Circle(marker.x, marker.y - 28, 10, Paint.valueOf(String.format("#%06x", playerState.getPlayerNumber().getPlayerColor().getRGB() & 0xFFFFFF)));
-            circle.setUserData(marker.location);
-            circle.setId(id);
-            playerGroup.getChildren().add(circle);
-            playerState.deployWorker(false);
-            return true;
-        }
-        return false;
+        String id = playerState.getPlayerName() + '_' + location.toShorthandString().split("_", 2)[1];
+        String opponentId = opponentState.getPlayerName() + '_' + location.toShorthandString().split("_", 2)[1];
+
+        return ((location.isOpen() && playerGroup.getChildren().stream().noneMatch(o -> Objects.equals(o.getId(), id)))
+                || opponentGroup.getChildren().stream().noneMatch(o -> Objects.equals(o.getId(), opponentId))
+                && playerGroup.getChildren().stream().noneMatch(o -> Objects.equals(o.getId(), id)))
+                && playerState.getFreeWorkers() > 0;
     }
 }

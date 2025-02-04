@@ -1,15 +1,24 @@
 package hr.algebra.everdell.models;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.text.MessageFormat;
 
+@XmlRootElement
 @Getter
+@NoArgsConstructor
 public class ResourceGroup implements Comparable<ResourceGroup>, Serializable {
+    @XmlElement
     private int berries;
+    @XmlElement
     private int twigs;
+    @XmlElement
     private int resin;
+    @XmlElement
     private int pebbles;
 
     public ResourceGroup(int berries, int twigs, int resin, int pebbles) {
