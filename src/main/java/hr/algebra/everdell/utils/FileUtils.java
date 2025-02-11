@@ -1,8 +1,5 @@
 package hr.algebra.everdell.utils;
 
-import hr.algebra.everdell.models.GameStateTransferable;
-import javafx.scene.control.Alert;
-
 import java.io.*;
 import java.util.Objects;
 
@@ -35,29 +32,5 @@ public class FileUtils {
 
     private static String getBoardImagePath(){
         return imageFolder.getAbsolutePath() + File.pathSeparator + boardFileName;
-    }
-
-    public static GameStateTransferable loadGameStateFromFile(){
-        GameStateTransferable loadedGameState;
-        try(ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(SAVE_GAME_FILE_NAME))) {
-            loadedGameState = (GameStateTransferable) objectInputStream.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        return loadedGameState;
-    }
-
-    public static void saveGameToFile(GameStateTransferable gameState) {
-        try (ObjectOutputStream objectOutputStream =
-                     new ObjectOutputStream(new FileOutputStream(SAVE_GAME_FILE_NAME))) {
-            objectOutputStream.writeObject(gameState);
-
-            DialogUtils.showAlert(Alert.AlertType.INFORMATION, "Saved", "Game saved");
-
-        } catch (IOException e) {
-            DialogUtils.showAlert(Alert.AlertType.ERROR, "Error", "Error saving game");
-
-            throw new RuntimeException(e);
-        }
     }
 }

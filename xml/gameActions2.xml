@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<gameAction>
-    <dateTime>2025-01-12T20:01:12.554151500</dateTime>
-    <gameActionObject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="baseCard"/>
-    <gameActionType>PLAY_CARD</gameActionType>
-    <playerNumber>ONE</playerNumber>
-</gameAction>

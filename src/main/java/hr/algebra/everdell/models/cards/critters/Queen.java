@@ -40,7 +40,7 @@ public class Queen extends Critter<Palace> implements Destination {
     }
 
     @Override
-    public boolean isOpen() {
+    public Boolean isOpen() {
         return isOpen;
     }
 
@@ -50,7 +50,7 @@ public class Queen extends Critter<Palace> implements Destination {
     }
 
     @Override
-    public Boolean placeWorker() {
+    public Boolean place() {
         List<Card> cards = new ArrayList<>(GameState.getPlayerState().cardsInHand);
         cards.addAll(GameState.getResourceManager().getMeadow());
         List<Card> options = cards.stream().filter(x -> x.calculatePoints() < 3).toList();
@@ -58,7 +58,7 @@ public class Queen extends Critter<Palace> implements Destination {
             Optional<Card> card = DialogUtils.showCardChooseDialog(cards, "Choose card to play");
             if (card.isPresent()){
                 CardUtils.addCardToCity(card.get(), true);
-                GameState.getPlayerState().playCard(card.get());
+                GameState.getPlayerState().playCard(card.get(), true);
                 workers.add(GameState.getPlayerState().getPlayerNumber());
                 return true;
             }

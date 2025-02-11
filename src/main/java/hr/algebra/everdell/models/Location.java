@@ -1,6 +1,7 @@
 package hr.algebra.everdell.models;
 
 import hr.algebra.everdell.interfaces.Card;
+import hr.algebra.everdell.interfaces.Placeable;
 import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.GameUtils;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import java.util.Objects;
 
 @NoArgsConstructor
 @XmlRootElement
-public class Location implements Serializable {
+public class Location implements Serializable, Placeable {
     @Getter
     static final List<Location> locations = new ArrayList<>();
 
@@ -45,16 +46,13 @@ public class Location implements Serializable {
         return activated;
     }
 
-    public void activate(PlayerState playerState, Boolean ignoreActivation) {
-        if (isActivated() && !ignoreActivation)
-            return;
-        else if (!ignoreActivation)
-            activated = true;
+    public Boolean place() {
         List<Card> cardsDrawn = GameState.getResourceManager().tryDrawFromMainDeck(cards);
         CardUtils.addCardsToHand(cardsDrawn);
-        playerState.addPoints(points);
-        GameState.getResourceManager().tryTakeGroup(playerState.resources, resourceGroup);
+        GameState.getPlayerState().addPoints(points);
+        GameState.getResourceManager().tryTakeGroup(GameState.getPlayerState().resources, resourceGroup);
         GameUtils.updatePlayer();
+        return true;
     }
 
     public void deactivate(){
@@ -121,8 +119,13 @@ public class Location implements Serializable {
         return Objects.hash(cards, points, resourceGroup);
     }
 
-    @XmlElement
+    @Override
     public Boolean isOpen(){
         return open;
+    }
+
+    @Override
+    public String getName() {
+        return toShorthandString();
     }
 }

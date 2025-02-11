@@ -7,8 +7,11 @@ import hr.algebra.everdell.controllers.PlayableCardController;
 import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.models.*;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -16,6 +19,7 @@ import javafx.stage.StageStyle;
 import lombok.Getter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameUtils {
@@ -87,7 +91,7 @@ public class GameUtils {
     }
 
     public static void updateMarkers(List<Marker> markers) {
-        mainController.updateOpponentGroup(markers);
+        mainController.updateMarkers(markers);
     }
 
     public static List<Location> getDeployableLocations() {
@@ -100,6 +104,15 @@ public class GameUtils {
         } else {
             return mainController.playerTwoGroup;
         }
+    }
+
+    public static List<Node> getAllMarkers(){
+        List<Node> playerOneMarkers = new ArrayList<>(mainController.playerOneGroup.getChildren());
+        List<Node> playerTwoMarkers = new ArrayList<>(mainController.playerTwoGroup.getChildren());
+
+        List<Node> markers = new ArrayList<>(playerTwoMarkers);
+        markers.addAll(playerOneMarkers);
+        return markers;
     }
 
     public static void setUpGame() {

@@ -38,7 +38,7 @@ public class Monastery extends Construct implements Destination, Locked {
     }
 
     @Override
-    public boolean isOpen() {
+    public Boolean isOpen() {
         return isOpen;
     }
 
@@ -48,7 +48,7 @@ public class Monastery extends Construct implements Destination, Locked {
     }
 
     @Override
-    public Boolean placeWorker() {
+    public Boolean place() {
         Optional<ResourceGroup> resourceGroup = DialogUtils.showMultiResourceDialog(2, GameState.getPlayerState().resources, "Gift resources");
         if (resourceGroup.isPresent()) {
             GameState.getPlayerState().resources.subtract(resourceGroup.get());

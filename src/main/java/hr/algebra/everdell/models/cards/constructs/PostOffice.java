@@ -42,7 +42,7 @@ public class PostOffice extends Construct implements Destination {
     }
 
     @Override
-    public boolean isOpen() {
+    public Boolean isOpen() {
         return isOpen;
     }
 
@@ -52,7 +52,7 @@ public class PostOffice extends Construct implements Destination {
     }
 
     @Override
-    public Boolean placeWorker() {
+    public Boolean place() {
         PlayerState playerState = GameState.getPlayerState();
         CardUtils.addCardsToOpponentsHand(GameState.getResourceManager().tryDrawFromMainDeck(2));
         Optional<Integer> cardsToDiscard = DialogUtils.showSingleResourceDialog(playerState.cardsInHand.size(), Resource.CARD, "Cards to discard");

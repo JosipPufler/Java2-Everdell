@@ -5,6 +5,7 @@ import hr.algebra.everdell.models.GameState;
 import hr.algebra.everdell.models.GameStateTransferable;
 import hr.algebra.everdell.models.PlayerNumber;
 import hr.algebra.everdell.utils.ConfigurationReader;
+import hr.algebra.everdell.utils.DialogUtils;
 import hr.algebra.everdell.utils.GameUtils;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -12,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Dialog;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -80,21 +82,8 @@ public class EverdellApplication extends Application {
             GameStateTransferable gameState = (GameStateTransferable)ois.readObject();
             Platform.runLater(() -> GameState.loadGameState(gameState));
 
-            boolean gameOver = GameState.getPlayerState().getGameOver() && GameState.getOpponentState().getGameOver();
-
-            if (gameOver){
-                GameUtils.blockScreen(true);
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Game over");
-                if (GameState.getPlayerState().calculatePoints() != GameState.getOpponentState().calculatePoints()){
-                    alert.setHeaderText("We have a winner");
-                    if (GameState.getPlayerState().calculatePoints() > GameState.getOpponentState().calculatePoints())
-                        alert.setContentText("You are the winner");
-                    else
-                        alert.setContentText("You lost");
-                }
-                else
-                    alert.setHeaderText("It's a tie");
+            if (GameState.getPlayerState().getGameOver() && GameState.getOpponentState().getGameOver()){
+                DialogUtils.showGameOverAlert();
             } else {
                 GameUtils.blockScreen(false);
             }
@@ -117,6 +106,6 @@ public class EverdellApplication extends Application {
     private static void sendSerializableRequest(Socket client) throws IOException, ClassNotFoundException {
         ObjectOutputStream oos = new ObjectOutputStream(client.getOutputStream());
         ObjectInputStream ois = new ObjectInputStream(client.getInputStream());
-        oos.writeObject(GameState.packageGameState());
+        oos.writeObject(GameState.packageGameStateWithAllMarkers());
     }
 }

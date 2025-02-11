@@ -65,7 +65,7 @@ public class Storehouse extends Construct implements Destination {
     }
 
     @Override
-    public boolean isOpen() {
+    public Boolean isOpen() {
         return isOpen;
     }
 
@@ -75,7 +75,7 @@ public class Storehouse extends Construct implements Destination {
     }
 
     @Override
-    public Boolean placeWorker() {
+    public Boolean place() {
         GameState.getPlayerState().resources.merge(stockpile);
         workers.add(GameState.getPlayerState().getPlayerNumber());
         return true;

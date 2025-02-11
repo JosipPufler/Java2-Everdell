@@ -40,7 +40,7 @@ public class Chapel extends Construct implements Destination {
     }
 
     @Override
-    public boolean isOpen() {
+    public Boolean isOpen() {
         return isOpen;
     }
 
@@ -55,7 +55,7 @@ public class Chapel extends Construct implements Destination {
     }
 
     @Override
-    public Boolean placeWorker() {
+    public Boolean place() {
         pointsPlaced++;
         List<Card> cards = GameState.getResourceManager().tryDrawFromMainDeck(pointsPlaced * 2);
         CardUtils.addCardsToHand(cards);

@@ -13,10 +13,13 @@ public class SpecialLocation extends Location{
     }
 
     @Override
-    public void activate(PlayerState playerState, Boolean ignoreActivation) {
-        super.activate(playerState, ignoreActivation);
-        function.get();
-        GameUtils.updatePlayer();
+    public Boolean place() {
+        if (super.place()) {
+            function.get();
+            GameUtils.updatePlayer();
+            return true;
+        }
+        return false;
     }
 
     @Override

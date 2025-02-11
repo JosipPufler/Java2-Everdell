@@ -1,7 +1,10 @@
 package hr.algebra.everdell.threads;
 
+import hr.algebra.everdell.models.CompactGameAction;
 import hr.algebra.everdell.models.GameAction;
+import hr.algebra.everdell.models.PlayerState;
 import hr.algebra.everdell.utils.FileUtils;
+import hr.algebra.everdell.utils.ResourceManagerSingleton;
 import hr.algebra.everdell.utils.XmlUtils;
 
 import java.io.*;
@@ -14,8 +17,7 @@ public abstract class GameMoveThread {
 
     protected static Boolean FILE_ACCESS_IN_PROGRESS = false;
 
-    public synchronized void saveTheLastGameMove(GameAction gameAction) {
-
+    public synchronized void saveTheLastGameMove(PlayerState playerState, GameAction gameAction) {
         while(FILE_ACCESS_IN_PROGRESS) {
             try {
                 wait();
@@ -24,18 +26,18 @@ public abstract class GameMoveThread {
             }
         }
 
-        List<GameAction> finalGameMoveList = new ArrayList<>();
+        List<CompactGameAction> finalGameMoveList = new ArrayList<>();
 
         if (Files.exists(Path.of(FileUtils.GAME_MOVES_FILE_NAME))) {
             try {
-                List<GameAction> gameMoves = (List<GameAction>) loadGameMoveList();
+                List<CompactGameAction> gameMoves = loadGameMoveList();
                 finalGameMoveList.addAll(gameMoves);
             } catch (IOException | ClassNotFoundException ex) {
                 throw new RuntimeException(ex);
             }
         }
 
-        finalGameMoveList.add(gameAction);
+        finalGameMoveList.add(new CompactGameAction(gameAction, playerState.cardsInPlay, playerState.cardsInHand, playerState.resources, playerState.getFreeWorkers(), ResourceManagerSingleton.getInstance().getResourcePool(), playerState.calculatePoints(), ResourceManagerSingleton.getInstance().getDeckSize()));
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FileUtils.GAME_MOVES_FILE_NAME))) {
             oos.writeObject(finalGameMoveList);
@@ -43,16 +45,16 @@ public abstract class GameMoveThread {
             throw new RuntimeException(e);
         }
 
-        XmlUtils.saveGameAction(gameAction);
+        XmlUtils.saveGameAction(playerState, gameAction);
 
         FILE_ACCESS_IN_PROGRESS = false;
 
         notifyAll();
     }
 
-    public synchronized List<GameAction> loadGameMoveList() throws IOException, ClassNotFoundException {
+    public synchronized List<CompactGameAction> loadGameMoveList() throws IOException, ClassNotFoundException {
 
-        while(FILE_ACCESS_IN_PROGRESS) {
+        while(Boolean.TRUE.equals(FILE_ACCESS_IN_PROGRESS)) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -62,10 +64,10 @@ public abstract class GameMoveThread {
 
         FILE_ACCESS_IN_PROGRESS = true;
 
-        List<GameAction> gameMoveList = new ArrayList<>();
+        List<CompactGameAction> gameMoveList = new ArrayList<>();
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FileUtils.GAME_MOVES_FILE_NAME))) {
             if (ois.available() > 0) {
-                gameMoveList = new ArrayList<>((List<GameAction>) ois.readObject());
+                gameMoveList = new ArrayList<>((List<CompactGameAction>) ois.readObject());
             }
         } catch (EOFException e){
             System.err.println("Unexpected end of file");

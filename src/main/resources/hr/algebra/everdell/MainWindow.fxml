@@ -15,6 +15,8 @@
                 <MenuBar prefHeight="20.0" prefWidth="900.0">
                     <Menu mnemonicParsing="false" text="Game">
                         <MenuItem mnemonicParsing="false" onAction="#saveGameState" text="Save" />
+                        <MenuItem mnemonicParsing="false" onAction="#loadGameState" text="Load" />
+                        <MenuItem mnemonicParsing="false" onAction="#replayGame" text="Replay" />
                     </Menu>
                     <Menu mnemonicParsing="false" text="Documentation">
                         <MenuItem mnemonicParsing="false" onAction="#generateDocumentation" text="Generate" />
@@ -54,6 +56,11 @@
                   <ColorAdjust />
                </effect>
             </Pane>
+            <Ellipse fx:id="event_red" fill="#00ff0024" layoutX="354.0" layoutY="158.0" radiusX="39.0" radiusY="24.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+            <Ellipse fx:id="event_blue" fill="#00ff0024" layoutX="251.0" layoutY="134.0" radiusX="39.0" radiusY="24.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+            <Ellipse fx:id="event_green" fill="#00ff0024" layoutX="571.0" layoutY="186.0" radiusX="39.0" radiusY="24.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+            <Ellipse fx:id="event_tan" fill="#00ff0024" layoutX="639.0" layoutY="148.0" radiusX="39.0" radiusY="24.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+            <Label fx:id="lblReplay" layoutX="638.0" layoutY="26.0" prefHeight="47.0" prefWidth="248.0" textAlignment="JUSTIFY" wrapText="true" />
                 <stylesheets>
                     <URL value="@application.css" />
                 </stylesheets>

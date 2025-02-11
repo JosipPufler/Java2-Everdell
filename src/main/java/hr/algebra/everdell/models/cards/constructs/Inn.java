@@ -37,7 +37,7 @@ public class Inn extends Construct implements Destination {
     }
 
     @Override
-    public boolean isOpen() {
+    public Boolean isOpen() {
         return isOpen;
     }
 
@@ -47,7 +47,7 @@ public class Inn extends Construct implements Destination {
     }
 
     @Override
-    public Boolean placeWorker() {
+    public Boolean place() {
         if (!GameState.getResourceManager().getMeadow().isEmpty()){
             Optional<Card> card = DialogUtils.showCardChooseDialog(GameState.getResourceManager().getMeadow(), "Choose card from the meadow");
             if (card.isPresent()){
@@ -60,7 +60,7 @@ public class Inn extends Construct implements Destination {
                 }
                 ResourceGroup cost = card.get().getCost();
                 if (discount.isPresent() && cost.subtract(discount.get()) && cost.compareTo(GameState.getPlayerState().resources) < 0){
-                    GameState.getPlayerState().playCard(card.get());
+                    GameState.getPlayerState().playCard(card.get(), true);
                     CardUtils.removeCardFromMeadow(card.get());
                 }
             }

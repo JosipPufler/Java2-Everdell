@@ -3,6 +3,7 @@ package hr.algebra.everdell.models;
 import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.interfaces.GreenProduction;
 import hr.algebra.everdell.interfaces.Triggered;
+import hr.algebra.everdell.models.cards.constructs.Ruins;
 import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.GameUtils;
 import lombok.Getter;
@@ -30,13 +31,12 @@ public class PlayerState implements Serializable {
     int maxWorkers = 2;
     int freeWorkers = maxWorkers;
     int cardWorkers = 0;
-    @Getter
-    Boolean gameOver = false;
-    public final int MAX_CARDS_IN_HAND = 8;
-    public final int MAX_CARDS_IN_PLAY = 15;
+    public static final int MAX_CARDS_IN_HAND = 8;
+    public static final int MAX_CARDS_IN_PLAY = 15;
     @Getter
     @Setter
     Boolean turnPriority = false;
+    boolean lastWinter = false;
 
     public PlayerState(PlayerNumber playerNumber) {
         playerName = playerNumber.toString();
@@ -52,21 +52,20 @@ public class PlayerState implements Serializable {
         return cardValue + points;
     }
 
-    public Optional<Card> playCard(Card card){
+    public Optional<Card> playCard(Card card, Boolean ignoreCost){
         fireTrigger(TriggerType.CARD_BEFORE);
         if (card instanceof Critter<?>)
             fireTrigger(TriggerType.CRITTER_BEFORE);
         else if (card instanceof Construct)
             fireTrigger(TriggerType.CONSTRUCT_BEFORE);
 
-        if (card.isUnique() && cardsInPlay.stream().anyMatch(x -> Objects.equals(x.getName(), card.getName())))
-            return Optional.empty();
-        if (numberOfCardsInPlay() >= MAX_CARDS_IN_PLAY)
-            return Optional.empty();
 
-        Optional<ResourceGroup> resourceGroup = calculateCost(card);
-        if (resourceGroup.isPresent() && GameState.getPlayerState().resources.subtract(resourceGroup.get())){
-            GameState.getResourceManager().deposit(resourceGroup.get());
+        if (couldPlayCard(card, ignoreCost)){
+            if (!ignoreCost){
+                Optional<ResourceGroup> resourceGroup = calculateCost(card);
+                GameState.getResourceManager().deposit(resourceGroup.get());
+                resources.subtract(resourceGroup.get());
+            }
             boolean played = card.play();
             if (!played)
                 return Optional.empty();
@@ -77,9 +76,19 @@ public class PlayerState implements Serializable {
                 fireTrigger(TriggerType.CONSTRUCT_AFTER);
 
             return Optional.of(card);
+
         } else {
             return Optional.empty();
         }
+    }
+
+    public boolean couldPlayCard(Card card, Boolean ignoreCost){
+        if ((card.isUnique() && cardsInPlay.stream().anyMatch(x -> Objects.equals(x.getName(), card.getName()))) || numberOfCardsInPlay() >= MAX_CARDS_IN_PLAY)
+            return false;
+        Optional<Card> construct = cardsInPlay.stream().filter(x -> card instanceof Critter<?> && x.getClass() == ((Critter<?>)card).getAssociatedLocation() && !((Construct)x).isOccupied).findFirst();
+        if (ignoreCost)
+            return true;
+        return (card instanceof Critter<?> && construct.isPresent()) || resources.compareTo(card.getCost()) > 0;
     }
 
     public Optional<ResourceGroup> calculateCost(Card card){
@@ -94,25 +103,47 @@ public class PlayerState implements Serializable {
         return Optional.empty();
     }
 
+    public void setCurrentSeason(Season season){
+        currentSeason = season;
+        switch (season) {
+            case WINTER:
+                lastWinter = true;
+                break;
+            case SUMMER:
+                maxWorkers = maxWorkers + 1;
+                //CardUtils.addCardsToHand(GameState.getResourceManager().tryDrawCardsFromMeadow(2));
+                break;
+            case AUTUMN:
+                //maxWorkers = maxWorkers + 2;
+                cardsInPlay.stream().filter(GreenProduction.class::isInstance).forEach(x -> ((GreenProduction) x).Activate());
+                break;
+            case SPRING:
+                //maxWorkers = maxWorkers + 1;
+                cardsInPlay.stream().filter(GreenProduction.class::isInstance).forEach(x -> ((GreenProduction) x).Activate());
+                break;
+        }
+        callWorkersHome();
+    }
+
     public void nextSeason(){
-        if (gameOver)
+        if (lastWinter)
             return;
         fireTrigger(TriggerType.SEASON_CHANGE);
         currentSeason = currentSeason.next();
         switch (currentSeason) {
             case WINTER:
-                gameOver = true;
+                lastWinter = true;
                 break;
             case SUMMER:
                 maxWorkers = maxWorkers + 1;
-                CardUtils.addCardsToHand(GameState.getResourceManager().tryDrawCardsFromMeadow(2));
+                //CardUtils.addCardsToHand(GameState.getResourceManager().tryDrawCardsFromMeadow(2));
                 break;
             case AUTUMN:
-                maxWorkers = maxWorkers + 2;
+                //maxWorkers = maxWorkers + 2;
                 cardsInPlay.stream().filter(GreenProduction.class::isInstance).forEach(x -> ((GreenProduction) x).Activate());
                 break;
             case SPRING:
-                maxWorkers = maxWorkers + 1;
+                //maxWorkers = maxWorkers + 1;
                 cardsInPlay.stream().filter(GreenProduction.class::isInstance).forEach(x -> ((GreenProduction) x).Activate());
                 break;
         }
@@ -143,10 +174,10 @@ public class PlayerState implements Serializable {
         locationsDeployed.clear();
     }
 
-    public Boolean deployWorker(Boolean card){
+    public Boolean deployWorker(Boolean isCard){
         if (freeWorkers <= 0)
             return false;
-        if (card){
+        if (isCard){
             cardWorkers++;
         }
         freeWorkers--;
@@ -162,5 +193,19 @@ public class PlayerState implements Serializable {
 
     public int numberOfCardsInPlay(){
         return (int) cardsInPlay.stream().filter(Card::takesSpace).count();
+    }
+
+    public Boolean getGameOver() {
+        long negativeCardsPlayable = 0;
+        if (cardsInHand.stream().filter(Ruins.class::isInstance).count() > 0){
+            long countRuins = cardsInHand.stream().filter(Ruins.class::isInstance).count();
+            long countConstructs = cardsInPlay.stream().filter(Construct.class::isInstance).count();
+            if (countRuins > countConstructs){
+                negativeCardsPlayable = countRuins - countConstructs;
+            }
+        }
+        long cardsPlayable = cardsInHand.stream().filter(x -> couldPlayCard(x, false)).count();
+        cardsPlayable = cardsPlayable - negativeCardsPlayable;
+        return lastWinter && freeWorkers == 0 && (cardsInHand.isEmpty() || cardsPlayable <= 0);
     }
 }

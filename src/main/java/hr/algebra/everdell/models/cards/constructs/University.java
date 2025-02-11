@@ -48,7 +48,7 @@ public class University extends Construct implements Destination {
     }
 
     @Override
-    public boolean isOpen() {
+    public Boolean isOpen() {
         return isOpen;
     }
 
@@ -58,7 +58,7 @@ public class University extends Construct implements Destination {
     }
 
     @Override
-    public Boolean placeWorker() {
+    public Boolean place() {
         PlayerState playerState = GameState.getPlayerState();
         Optional<Card> card = DialogUtils.showCardChooseDialog(playerState.cardsInPlay, getName());
         if (card.isPresent()){

@@ -1,10 +1,9 @@
 package hr.algebra.everdell.models;
 
 import hr.algebra.everdell.EverdellApplication;
-import hr.algebra.everdell.utils.GameActionUtils;
-import hr.algebra.everdell.utils.GameUtils;
-import hr.algebra.everdell.utils.ResourceManager;
-import hr.algebra.everdell.utils.ResourceManagerSingleton;
+import hr.algebra.everdell.utils.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Dialog;
 import javafx.scene.shape.Circle;
 import lombok.Getter;
 
@@ -50,29 +49,46 @@ public class GameState {
     }
 
     public static void switchPlayers(GameAction gameAction){
-        if (EverdellApplication.solo){
-            PlayerNumber tempNumber = playerNumber;
-            playerNumber = opponentNumber;
-            opponentNumber = tempNumber;
+        GameActionUtils.createAndSaveGameAction(getPlayerState(), gameAction);
+        if (Boolean.TRUE.equals(EverdellApplication.solo)){
+            if (!opponentState.getGameOver()){
+                PlayerNumber tempNumber = playerNumber;
+                playerNumber = opponentNumber;
+                opponentNumber = tempNumber;
 
 
-            PlayerState tempState = playerState;
-            playerState = opponentState;
-            opponentState = tempState;
+                PlayerState tempState = playerState;
+                playerState = opponentState;
+                opponentState = tempState;
 
-            GameUtils.switchPlayers();
+                GameUtils.switchPlayers();
+            } else if (opponentState.getGameOver() && playerState.getGameOver()){
+                DialogUtils.showGameOverAlert();
+            }
         } else {
             GameUtils.blockScreen(true);
             GameUtils.sendUpdate();
         }
-        GameActionUtils.createAndSaveGameAction(gameAction);
     }
 
     public static GameStateTransferable packageGameState(){
         GameUtils.blockScreen(true);
-        return new GameStateTransferable(getResourceManager(), getPlayerState(), getOpponentState(), GameUtils.getMarkerGroup().getChildren().stream().map(x -> {
+        return new GameStateTransferable(getResourceManager(), getPlayerState(), getOpponentState(), GameUtils.getAllMarkers().stream().map(x -> {
             Circle circle = (Circle) x;
-            return new Marker(circle.getCenterX(), circle.getCenterY(), circle.getId(), (Location) circle.getUserData());
+            return (Marker)circle.getUserData();
+        }).toList());
+    }
+
+    public static GameStateTransferable packageGameStateWithAllMarkers(){
+        if (!EverdellApplication.solo){
+            GameUtils.blockScreen(true);
+        }
+        return new GameStateTransferable(getResourceManager(), getPlayerState(), getOpponentState(), GameUtils.getAllMarkers().stream().map(x -> {
+            Circle circle = (Circle) x;
+            if (circle.getUserData() instanceof Marker marker)
+                return marker;
+            else
+                throw new IllegalArgumentException("Invalid marker type: " + circle.getUserData());
         }).toList());
     }
 }

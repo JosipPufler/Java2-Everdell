@@ -1,12 +1,15 @@
 package hr.algebra.everdell.utils;
 
 import hr.algebra.everdell.interfaces.Card;
+import hr.algebra.everdell.models.GameState;
+import hr.algebra.everdell.models.PlayerState;
 import hr.algebra.everdell.models.Resource;
 import hr.algebra.everdell.models.ResourceGroup;
 import hr.algebra.everdell.utils.dialogs.CardChooseDialogPane;
 import hr.algebra.everdell.utils.dialogs.CustomListDialogPane;
 import hr.algebra.everdell.utils.dialogs.MultiResourceDialogPane;
 import hr.algebra.everdell.utils.dialogs.SingleResourceDialogPane;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -59,7 +62,7 @@ public class DialogUtils {
         dialog.setDialogPane(cardChooseDialogPane);
         dialog.setResizable(true);
         dialog.showAndWait();
-        if (dialog.getResult() == ButtonType.OK) {
+        if (dialog.getResult() == ButtonType.OK && cardChooseDialogPane.getSelectedCard() != null) {
             return Optional.of(cardChooseDialogPane.getSelectedCard());
         }
         return Optional.empty();
@@ -81,5 +84,21 @@ public class DialogUtils {
         Alert alert = new Alert(alertType, contentText, ButtonType.OK);
         alert.setTitle(title);
         alert.showAndWait();
+    }
+
+    public static void showGameOverAlert(){
+        GameUtils.blockScreen(true);
+        PlayerState opponentState = GameState.getOpponentState();
+        PlayerState playerState = GameState.getPlayerState();
+        String gameOverText;
+        if (opponentState.calculatePoints() > playerState.calculatePoints())
+            gameOverText = "Player " + opponentState.getPlayerNumber() + " wins!\n" + playerState.calculatePoints() + " : " + opponentState.calculatePoints();
+        else if (opponentState.calculatePoints() < playerState.calculatePoints())
+            gameOverText = "Player " + playerState.getPlayerNumber() + " wins!\n" + playerState.calculatePoints() + " : " + opponentState.calculatePoints();
+        else
+            gameOverText = "It's a tie\n" + playerState.calculatePoints() + " : " + opponentState.calculatePoints();
+
+        showAlert(Alert.AlertType.INFORMATION, "Game over", gameOverText);
+        Platform.exit();
     }
 }

@@ -1,27 +1,28 @@
 package hr.algebra.everdell.utils;
 
-import hr.algebra.everdell.models.GameAction;
-import hr.algebra.everdell.models.GameState;
-import hr.algebra.everdell.models.GameStateTransferable;
+import hr.algebra.everdell.models.*;
+import hr.algebra.everdell.threads.ReadGameMoveThread;
+import hr.algebra.everdell.threads.SaveGameMoveThread;
 import javafx.scene.control.Alert;
 
 import java.io.*;
+import java.util.List;
 
 public class GameActionUtils {
     private static String SAVE_GAME_FILE_NAME = "game/savedGame.dat";
 
     private GameActionUtils() {}
 
-    public static void createAndSaveGameAction(GameAction gameAction) {
-        /*SaveGameMoveThread saveGameMoveThread = new SaveGameMoveThread(gameAction);
+    public static void createAndSaveGameAction(PlayerState playerState, GameAction gameAction) {
+        SaveGameMoveThread saveGameMoveThread = new SaveGameMoveThread(playerState, gameAction);
         Thread thread = new Thread(saveGameMoveThread);
-        thread.start();*/
+        thread.start();
     }
 
     public static void saveGameToFile() {
         try (ObjectOutputStream objectOutputStream =
                      new ObjectOutputStream(new FileOutputStream(SAVE_GAME_FILE_NAME))) {
-            objectOutputStream.writeObject(GameState.packageGameState());
+            objectOutputStream.writeObject(GameState.packageGameStateWithAllMarkers());
 
             DialogUtils.showAlert(Alert.AlertType.INFORMATION,
                     "Spremanje igre",
@@ -34,13 +35,13 @@ public class GameActionUtils {
         }
     }
 
-    public static GameStateTransferable loadGameFromFile() {
+    public static void loadGameFromFile() {
         GameStateTransferable loadedGameState = null;
         try(ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(SAVE_GAME_FILE_NAME))) {
             loadedGameState = (GameStateTransferable) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return loadedGameState;
+        GameState.loadGameState(loadedGameState);
     }
 }

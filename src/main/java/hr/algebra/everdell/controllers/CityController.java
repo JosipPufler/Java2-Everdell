@@ -35,7 +35,7 @@ public class CityController extends CardListable implements CardInsertable {
                 System.out.println(cardName);
                 try {
                     BaseCard card = (BaseCard) Class.forName(cardName).getConstructor().newInstance();
-                    if (GameState.getPlayerState().playCard(card).isPresent()){
+                    if (GameState.getPlayerState().playCard(card, false).isPresent()){
                         GameUtils.updatePlayer();
                         event.setDropCompleted(true);
                     } else {
@@ -61,13 +61,14 @@ public class CityController extends CardListable implements CardInsertable {
     public void insertCard(Card card){
         ImageView cardImageView = createCardImageView(card);
         cardImageView.setUserData(card);
-        if (card instanceof Destination){
+        if (card instanceof Destination destination){
             Pane container = new Pane();
             cardImageView.setOnMouseClicked(event -> {
                 if (GameState.getPlayerState().getFreeWorkers() > 0 && ((Destination) card).tryPlaceWorker()){
                     GameState.getPlayerState().deployWorker(true);
                     container.getChildren().add(new Circle(event.getX(), event.getY(), 5, Paint.valueOf(String.format("#%06x", GameState.getPlayerState().getPlayerNumber().getPlayerColor().getRGB() & 0xFFFFFF))));
-                    GameState.switchPlayers(new GameAction(GameState.getPlayerState().getPlayerNumber(), GameActionType.PLACE_WORKER, cardImageView.getUserData()));
+                    Marker marker = new Marker(event.getX(), event.getY(), destination.getName(), destination);
+                    GameState.switchPlayers(new GameAction(GameState.getPlayerState().getPlayerNumber(), GameActionType.PLACE_WORKER, marker));
                 }
             });
             container.getChildren().add(cardImageView);

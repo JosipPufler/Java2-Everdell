@@ -1,7 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!ELEMENT GameActions (GameAction+)>
-<!ELEMENT GameAction (PlayerNumber, GameActionType, GameActionObject, Time)>
-<!ELEMENT PlayerNumber (#PCDATA)>
-<!ELEMENT GameActionType (#PCDATA)>
-<!ELEMENT GameActionObject (#PCDATA)>
-<!ELEMENT Time (#PCDATA)>
+
+<!ELEMENT GameAction ((CardPlayed|Location|Season), PlayerState)>
+<!ATTLIST GameAction player-number CDATA #REQUIRED>
+<!ATTLIST GameAction game-action-type CDATA #REQUIRED>
+<!ATTLIST GameAction time CDATA #REQUIRED>
+
+<!ELEMENT CardPlayed (#PCDATA)>
+<!ELEMENT Season (#PCDATA)>
+<!ELEMENT Location (Name, X, Y)>
+<!ELEMENT Name (#PCDATA)>
+<!ELEMENT X (#PCDATA)>
+<!ELEMENT Y (#PCDATA)>
+
+<!ELEMENT PlayerState (FreeWorkers, ResourceGroup, CardsInHand, CardsInPlay, BoardResources)>
+
+<!ELEMENT FreeWorkers (#PCDATA)>
+
+<!ELEMENT ResourceGroup (Berries, Resin, Pebbles, Twigs, Points)>
+<!ELEMENT Berries (#PCDATA)>
+<!ELEMENT Resin (#PCDATA)>
+<!ELEMENT Pebbles (#PCDATA)>
+<!ELEMENT Twigs (#PCDATA)>
+<!ELEMENT Points (#PCDATA)>
+
+<!ELEMENT BoardResources (BoardBerries, BoardResin, BoardPebbles, BoardTwigs, DeckSize)>
+<!ELEMENT BoardBerries (#PCDATA)>
+<!ELEMENT BoardResin (#PCDATA)>
+<!ELEMENT BoardPebbles (#PCDATA)>
+<!ELEMENT BoardTwigs (#PCDATA)>
+<!ELEMENT DeckSize (#PCDATA)>
+
+<!ELEMENT CardsInHand (CardInHand*)>
+<!ELEMENT CardsInPlay (CardInPlay*)>
+<!ELEMENT CardInHand (#PCDATA)>
+<!ELEMENT CardInPlay (#PCDATA)>

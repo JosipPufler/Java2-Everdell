@@ -35,7 +35,7 @@ public class Lookout extends Construct implements Destination {
     }
 
     @Override
-    public boolean isOpen() {
+    public Boolean isOpen() {
         return isOpen;
     }
 
@@ -45,12 +45,12 @@ public class Lookout extends Construct implements Destination {
     }
 
     @Override
-    public Boolean placeWorker() {
+    public Boolean place() {
         List<Location> locations = Location.getLocations();
         Optional<Integer> index = DialogUtils.showCustomListDialog(locations.stream().map(Location::toShorthandString).toList(), "Choose location to copy");
         if (index.isEmpty())
             return false;
-        locations.get(index.get()).activate(GameState.getPlayerState(), true);
+        locations.get(index.get()).place();
         workers.add(GameState.getPlayerState().getPlayerNumber());
         return true;
     }

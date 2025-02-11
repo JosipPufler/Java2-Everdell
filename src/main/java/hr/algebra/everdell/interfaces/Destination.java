@@ -4,9 +4,10 @@ import hr.algebra.everdell.models.GameState;
 import hr.algebra.everdell.models.PlayerNumber;
 import hr.algebra.everdell.models.PlayerState;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface Destination {
+public interface Destination extends Placeable, Serializable {
     int getNumberOfWorkerSlots();
 
     default int getNumberOfFreeWorkerSlots() {
@@ -14,12 +15,12 @@ public interface Destination {
     }
 
     int getNumberOfDeployedWorkers();
-    boolean isOpen();
+    Boolean isOpen();
     List<PlayerNumber> getWorkers();
 
     default Boolean tryPlaceWorker() {
         if (getNumberOfFreeWorkerSlots() > 0){
-            return placeWorker();
+            return place();
         }
         return false;
     }
@@ -35,6 +36,4 @@ public interface Destination {
         GameState.getPlayerState().returnWorkersFromCards(workersReturned);
         return workersReturned;
     }
-
-    Boolean placeWorker();
 }

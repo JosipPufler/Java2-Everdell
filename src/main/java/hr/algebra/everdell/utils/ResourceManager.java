@@ -17,7 +17,7 @@ public class ResourceManager implements Serializable {
     static final int STARTING_RESIN = 25;
     static final int STARTING_BERRIES = 30;
     static final int STARTING_TWIGS = 30;
-    ResourceGroup resourcePool = new ResourceGroup(STARTING_BERRIES, STARTING_TWIGS, STARTING_RESIN, STARTING_PEBBLES);
+    private final ResourceGroup resourcePool = new ResourceGroup(STARTING_BERRIES, STARTING_TWIGS, STARTING_RESIN, STARTING_PEBBLES);
 
     private final List<Card> deck = new ArrayList<>();
     @Getter
@@ -105,6 +105,7 @@ public class ResourceManager implements Serializable {
                 }
             }
         }
+        GameUtils.replenishMeadow();
         return cardsDrawn;
     }
 

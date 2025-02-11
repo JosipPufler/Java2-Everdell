@@ -31,7 +31,7 @@ public class Monk extends Critter<Monastery> implements GreenProduction {
     public Boolean Activate() {
         int maxBerries = 2;
         if (GameState.getPlayerState().resources.getBerries() == 0)
-            return false;
+            return true;
         if (GameState.getPlayerState().resources.getBerries() < maxBerries)
             maxBerries = GameState.getPlayerState().resources.getBerries();
         Optional<Integer> giftBerries = DialogUtils.showSingleResourceDialog(maxBerries, Resource.BERRIES, "Gift berries");

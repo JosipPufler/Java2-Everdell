@@ -42,7 +42,7 @@ public class    ClockTower extends Construct implements Triggered {
     @Override
     public void trigger() {
         Optional<Integer> index = DialogUtils.showCustomListDialog(GameState.getPlayerState().locationsDeployed, "Choose location");
-        index.ifPresent(integer -> GameState.getPlayerState().locationsDeployed.get(integer).activate(GameState.getPlayerState(), true));
+        index.ifPresent(integer -> GameState.getPlayerState().locationsDeployed.get(integer).place());
         GameUtils.updatePlayer();
     }
 }

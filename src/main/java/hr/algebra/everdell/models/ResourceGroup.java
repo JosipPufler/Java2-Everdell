@@ -103,6 +103,13 @@ public class ResourceGroup implements Comparable<ResourceGroup>, Serializable {
         resourceGroup.clear();
     }
 
+    public void replace(ResourceGroup resourceGroup){
+        berries = resourceGroup.getBerries();
+        twigs = resourceGroup.getTwigs();
+        resin = resourceGroup.getResin();
+        pebbles = resourceGroup.getPebbles();
+    }
+
     public void clear(){
         this.berries = 0;
         this.twigs = 0;

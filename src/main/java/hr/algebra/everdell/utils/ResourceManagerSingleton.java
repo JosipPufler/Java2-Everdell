@@ -4,7 +4,7 @@ import lombok.Getter;
 
 public class ResourceManagerSingleton {
     @Getter
-    static ResourceManager instance;
+    private static ResourceManager instance;
 
     static {
         try {
