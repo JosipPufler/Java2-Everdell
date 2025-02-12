@@ -47,7 +47,7 @@ public class Lookout extends Construct implements Destination {
     @Override
     public Boolean place() {
         List<Location> locations = Location.getLocations();
-        Optional<Integer> index = DialogUtils.showCustomListDialog(locations.stream().map(Location::toShorthandString).toList(), "Choose location to copy");
+        Optional<Integer> index = DialogUtils.showCustomListDialog(locations.stream().map(Location::toString).toList(), "Choose location to copy");
         if (index.isEmpty())
             return false;
         locations.get(index.get()).place();

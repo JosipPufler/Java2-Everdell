@@ -13,23 +13,23 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
-public class ReadGameMoveThread extends GameMoveThread implements Runnable {
+public class ReadGameActionThread extends GameActionThread implements Runnable {
 
     private Label label;
 
     @Override
     public void run() {
         try {
-            List<?> gameMoves = loadGameMoveList();
+            List<?> gameActions = loadGameMoveList();
 
-            if(!gameMoves.isEmpty()) {
-                GameAction gameMove = (GameAction) gameMoves.get(gameMoves.size() - 1);
+            if(!gameActions.isEmpty()) {
+                GameAction gameAction = (GameAction) gameActions.get(gameActions.size() - 1);
                 Platform.runLater(() -> {
-                    label.setText(gameMove.getGameActionType().getGameActionText()
+                    label.setText(gameAction.getGameActionType().getGameActionText()
                             + ": "
-                            + gameMove.getGameActionObject().toString()
+                            + gameAction.getGameActionObject().toString()
                             + " at "
-                            + gameMove.getDateTime().toString()
+                            + gameAction.getDateTime().toString()
                             + ")");
                 });
             }

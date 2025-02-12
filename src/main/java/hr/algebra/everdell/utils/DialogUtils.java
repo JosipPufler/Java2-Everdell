@@ -80,6 +80,12 @@ public class DialogUtils {
         return Optional.empty();
     }
 
+    public static void showAndWaitAlert(Alert.AlertType alertType, String title, String contentText){
+        Alert alert = new Alert(alertType, contentText, ButtonType.OK);
+        alert.setTitle(title);
+        alert.showAndWait();
+    }
+
     public static void showAlert(Alert.AlertType alertType, String title, String contentText){
         Alert alert = new Alert(alertType, contentText, ButtonType.OK);
         alert.setTitle(title);
@@ -98,7 +104,7 @@ public class DialogUtils {
         else
             gameOverText = "It's a tie\n" + playerState.calculatePoints() + " : " + opponentState.calculatePoints();
 
-        showAlert(Alert.AlertType.INFORMATION, "Game over", gameOverText);
+        showAndWaitAlert(Alert.AlertType.INFORMATION, "Game over", gameOverText);
         Platform.exit();
     }
 }

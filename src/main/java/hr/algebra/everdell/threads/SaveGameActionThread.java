@@ -5,7 +5,7 @@ import hr.algebra.everdell.models.PlayerState;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class SaveGameMoveThread extends GameMoveThread implements Runnable {
+public class SaveGameActionThread extends GameActionThread implements Runnable {
 
     private PlayerState playerState;
     private GameAction gameMove;

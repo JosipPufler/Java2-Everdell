@@ -1,5 +1,7 @@
 package hr.algebra.everdell.controllers;
 import hr.algebra.everdell.EverdellApplication;
+import hr.algebra.everdell.interfaces.Card;
+import hr.algebra.everdell.interfaces.Placeable;
 import hr.algebra.everdell.models.*;
 import hr.algebra.everdell.rmi.ChatRemoteService;
 import hr.algebra.everdell.rmi.ChatServer;
@@ -17,12 +19,15 @@ import javafx.scene.shape.Ellipse;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.io.Serializable;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 public class EverdellMainController {
     @FXML public Ellipse location_2T1C;
@@ -41,6 +46,11 @@ public class EverdellMainController {
     @FXML public Ellipse event_red;
     @FXML public Ellipse event_blue;
     @FXML public Label lblReplay;
+    @FXML public Ellipse location_haven;
+    @FXML public Ellipse location_journey_4;
+    @FXML public Ellipse location_journey_3;
+    @FXML public Ellipse location_journey_2;
+    @FXML public Ellipse location_journey_1;
     @FXML TabPane tabPane;
     @FXML Pane blockPane;
     @FXML AnchorPane anchorPane;
@@ -50,7 +60,6 @@ public class EverdellMainController {
     @FXML Button btnPebbles;
     @FXML Label lblDeck;
     @FXML StackPane stpYourStockpile;
-
     final List<Ellipse> locations = new ArrayList<>();
     public Group playerOneGroup = new Group();
     public Group playerTwoGroup = new Group();
@@ -62,12 +71,10 @@ public class EverdellMainController {
         cityController = GameUtils.showCity(this);
         GameUtils.showHand(this);
         GameUtils.generateMeadow(this);
-
         event_green.setUserData(new Event(new ResourceGroup(), 0, 3, () -> GameState.getPlayerState().cardsInPlay.stream().filter(x -> x.getType() == CardType.GREEN_PRODUCTION).count() >= 4));
         event_red.setUserData(new Event(new ResourceGroup(), 0, 3, () -> GameState.getPlayerState().cardsInPlay.stream().filter(x -> x.getType() == CardType.RED_DESTINATION).count() >= 3));
         event_blue.setUserData(new Event(new ResourceGroup(), 0, 3, () -> GameState.getPlayerState().cardsInPlay.stream().filter(x -> x.getType() == CardType.BLUE_GOVERNANCE).count() >= 3));
         event_tan.setUserData(new Event(new ResourceGroup(), 0, 3, () -> GameState.getPlayerState().cardsInPlay.stream().filter(x -> x.getType() == CardType.TAN_TRAVELER).count() >= 3));
-
         location_2T1C.setUserData(new Location(new ResourceGroup(0, 2, 0, 0), 1, 0, true));
         location_3T.setUserData(new Location(new ResourceGroup(0, 3, 0, 0), 0, 0, false));
         location_2R.setUserData(new Location(new ResourceGroup(0, 0, 2, 0), 0, 0, false));
@@ -76,25 +83,30 @@ public class EverdellMainController {
         location_1P.setUserData(new Location(new ResourceGroup(0, 0, 0, 1), 0, 0, false));
         location_1B1C.setUserData(new Location(new ResourceGroup(1, 0, 0, 0), 1, 0, false));
         location_1B.setUserData(new Location(new ResourceGroup(1, 0, 0, 0), 0, 0, true));
-        locations.addAll(List.of(location_2T1C, location_3T, location_2R, location_1R1C, location_2C1Pt, location_1P, location_1B1C, location_1B));
+        location_haven.setUserData(LocationCreator.createHavenSpecialLocation());
+        location_journey_1.setUserData(LocationCreator.createJourneySpecialLocation(2));
+        location_journey_2.setUserData(LocationCreator.createJourneySpecialLocation(3));
+        location_journey_3.setUserData(LocationCreator.createJourneySpecialLocation(4));
+        location_journey_4.setUserData(LocationCreator.createJourneySpecialLocation(5));
+
+        locations.addAll(List.of(location_journey_4, location_journey_3, location_journey_2, location_journey_1, location_haven, location_2T1C, location_3T, location_2R, location_1R1C, location_2C1Pt, location_1P, location_1B1C, location_1B));
 
         for (Ellipse location : locations){
             location.setOnMouseClicked(event -> {
-                Group playerGroup, opponentGroup;
+                Group playerGroup = playerTwoGroup;
+                Group opponentGroup = playerOneGroup;
                 if (GameState.getPlayerState().getPlayerNumber() == PlayerNumber.ONE){
                     playerGroup = playerOneGroup;
                     opponentGroup = playerTwoGroup;
-                }else{
-                    playerGroup = playerTwoGroup;
-                    opponentGroup = playerOneGroup;
                 }
-                if (location.getUserData() instanceof Location markerLocation && UiUtils.placeMarker(new Marker(event.getSceneX(), event.getSceneY(), markerLocation.toShorthandString(), markerLocation), false, playerGroup, opponentGroup)){
-                    markerLocation.place();
+                if (location.getUserData() instanceof Placeable placeable && UiUtils.canPlaceMarker(placeable, false, playerGroup, opponentGroup) && placeable.place()){
+                    UiUtils.placeMarker(new Marker(event.getSceneX(), event.getSceneY(), placeable.getName(), placeable), false, playerGroup, opponentGroup);
                     updateResourcePool();
-                    Location.addLocations(markerLocation);
-                    if (markerLocation instanceof Event)
+                    if (placeable instanceof Location markerLocation)
+                        Location.addLocations(markerLocation);
+                    if (placeable instanceof Event)
                         location.setVisible(false);
-                    GameState.switchPlayers(new GameAction(GameState.getPlayerState().getPlayerNumber(), GameActionType.PLACE_WORKER, new Marker(event.getSceneX(), event.getSceneY(), markerLocation.toShorthandString(), markerLocation)));
+                    GameState.switchPlayers(new GameAction(GameState.getPlayerState().getPlayerNumber(), GameActionType.PLACE_WORKER, new Marker(event.getSceneX(), event.getSceneY(), placeable.getName(), placeable)));
                 }
             });
         }
@@ -133,10 +145,6 @@ public class EverdellMainController {
             playerTwoGroup.getChildren().clear();
         cityController.returnWorkers(GameState.getPlayerState());
         GameState.getPlayerState().nextSeason();
-        locations.forEach(x -> {
-            if (x.getUserData() instanceof Location location)
-                location.deactivate();
-        });
         updateResourcePool();
     }
 
@@ -147,11 +155,10 @@ public class EverdellMainController {
             Circle circle = new Circle(marker.getX(), marker.getY() - 25, 10, Paint.valueOf(String.format("#%06x", marker.getPlayerNumber().getPlayerColor().getRGB() & 0xFFFFFF)));
             circle.setUserData(marker);
             circle.setId(marker.getPlayerNumber().name() + '_' + marker.getName().split("_", 2)[1]);
-            if(marker.getPlayerNumber() == PlayerNumber.TWO){
+            if(marker.getPlayerNumber() == PlayerNumber.TWO)
                 playerTwoGroup.getChildren().add(circle);
-            } else if (marker.getPlayerNumber() == PlayerNumber.ONE){
+            else if (marker.getPlayerNumber() == PlayerNumber.ONE)
                 playerOneGroup.getChildren().add(circle);
-            }
         }
     }
 
@@ -179,20 +186,11 @@ public class EverdellMainController {
         GameActionUtils.saveGameToFile();
     }
 
-    public List<Location> getLocationsDeployable(){
-        List<Location> availableLocations = new ArrayList<>();
-        for (Ellipse ellipse : locations){
-            if (ellipse.getUserData() instanceof Location location)
-                availableLocations.add(location);
-        }
-        return availableLocations;
-    }
-
     public void loadGameState(ActionEvent actionEvent) {
         GameActionUtils.loadGameFromFile();
     }
 
     public void replayGame(ActionEvent actionEvent) {
-        XmlUtils.replay(this, lblReplay);
+        XmlUtils.replay(lblReplay);
     }
 }

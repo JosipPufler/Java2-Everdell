@@ -1,19 +1,13 @@
 package hr.algebra.everdell.utils;
 
-import hr.algebra.everdell.controllers.EverdellMainController;
 import hr.algebra.everdell.interfaces.Card;
-import hr.algebra.everdell.interfaces.Placeable;
 import hr.algebra.everdell.models.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import org.w3c.dom.*;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -25,11 +19,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -44,22 +36,22 @@ public class XmlUtils {
     public static final String XML_FILE_NAME = "xml/gameActions.xml";
 
     public static void saveGameAction(PlayerState playerState, GameAction gameAction) {
-        CompactGameAction compactGameAction = new CompactGameAction(gameAction, playerState.cardsInPlay, playerState.cardsInHand, playerState.resources, playerState.getFreeWorkers(), resourceManager.getResourcePool(), playerState.calculatePoints(), resourceManager.getDeckSize());
+        GameActionTransferable gameActionTransferable = new GameActionTransferable(gameAction, playerState.cardsInPlay, playerState.cardsInHand, playerState.resources, playerState.getFreeWorkers(), resourceManager.getResourcePool(), playerState.calculatePoints(), resourceManager.getDeckSize());
 
         if (!Files.exists(Path.of(XML_FILE_NAME))) {
             try {
                 Document document = createDocument(GameActionTag.GAME_ACTIONS.getTag());
-                appendGameActionElement(compactGameAction, document);
+                appendGameActionElement(gameActionTransferable, document);
                 saveDocument(document, XML_FILE_NAME);
             } catch (ParserConfigurationException | TransformerException e) {
                 throw new RuntimeException(e);
             }
         } else {
             try {
-                List<CompactGameAction> gameActions = parse(XML_FILE_NAME);
-                gameActions.add(compactGameAction);
+                List<GameActionTransferable> gameActions = XmlParseUtils.parse(XML_FILE_NAME);
+                gameActions.add(gameActionTransferable);
                 Document document = createDocument(GameActionTag.GAME_ACTIONS.getTag());
-                for (CompactGameAction ga : gameActions) {
+                for (GameActionTransferable ga : gameActions) {
                     appendGameActionElement(ga, document);
                 }
                 saveDocument(document, XML_FILE_NAME);
@@ -69,38 +61,6 @@ public class XmlUtils {
         }
     }
 
-    private static List<CompactGameAction> parse(String xmlFileName) {
-        Document document = null;
-
-        try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setValidating(true);
-            DocumentBuilder builder = factory.newDocumentBuilder();
-
-            builder.setErrorHandler(new ErrorHandler() {
-                @Override
-                public void warning(SAXParseException exception) throws SAXException {
-                    System.err.println("Warning: " + exception);
-                }
-
-                @Override
-                public void error(SAXParseException exception) throws SAXException {
-                    throw exception;
-                }
-
-                @Override
-                public void fatalError(SAXParseException exception) throws SAXException {
-                    throw exception;
-                }
-            });
-            document = builder.parse(new File(xmlFileName));
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        return retrieveGameMoves(document);
-    }
-
     private static Document createDocument(String element) throws ParserConfigurationException {
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
         DOMImplementation dom = builder.getDOMImplementation();
@@ -108,8 +68,8 @@ public class XmlUtils {
         return dom.createDocument(null, element, docType);
     }
 
-    private static void appendGameActionElement(CompactGameAction compactGameAction, Document document) {
-        GameAction gameAction = compactGameAction.getAction();
+    private static void appendGameActionElement(GameActionTransferable gameActionTransferable, Document document) {
+        GameAction gameAction = gameActionTransferable.getAction();
 
         Element element = document.createElement(GameActionTag.GAME_ACTION.getTag());
         document.getDocumentElement().appendChild(element);
@@ -137,30 +97,30 @@ public class XmlUtils {
         Element boardResources = document.createElement(GameActionTag.BOARD_RESOURCES.getTag());
         element.appendChild(playerState);
 
-        playerState.appendChild(createElement(document, GameActionTag.FREE_WORKERS.getTag(), String.valueOf(compactGameAction.getFreeWorkers())));
+        playerState.appendChild(createElement(document, GameActionTag.FREE_WORKERS.getTag(), String.valueOf(gameActionTransferable.getFreeWorkers())));
         playerState.appendChild(resources);
         playerState.appendChild(cardsInHand);
         playerState.appendChild(cardsInPlay);
         playerState.appendChild(boardResources);
 
-        for (Card card : compactGameAction.getCardsInPlay()){
+        for (Card card : gameActionTransferable.getCardsInPlay()){
             cardsInPlay.appendChild(createElement(document, GameActionTag.CARD_IN_PLAY.getTag(), card.getClass().getCanonicalName()));
         }
-        for (Card card : compactGameAction.getCardsInHand()){
+        for (Card card : gameActionTransferable.getCardsInHand()){
             cardsInHand.appendChild(createElement(document, GameActionTag.CARD_IN_HAND.getTag(), card.getClass().getCanonicalName()));
         }
 
-        resources.appendChild(createElement(document, GameActionTag.BERRIES.getTag(), String.valueOf(compactGameAction.getResourceGroup().getBerries())));
-        resources.appendChild(createElement(document, GameActionTag.RESIN.getTag(), String.valueOf(compactGameAction.getResourceGroup().getResin())));
-        resources.appendChild(createElement(document, GameActionTag.PEBBLES.getTag(), String.valueOf(compactGameAction.getResourceGroup().getPebbles())));
-        resources.appendChild(createElement(document, GameActionTag.TWIGS.getTag(), String.valueOf(compactGameAction.getResourceGroup().getTwigs())));
-        resources.appendChild(createElement(document, GameActionTag.POINTS.getTag(), String.valueOf(compactGameAction.getPoints())));
+        resources.appendChild(createElement(document, GameActionTag.BERRIES.getTag(), String.valueOf(gameActionTransferable.getResourceGroup().getBerries())));
+        resources.appendChild(createElement(document, GameActionTag.RESIN.getTag(), String.valueOf(gameActionTransferable.getResourceGroup().getResin())));
+        resources.appendChild(createElement(document, GameActionTag.PEBBLES.getTag(), String.valueOf(gameActionTransferable.getResourceGroup().getPebbles())));
+        resources.appendChild(createElement(document, GameActionTag.TWIGS.getTag(), String.valueOf(gameActionTransferable.getResourceGroup().getTwigs())));
+        resources.appendChild(createElement(document, GameActionTag.POINTS.getTag(), String.valueOf(gameActionTransferable.getPoints())));
 
-        boardResources.appendChild(createElement(document, GameActionTag.BOARD_BERRIES.getTag(), String.valueOf(compactGameAction.getBoardResourceGroup().getBerries())));
-        boardResources.appendChild(createElement(document, GameActionTag.BOARD_RESIN.getTag(), String.valueOf(compactGameAction.getBoardResourceGroup().getResin())));
-        boardResources.appendChild(createElement(document, GameActionTag.BOARD_PEBBLES.getTag(), String.valueOf(compactGameAction.getBoardResourceGroup().getPebbles())));
-        boardResources.appendChild(createElement(document, GameActionTag.BOARD_TWIGS.getTag(), String.valueOf(compactGameAction.getBoardResourceGroup().getTwigs())));
-        boardResources.appendChild(createElement(document, GameActionTag.DECK_SIZE.getTag(), String.valueOf(compactGameAction.getDeckSize())));
+        boardResources.appendChild(createElement(document, GameActionTag.BOARD_BERRIES.getTag(), String.valueOf(gameActionTransferable.getBoardResourceGroup().getBerries())));
+        boardResources.appendChild(createElement(document, GameActionTag.BOARD_RESIN.getTag(), String.valueOf(gameActionTransferable.getBoardResourceGroup().getResin())));
+        boardResources.appendChild(createElement(document, GameActionTag.BOARD_PEBBLES.getTag(), String.valueOf(gameActionTransferable.getBoardResourceGroup().getPebbles())));
+        boardResources.appendChild(createElement(document, GameActionTag.BOARD_TWIGS.getTag(), String.valueOf(gameActionTransferable.getBoardResourceGroup().getTwigs())));
+        boardResources.appendChild(createElement(document, GameActionTag.DECK_SIZE.getTag(), String.valueOf(gameActionTransferable.getDeckSize())));
 
     }
 
@@ -178,135 +138,45 @@ public class XmlUtils {
         transformer.transform(new DOMSource(document), new StreamResult(new File(filename)));
     }
 
-    private static List<CompactGameAction> retrieveGameMoves(Document document) {
-        List<CompactGameAction> gameActions = new ArrayList<>();
-        Element documentElement = document.getDocumentElement();
-        NodeList nodes = documentElement.getElementsByTagName(GameActionTag.GAME_ACTION.getTag());
-        for (int i = 0; i < nodes.getLength(); i++) {
-            Element element = (Element) nodes.item(i);
-            List<Card> cardsInPlay = new ArrayList<>();
-            List<Card> cardsInHand = new ArrayList<>();
-
-            LocalDateTime time = LocalDateTime.parse(element.getAttribute(GameActionTag.ATT_TIME.getTag()));
-            GameActionType actionType = GameActionType.valueOf(element.getAttribute(GameActionTag.ATT_GAME_ACTION_TYPE.getTag()));
-            PlayerNumber playerNumber = PlayerNumber.valueOf(element.getAttribute(GameActionTag.ATT_PLAYER_NUMBER.getTag()));
-
-            Element playerState = (Element) element.getElementsByTagName(GameActionTag.PLAYER_STATE.getTag()).item(0);
-
-            Element cardsInHandElement = (Element) playerState.getElementsByTagName(GameActionTag.CARDS_IN_HAND.getTag()).item(0);
-            Element cardsInPlayElement = (Element) playerState.getElementsByTagName(GameActionTag.CARDS_IN_PLAY.getTag()).item(0);
-            NodeList cardsInPlayList = cardsInPlayElement.getElementsByTagName(GameActionTag.CARD_IN_PLAY.getTag());
-            NodeList cardsInHandList = cardsInHandElement.getElementsByTagName(GameActionTag.CARD_IN_HAND.getTag());
-
-            extractCards(cardsInPlay, cardsInPlayList);
-            extractCards(cardsInHand, cardsInHandList);
-
-            Element resourceGroupElement = (Element)playerState.getElementsByTagName(GameActionTag.RESOURCE_GROUP.getTag()).item(0);
-
-            int freeWorkers = Integer.parseInt(playerState.getElementsByTagName(GameActionTag.FREE_WORKERS.getTag()).item(0).getTextContent());
-
-            int berries = Integer.parseInt(resourceGroupElement.getElementsByTagName(GameActionTag.BERRIES.getTag()).item(0).getTextContent());
-            int pebbles = Integer.parseInt(resourceGroupElement.getElementsByTagName(GameActionTag.PEBBLES.getTag()).item(0).getTextContent());
-            int resin = Integer.parseInt(resourceGroupElement.getElementsByTagName(GameActionTag.RESIN.getTag()).item(0).getTextContent());
-            int twigs = Integer.parseInt(resourceGroupElement.getElementsByTagName(GameActionTag.TWIGS.getTag()).item(0).getTextContent());
-            int points = Integer.parseInt(resourceGroupElement.getElementsByTagName(GameActionTag.POINTS.getTag()).item(0).getTextContent());
-
-            Element boardResourcesElement = (Element)playerState.getElementsByTagName(GameActionTag.BOARD_RESOURCES.getTag()).item(0);
-
-            int boardBerries = Integer.parseInt(boardResourcesElement.getElementsByTagName(GameActionTag.BOARD_BERRIES.getTag()).item(0).getTextContent());
-            int boardPebbles = Integer.parseInt(boardResourcesElement.getElementsByTagName(GameActionTag.BOARD_PEBBLES.getTag()).item(0).getTextContent());
-            int boardResin = Integer.parseInt(boardResourcesElement.getElementsByTagName(GameActionTag.BOARD_RESIN.getTag()).item(0).getTextContent());
-            int boardTwigs = Integer.parseInt(boardResourcesElement.getElementsByTagName(GameActionTag.BOARD_TWIGS.getTag()).item(0).getTextContent());
-            int deckSize = Integer.parseInt(boardResourcesElement.getElementsByTagName(GameActionTag.DECK_SIZE.getTag()).item(0).getTextContent());
-
-
-            ResourceGroup resourceGroup = new ResourceGroup(berries, twigs, resin, pebbles);
-            ResourceGroup boardResourceGroup = new ResourceGroup(boardBerries, boardTwigs, boardResin, boardPebbles);
-
-            if (actionType == GameActionType.PLACE_WORKER){
-                Element location = (Element) element.getElementsByTagName(GameActionTag.LOCATION.getTag()).item(0);
-                double x = Double.parseDouble(location.getElementsByTagName(GameActionTag.X.getTag()).item(0).getTextContent());
-                double y = Double.parseDouble(location.getElementsByTagName(GameActionTag.Y.getTag()).item(0).getTextContent());
-                String name = location.getElementsByTagName(GameActionTag.NAME.getTag()).item(0).getTextContent();
-                Marker marker = new Marker(x, y, name, playerNumber);
-                gameActions.add(new CompactGameAction(new GameAction(playerNumber, actionType, marker, time), cardsInPlay, cardsInHand, resourceGroup, freeWorkers, boardResourceGroup, points, deckSize));
-            }
-            else if (actionType == GameActionType.PLAY_CARD){
-                Card card = extractCard(element.getElementsByTagName(GameActionTag.CARD_PLAYED.getTag()).item(0).getTextContent());
-                gameActions.add(new CompactGameAction(new GameAction(playerNumber, actionType, card, time), cardsInPlay, cardsInHand, resourceGroup, freeWorkers, boardResourceGroup, points, deckSize));
-            } else if (actionType == GameActionType.PREPARE_FOR_SEASON) {
-                Season season = Season.valueOf(element.getElementsByTagName(GameActionTag.SEASON.getTag()).item(0).getTextContent());
-                gameActions.add(new CompactGameAction(new GameAction(playerNumber, actionType, season, time), cardsInPlay, cardsInHand, resourceGroup, freeWorkers, boardResourceGroup, points, deckSize));
-            }
-        }
-
-        return gameActions;
-    }
-
-    private static void extractCards(List<Card> cardsInHand, NodeList cardsInHandList){
-        try {
-            for (int index = 0; index < cardsInHandList.getLength(); index++) {
-                String className = cardsInHandList.item(index).getTextContent();
-                Class<?> aClass = Class.forName(className);
-                BaseCard o = (BaseCard) aClass.getDeclaredConstructor().newInstance();
-                cardsInHand.add(o);
-            }
-        } catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
-        IllegalAccessException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private static Card extractCard(String className){
-        try {
-            Class<?> aClass = Class.forName(className);
-            BaseCard o = (BaseCard) aClass.getDeclaredConstructor().newInstance();
-            return o;
-        } catch (ClassNotFoundException | InvocationTargetException | InstantiationException |
-                 IllegalAccessException | NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static void replay(EverdellMainController mainController, Label label){
-        List<CompactGameAction> gameActions = parse(XML_FILE_NAME);
+    public static void replay(Label label){
+        List<GameActionTransferable> gameActions = XmlParseUtils.parse(XML_FILE_NAME);
         final AtomicInteger counter = new AtomicInteger(0);
-
+        GameUtils.clearMarkerGroups();
         Timeline replay = new Timeline(new KeyFrame(Duration.ZERO, _ -> {
 
-            CompactGameAction compactGameAction = gameActions.get(counter.get());
+            GameActionTransferable gameActionTransferable = gameActions.get(counter.get());
 
             CardUtils.clearCardsFromCity();
             CardUtils.clearCardsFromHand();
 
-            CardUtils.addCardsToCity(compactGameAction.getCardsInPlay());
-            CardUtils.addCardsToHand(compactGameAction.getCardsInHand());
-            GameState.getPlayerState().resources.replace(compactGameAction.getResourceGroup());
+            CardUtils.addCardsToCity(gameActionTransferable.getCardsInPlay());
+            CardUtils.addCardsToHand(gameActionTransferable.getCardsInHand());
+            GameState.getPlayerState().resources.replace(gameActionTransferable.getResourceGroup());
 
-            ResourceManagerSingleton.getInstance().getResourcePool().replace(compactGameAction.getBoardResourceGroup());
+            ResourceManagerSingleton.getInstance().getResourcePool().replace(gameActionTransferable.getBoardResourceGroup());
 
             PlayerState currentPlayer;
-            if (compactGameAction.getAction().getPlayerNumber() == PlayerNumber.ONE){
+            if (gameActionTransferable.getAction().getPlayerNumber() == PlayerNumber.ONE){
                 currentPlayer = GameState.getPlayerState();
             } else
                 currentPlayer = GameState.getOpponentState();
 
-            if (compactGameAction.getAction().getGameActionType() == GameActionType.PLACE_WORKER){
-                Marker marker = (Marker)compactGameAction.getAction().getGameActionObject();
+            if (gameActionTransferable.getAction().getGameActionType() == GameActionType.PLACE_WORKER){
+                Marker marker = (Marker) gameActionTransferable.getAction().getGameActionObject();
                 List<Marker> allMarkers = new ArrayList<>(GameUtils.getAllMarkers().stream().map(x -> (Marker) x.getUserData()).toList());
                 allMarkers.add(marker);
                 GameUtils.updateMarkers(allMarkers);
                 currentPlayer.deployWorker(false);
-                label.setText(compactGameAction.getAction().getPlayerNumber().toString() + " placed a worker on " + ((Marker) compactGameAction.getAction().getGameActionObject()).getName() + " on " + compactGameAction.getAction().getDateTime());
-            } else if (compactGameAction.getAction().getGameActionType() == GameActionType.PLAY_CARD){
-                label.setText(compactGameAction.getAction().getPlayerNumber().toString() + " played card " + ((Card)compactGameAction.getAction().getGameActionObject()).getName() + " on " + compactGameAction.getAction().getDateTime());
-            } else if (compactGameAction.getAction().getGameActionType() == GameActionType.PREPARE_FOR_SEASON){
+                label.setText(gameActionTransferable.getAction().getPlayerNumber().toString() + " placed a worker on " + ((Marker) gameActionTransferable.getAction().getGameActionObject()).getName() + " on " + gameActionTransferable.getAction().getDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
+            } else if (gameActionTransferable.getAction().getGameActionType() == GameActionType.PLAY_CARD){
+                label.setText(gameActionTransferable.getAction().getPlayerNumber().toString() + " played card " + ((Card) gameActionTransferable.getAction().getGameActionObject()).getName() + " on " + gameActionTransferable.getAction().getDateTime());
+            } else if (gameActionTransferable.getAction().getGameActionType() == GameActionType.PREPARE_FOR_SEASON){
                 List<Marker> allMarkers = new ArrayList<>(GameUtils.getAllMarkers().stream().map(x -> (Marker) x.getUserData()).toList());
-                List<Marker> filteredMarkers = allMarkers.stream().filter(x -> x.getPlayerNumber() == compactGameAction.getAction().getPlayerNumber()).toList();
+                List<Marker> filteredMarkers = allMarkers.stream().filter(x -> x.getPlayerNumber() == gameActionTransferable.getAction().getPlayerNumber()).toList();
                 GameUtils.updateMarkers(filteredMarkers);
-                currentPlayer.setCurrentSeason((Season)compactGameAction.getAction().getGameActionObject());
+                currentPlayer.setCurrentSeason((Season) gameActionTransferable.getAction().getGameActionObject());
 
-                label.setText(compactGameAction.getAction().getPlayerNumber().toString() + " prepared for season " + ((Season)compactGameAction.getAction().getGameActionObject()).name() + " on " + compactGameAction.getAction().getDateTime());
+                label.setText(gameActionTransferable.getAction().getPlayerNumber().toString() + " prepared for season " + ((Season) gameActionTransferable.getAction().getGameActionObject()).name() + " on " + gameActionTransferable.getAction().getDateTime());
             }
 
             GameUtils.updatePlayer();
@@ -315,5 +185,6 @@ public class XmlUtils {
         }), new KeyFrame(Duration.seconds(3)));
         replay.setCycleCount(gameActions.size());
         replay.play();
+        replay.setOnFinished(event -> DialogUtils.showAlert(Alert.AlertType.INFORMATION, "Replay over", "You have reached the end of the replay"));
     }
 }

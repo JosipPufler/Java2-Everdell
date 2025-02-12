@@ -37,8 +37,8 @@ public class UiUtils {
             playerState = GameState.getPlayerState();
             opponentState = GameState.getOpponentState();
         }
-        String id = playerState.getPlayerName() + '_' + location.getName().split("_", 2)[1];
-        String opponentId = opponentState.getPlayerName() + '_' + location.getName().split("_", 2)[1];
+        String id = playerState.getPlayerName() + '_' + location.toString().split("_", 2)[1];
+        String opponentId = opponentState.getPlayerName() + '_' + location.toString().split("_", 2)[1];
 
         return ((location.isOpen() && playerGroup.getChildren().stream().noneMatch(o -> Objects.equals(o.getId(), id)))
                 || opponentGroup.getChildren().stream().noneMatch(o -> Objects.equals(o.getId(), opponentId))

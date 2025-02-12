@@ -1,12 +1,10 @@
 package hr.algebra.everdell.utils;
 
 import hr.algebra.everdell.models.*;
-import hr.algebra.everdell.threads.ReadGameMoveThread;
-import hr.algebra.everdell.threads.SaveGameMoveThread;
+import hr.algebra.everdell.threads.SaveGameActionThread;
 import javafx.scene.control.Alert;
 
 import java.io.*;
-import java.util.List;
 
 public class GameActionUtils {
     private static String SAVE_GAME_FILE_NAME = "game/savedGame.dat";
@@ -14,7 +12,7 @@ public class GameActionUtils {
     private GameActionUtils() {}
 
     public static void createAndSaveGameAction(PlayerState playerState, GameAction gameAction) {
-        SaveGameMoveThread saveGameMoveThread = new SaveGameMoveThread(playerState, gameAction);
+        SaveGameActionThread saveGameMoveThread = new SaveGameActionThread(playerState, gameAction);
         Thread thread = new Thread(saveGameMoveThread);
         thread.start();
     }
@@ -24,12 +22,12 @@ public class GameActionUtils {
                      new ObjectOutputStream(new FileOutputStream(SAVE_GAME_FILE_NAME))) {
             objectOutputStream.writeObject(GameState.packageGameStateWithAllMarkers());
 
-            DialogUtils.showAlert(Alert.AlertType.INFORMATION,
+            DialogUtils.showAndWaitAlert(Alert.AlertType.INFORMATION,
                     "Spremanje igre",
                     "Igra je uspješno spremljena!");
 
         } catch (IOException e) {
-            DialogUtils.showAlert(Alert.AlertType.ERROR, "Pogreška kod spremanja",
+            DialogUtils.showAndWaitAlert(Alert.AlertType.ERROR, "Pogreška kod spremanja",
                     "Došlo je do pogreške kod spremanja igre!");
             throw new RuntimeException(e);
         }

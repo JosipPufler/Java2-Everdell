@@ -33,6 +33,6 @@ public class ChipSweep extends Critter<ResinRefinery> implements GreenProduction
     @Override
     public Boolean Activate() {
         Optional<Card> card = DialogUtils.showCardChooseDialog(GameState.getPlayerState().cardsInPlay.stream().filter(x -> x.getType() == CardType.GREEN_PRODUCTION).toList(), getName());
-        return card.map(Card::play).orElse(false);
+        return card.map(x -> ((GreenProduction)x).Activate()).orElse(false);
     }
 }

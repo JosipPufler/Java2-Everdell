@@ -7,8 +7,6 @@ import hr.algebra.everdell.controllers.PlayableCardController;
 import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.models.*;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -94,8 +92,8 @@ public class GameUtils {
         mainController.updateMarkers(markers);
     }
 
-    public static List<Location> getDeployableLocations() {
-        return mainController.getLocationsDeployable();
+    public static void clearMarkerGroups() {
+        mainController.updateMarkers(new ArrayList<>());
     }
 
     public static Group getMarkerGroup(){

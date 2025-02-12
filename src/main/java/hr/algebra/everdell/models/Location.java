@@ -33,17 +33,11 @@ public class Location implements Serializable, Placeable {
     ResourceGroup resourceGroup;
     Boolean open;
 
-    Boolean activated = false;
-
     public Location(ResourceGroup resource, int numberOfCards, int numberOfPoints, Boolean open) {
         resourceGroup = resource;
         cards = numberOfCards;
         points = numberOfPoints;
         this.open = open;
-    }
-
-    public Boolean isActivated(){
-        return activated;
     }
 
     public Boolean place() {
@@ -55,35 +49,8 @@ public class Location implements Serializable, Placeable {
         return true;
     }
 
-    public void deactivate(){
-        activated = false;
-    }
-
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        if (cards > 0) {
-            builder.append("Cards: ").append(cards).append(SEPARATOR);
-        }
-        if (points > 0) {
-            builder.append("Points: ").append(points).append(SEPARATOR);
-        }
-        if (resourceGroup.getBerries() > 0) {
-            builder.append("Berries: ").append(resourceGroup.getBerries()).append(SEPARATOR);
-        }
-        if (resourceGroup.getResin() > 0){
-            builder.append("Resin: ").append(resourceGroup.getResin()).append(SEPARATOR);
-        }
-        if (resourceGroup.getPebbles() > 0){
-            builder.append("Pebbles: ").append(resourceGroup.getPebbles()).append(SEPARATOR);
-        }
-        if (resourceGroup.getTwigs() > 0){
-            builder.append("Twigs: ").append(resourceGroup.getTwigs()).append(SEPARATOR);
-        }
-        return builder.toString();
-    }
-
-    public String toShorthandString(){
         StringBuilder builder = new StringBuilder();
         builder.append("location_");
         if (cards > 0) {
@@ -111,7 +78,7 @@ public class Location implements Serializable, Placeable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Location location)) return false;
-        return cards == location.cards && points == location.points && Objects.equals(resourceGroup, location.resourceGroup) && Objects.equals(activated, location.activated);
+        return cards == location.cards && points == location.points && Objects.equals(resourceGroup, location.resourceGroup);
     }
 
     @Override
@@ -126,6 +93,6 @@ public class Location implements Serializable, Placeable {
 
     @Override
     public String getName() {
-        return toShorthandString();
+        return toString();
     }
 }

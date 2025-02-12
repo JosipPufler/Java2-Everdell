@@ -4,7 +4,6 @@ import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.interfaces.GreenProduction;
 import hr.algebra.everdell.interfaces.Triggered;
 import hr.algebra.everdell.models.cards.constructs.Ruins;
-import hr.algebra.everdell.utils.CardUtils;
 import hr.algebra.everdell.utils.GameUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -59,7 +58,6 @@ public class PlayerState implements Serializable {
         else if (card instanceof Construct)
             fireTrigger(TriggerType.CONSTRUCT_BEFORE);
 
-
         if (couldPlayCard(card, ignoreCost)){
             if (!ignoreCost){
                 Optional<ResourceGroup> resourceGroup = calculateCost(card);
@@ -74,21 +72,16 @@ public class PlayerState implements Serializable {
                 fireTrigger(TriggerType.CRITTER_AFTER);
             else if (card instanceof Construct)
                 fireTrigger(TriggerType.CONSTRUCT_AFTER);
-
             return Optional.of(card);
-
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     public boolean couldPlayCard(Card card, Boolean ignoreCost){
         if ((card.isUnique() && cardsInPlay.stream().anyMatch(x -> Objects.equals(x.getName(), card.getName()))) || numberOfCardsInPlay() >= MAX_CARDS_IN_PLAY)
             return false;
         Optional<Card> construct = cardsInPlay.stream().filter(x -> card instanceof Critter<?> && x.getClass() == ((Critter<?>)card).getAssociatedLocation() && !((Construct)x).isOccupied).findFirst();
-        if (ignoreCost)
-            return true;
-        return (card instanceof Critter<?> && construct.isPresent()) || resources.compareTo(card.getCost()) > 0;
+        return ignoreCost || (card instanceof Critter<?> && construct.isPresent()) || resources.compareTo(card.getCost()) > 0;
     }
 
     public Optional<ResourceGroup> calculateCost(Card card){
@@ -97,9 +90,8 @@ public class PlayerState implements Serializable {
             ((Construct)construct.get()).setOccupied(true);
             return Optional.of(new ResourceGroup(0, 0, 0, 0));
         }
-        else if (resources.compareTo(card.getCost()) > 0){
+        else if (resources.compareTo(card.getCost()) > 0)
             return Optional.of(card.getCost());
-        }
         return Optional.empty();
     }
 
@@ -129,25 +121,7 @@ public class PlayerState implements Serializable {
         if (lastWinter)
             return;
         fireTrigger(TriggerType.SEASON_CHANGE);
-        currentSeason = currentSeason.next();
-        switch (currentSeason) {
-            case WINTER:
-                lastWinter = true;
-                break;
-            case SUMMER:
-                maxWorkers = maxWorkers + 1;
-                //CardUtils.addCardsToHand(GameState.getResourceManager().tryDrawCardsFromMeadow(2));
-                break;
-            case AUTUMN:
-                //maxWorkers = maxWorkers + 2;
-                cardsInPlay.stream().filter(GreenProduction.class::isInstance).forEach(x -> ((GreenProduction) x).Activate());
-                break;
-            case SPRING:
-                //maxWorkers = maxWorkers + 1;
-                cardsInPlay.stream().filter(GreenProduction.class::isInstance).forEach(x -> ((GreenProduction) x).Activate());
-                break;
-        }
-        callWorkersHome();
+        setCurrentSeason(currentSeason.next());
         GameState.switchPlayers(new GameAction(GameState.getPlayerState().getPlayerNumber(), GameActionType.PREPARE_FOR_SEASON, currentSeason));
     }
 

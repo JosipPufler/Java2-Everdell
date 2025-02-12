@@ -20,6 +20,4 @@ module hr.algebra.everdell {
     exports hr.algebra.everdell.controllers;
     opens hr.algebra.everdell.controllers to javafx.fxml;
     exports hr.algebra.everdell.rmi to java.rmi;
-    exports hr.algebra.everdell.exceptions;
-    opens hr.algebra.everdell.exceptions to javafx.fxml;
 }

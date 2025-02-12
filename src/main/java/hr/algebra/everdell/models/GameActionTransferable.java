@@ -5,14 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
 @AllArgsConstructor
 @Getter
 @Setter
-public class CompactGameAction implements Serializable {
+public class GameActionTransferable implements Serializable {
     GameAction action;
     List<Card> cardsInPlay;
     List<Card> cardsInHand;

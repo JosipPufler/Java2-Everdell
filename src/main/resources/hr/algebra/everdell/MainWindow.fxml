@@ -61,6 +61,11 @@
             <Ellipse fx:id="event_green" fill="#00ff0024" layoutX="571.0" layoutY="186.0" radiusX="39.0" radiusY="24.0" stroke="TRANSPARENT" strokeType="INSIDE" />
             <Ellipse fx:id="event_tan" fill="#00ff0024" layoutX="639.0" layoutY="148.0" radiusX="39.0" radiusY="24.0" stroke="TRANSPARENT" strokeType="INSIDE" />
             <Label fx:id="lblReplay" layoutX="638.0" layoutY="26.0" prefHeight="47.0" prefWidth="248.0" textAlignment="JUSTIFY" wrapText="true" />
+            <Ellipse fx:id="location_haven" fill="#00ff0024" layoutX="642.0" layoutY="663.0" radiusX="35.0" radiusY="15.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+            <Ellipse fx:id="location_journey_1" fill="#00ff0024" layoutX="214.0" layoutY="647.0" radiusX="36.0" radiusY="16.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+            <Ellipse fx:id="location_journey_2" fill="#00ff0024" layoutX="245.0" layoutY="674.0" radiusX="24.0" radiusY="11.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+            <Ellipse fx:id="location_journey_4" fill="#00ff0024" layoutX="315.0" layoutY="723.0" radiusX="24.0" radiusY="11.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+            <Ellipse fx:id="location_journey_3" fill="#00ff0024" layoutX="275.0" layoutY="696.0" radiusX="24.0" radiusY="11.0" stroke="TRANSPARENT" strokeType="INSIDE" />
                 <stylesheets>
                     <URL value="@application.css" />
                 </stylesheets>
