@@ -1,518 +1,260 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE GameActions SYSTEM "dtd/gameActions.dtd">
 <GameActions>
-    <GameAction game-action-type="PREPARE_FOR_SEASON" player-number="TWO" time="2025-02-12T17:05:36.307775200">
-        <Season>SPRING</Season>
+    <GameAction game-action-type="PLACE_WORKER" player-number="ONE" time="2025-02-13T20:03:49.488786200">
+        <Location>
+            <Name>location_3T</Name>
+            <X>168.8</X>
+            <Y>312.0</Y>
+        </Location>
         <PlayerState>
-            <FreeWorkers>2</FreeWorkers>
+            <FreeWorkers>1</FreeWorkers>
             <ResourceGroup>
                 <Berries>0</Berries>
                 <Resin>0</Resin>
+                <Pebbles>0</Pebbles>
+                <Twigs>3</Twigs>
+                <Points>0</Points>
+            </ResourceGroup>
+            <CardsInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.GeneralStore</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.Inn</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.ClockTower</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.FairGrounds</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.University</CardInHand>
+            </CardsInHand>
+            <CardsInPlay/>
+            <BoardResources>
+                <BoardBerries>30</BoardBerries>
+                <BoardResin>25</BoardResin>
+                <BoardPebbles>20</BoardPebbles>
+                <BoardTwigs>27</BoardTwigs>
+                <DeckSize>95</DeckSize>
+            </BoardResources>
+        </PlayerState>
+    </GameAction>
+    <GameAction game-action-type="PLACE_WORKER" player-number="TWO" time="2025-02-13T20:03:50.212228">
+        <Location>
+            <Name>location_2R</Name>
+            <X>349.6</X>
+            <Y>335.2</Y>
+        </Location>
+        <PlayerState>
+            <FreeWorkers>1</FreeWorkers>
+            <ResourceGroup>
+                <Berries>0</Berries>
+                <Resin>2</Resin>
                 <Pebbles>0</Pebbles>
                 <Twigs>0</Twigs>
                 <Points>0</Points>
             </ResourceGroup>
             <CardsInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.ChipSweep</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Fool</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.PostalPigeon</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.Historian</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.Bard</CardInHand>
                 <CardInHand>hr.algebra.everdell.models.cards.critters.Queen</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Shopkeeper</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Courthouse</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.TwigBarge</CardInHand>
                 <CardInHand>hr.algebra.everdell.models.cards.constructs.Monastery</CardInHand>
             </CardsInHand>
             <CardsInPlay/>
             <BoardResources>
                 <BoardBerries>30</BoardBerries>
-                <BoardResin>25</BoardResin>
+                <BoardResin>23</BoardResin>
                 <BoardPebbles>20</BoardPebbles>
-                <BoardTwigs>30</BoardTwigs>
+                <BoardTwigs>27</BoardTwigs>
                 <DeckSize>95</DeckSize>
             </BoardResources>
         </PlayerState>
     </GameAction>
-    <GameAction game-action-type="PLACE_WORKER" player-number="ONE" time="2025-02-12T17:09:05.060975500">
+    <GameAction game-action-type="PLACE_WORKER" player-number="ONE" time="2025-02-13T20:03:51.399274500">
         <Location>
-            <Name>specialLocation_</Name>
-            <X>647.2</X>
-            <Y>696.0</Y>
+            <Name>location_2C1Pt</Name>
+            <X>485.6</X>
+            <Y>336.0</Y>
         </Location>
         <PlayerState>
-            <FreeWorkers>1</FreeWorkers>
+            <FreeWorkers>0</FreeWorkers>
             <ResourceGroup>
                 <Berries>0</Berries>
                 <Resin>0</Resin>
                 <Pebbles>0</Pebbles>
-                <Twigs>0</Twigs>
-                <Points>0</Points>
+                <Twigs>3</Twigs>
+                <Points>1</Points>
             </ResourceGroup>
             <CardsInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Teacher</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Innkeeper</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Farm</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Peddler</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.GeneralStore</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.Inn</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.ClockTower</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.FairGrounds</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.University</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.Dungeon</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.Crane</CardInHand>
             </CardsInHand>
             <CardsInPlay/>
             <BoardResources>
                 <BoardBerries>30</BoardBerries>
-                <BoardResin>25</BoardResin>
+                <BoardResin>23</BoardResin>
                 <BoardPebbles>20</BoardPebbles>
-                <BoardTwigs>30</BoardTwigs>
-                <DeckSize>95</DeckSize>
+                <BoardTwigs>27</BoardTwigs>
+                <DeckSize>93</DeckSize>
             </BoardResources>
         </PlayerState>
     </GameAction>
-    <GameAction game-action-type="PLACE_WORKER" player-number="ONE" time="2025-02-12T17:09:28.522884200">
+    <GameAction game-action-type="PLACE_WORKER" player-number="TWO" time="2025-02-13T20:03:52.379779900">
         <Location>
-            <Name>specialLocation_</Name>
-            <X>625.6</X>
-            <Y>688.0</Y>
+            <Name>location_1B</Name>
+            <X>753.6</X>
+            <Y>316.8</Y>
         </Location>
         <PlayerState>
-            <FreeWorkers>1</FreeWorkers>
+            <FreeWorkers>0</FreeWorkers>
             <ResourceGroup>
-                <Berries>0</Berries>
-                <Resin>1</Resin>
+                <Berries>1</Berries>
+                <Resin>2</Resin>
                 <Pebbles>0</Pebbles>
                 <Twigs>0</Twigs>
                 <Points>0</Points>
             </ResourceGroup>
             <CardsInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.PostalPigeon</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.Historian</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.Bard</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.Queen</CardInHand>
                 <CardInHand>hr.algebra.everdell.models.cards.constructs.TwigBarge</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.FairGrounds</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.BargeToad</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.Monastery</CardInHand>
             </CardsInHand>
             <CardsInPlay/>
             <BoardResources>
-                <BoardBerries>30</BoardBerries>
-                <BoardResin>25</BoardResin>
+                <BoardBerries>29</BoardBerries>
+                <BoardResin>23</BoardResin>
                 <BoardPebbles>20</BoardPebbles>
-                <BoardTwigs>30</BoardTwigs>
-                <DeckSize>95</DeckSize>
+                <BoardTwigs>27</BoardTwigs>
+                <DeckSize>93</DeckSize>
             </BoardResources>
         </PlayerState>
     </GameAction>
-    <GameAction game-action-type="PLACE_WORKER" player-number="TWO" time="2025-02-12T17:09:30.911834200">
+    <GameAction game-action-type="PREPARE_FOR_SEASON" player-number="ONE" time="2025-02-13T20:04:17.231191">
+        <Season>SPRING</Season>
+        <PlayerState>
+            <FreeWorkers>2</FreeWorkers>
+            <ResourceGroup>
+                <Berries>1</Berries>
+                <Resin>2</Resin>
+                <Pebbles>0</Pebbles>
+                <Twigs>0</Twigs>
+                <Points>1</Points>
+            </ResourceGroup>
+            <CardsInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.PostalPigeon</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.Historian</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.Bard</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.Queen</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.TwigBarge</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.Monastery</CardInHand>
+            </CardsInHand>
+            <CardsInPlay/>
+            <BoardResources>
+                <BoardBerries>29</BoardBerries>
+                <BoardResin>23</BoardResin>
+                <BoardPebbles>20</BoardPebbles>
+                <BoardTwigs>27</BoardTwigs>
+                <DeckSize>93</DeckSize>
+            </BoardResources>
+        </PlayerState>
+    </GameAction>
+    <GameAction game-action-type="PREPARE_FOR_SEASON" player-number="TWO" time="2025-02-13T20:04:19.068039">
+        <Season>SPRING</Season>
+        <PlayerState>
+            <FreeWorkers>2</FreeWorkers>
+            <ResourceGroup>
+                <Berries>1</Berries>
+                <Resin>2</Resin>
+                <Pebbles>0</Pebbles>
+                <Twigs>0</Twigs>
+                <Points>0</Points>
+            </ResourceGroup>
+            <CardsInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.PostalPigeon</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.Historian</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.Bard</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.Queen</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.TwigBarge</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.Monastery</CardInHand>
+            </CardsInHand>
+            <CardsInPlay/>
+            <BoardResources>
+                <BoardBerries>29</BoardBerries>
+                <BoardResin>23</BoardResin>
+                <BoardPebbles>20</BoardPebbles>
+                <BoardTwigs>27</BoardTwigs>
+                <DeckSize>93</DeckSize>
+            </BoardResources>
+        </PlayerState>
+    </GameAction>
+    <GameAction game-action-type="PLACE_WORKER" player-number="ONE" time="2025-02-13T20:04:22.758937">
         <Location>
-            <Name>location_1B</Name>
-            <X>751.2</X>
-            <Y>321.6</Y>
+            <Name>location_2R</Name>
+            <X>340.8</X>
+            <Y>328.0</Y>
         </Location>
         <PlayerState>
             <FreeWorkers>1</FreeWorkers>
             <ResourceGroup>
                 <Berries>1</Berries>
-                <Resin>0</Resin>
+                <Resin>4</Resin>
                 <Pebbles>0</Pebbles>
                 <Twigs>0</Twigs>
-                <Points>0</Points>
+                <Points>1</Points>
             </ResourceGroup>
             <CardsInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Storehouse</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Fool</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Theater</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Wanderer</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Architect</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Bard</CardInHand>
-            </CardsInHand>
-            <CardsInPlay/>
-            <BoardResources>
-                <BoardBerries>29</BoardBerries>
-                <BoardResin>25</BoardResin>
-                <BoardPebbles>20</BoardPebbles>
-                <BoardTwigs>30</BoardTwigs>
-                <DeckSize>95</DeckSize>
-            </BoardResources>
-        </PlayerState>
-    </GameAction>
-    <GameAction game-action-type="PLACE_WORKER" player-number="ONE" time="2025-02-12T19:37:46.356390900">
-        <Location>
-            <Name>location_2R</Name>
-            <X>357.6</X>
-            <Y>330.4</Y>
-        </Location>
-        <PlayerState>
-            <FreeWorkers>1</FreeWorkers>
-            <ResourceGroup>
-                <Berries>0</Berries>
-                <Resin>2</Resin>
-                <Pebbles>0</Pebbles>
-                <Twigs>0</Twigs>
-                <Points>0</Points>
-            </ResourceGroup>
-            <CardsInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.PostalPigeon</CardInHand>
                 <CardInHand>hr.algebra.everdell.models.cards.critters.Historian</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Teacher</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Lookout</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Monk</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Farm</CardInHand>
-            </CardsInHand>
-            <CardsInPlay/>
-            <BoardResources>
-                <BoardBerries>30</BoardBerries>
-                <BoardResin>23</BoardResin>
-                <BoardPebbles>20</BoardPebbles>
-                <BoardTwigs>30</BoardTwigs>
-                <DeckSize>95</DeckSize>
-            </BoardResources>
-        </PlayerState>
-    </GameAction>
-    <GameAction game-action-type="PLACE_WORKER" player-number="TWO" time="2025-02-12T19:37:50.712361800">
-        <Location>
-            <Name>location_1P</Name>
-            <X>589.6</X>
-            <Y>341.6</Y>
-        </Location>
-        <PlayerState>
-            <FreeWorkers>1</FreeWorkers>
-            <ResourceGroup>
-                <Berries>0</Berries>
-                <Resin>0</Resin>
-                <Pebbles>1</Pebbles>
-                <Twigs>0</Twigs>
-                <Points>0</Points>
-            </ResourceGroup>
-            <CardsInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Teacher</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.ClockTower</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.GeneralStore</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Wife</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Palace</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Mine</CardInHand>
-            </CardsInHand>
-            <CardsInPlay/>
-            <BoardResources>
-                <BoardBerries>30</BoardBerries>
-                <BoardResin>23</BoardResin>
-                <BoardPebbles>19</BoardPebbles>
-                <BoardTwigs>30</BoardTwigs>
-                <DeckSize>95</DeckSize>
-            </BoardResources>
-        </PlayerState>
-    </GameAction>
-    <GameAction game-action-type="PLACE_WORKER" player-number="ONE" time="2025-02-12T19:39:59.810707700">
-        <Location>
-            <Name>specialLocation_2Pt</Name>
-            <X>206.4</X>
-            <Y>675.2</Y>
-        </Location>
-        <PlayerState>
-            <FreeWorkers>1</FreeWorkers>
-            <ResourceGroup>
-                <Berries>0</Berries>
-                <Resin>0</Resin>
-                <Pebbles>0</Pebbles>
-                <Twigs>0</Twigs>
-                <Points>2</Points>
-            </ResourceGroup>
-            <CardsInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Ranger</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Crane</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.Bard</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.Queen</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.TwigBarge</CardInHand>
                 <CardInHand>hr.algebra.everdell.models.cards.constructs.Monastery</CardInHand>
             </CardsInHand>
             <CardsInPlay/>
             <BoardResources>
-                <BoardBerries>30</BoardBerries>
-                <BoardResin>25</BoardResin>
+                <BoardBerries>29</BoardBerries>
+                <BoardResin>21</BoardResin>
                 <BoardPebbles>20</BoardPebbles>
-                <BoardTwigs>30</BoardTwigs>
-                <DeckSize>95</DeckSize>
+                <BoardTwigs>27</BoardTwigs>
+                <DeckSize>93</DeckSize>
             </BoardResources>
         </PlayerState>
     </GameAction>
-    <GameAction game-action-type="PLACE_WORKER" player-number="TWO" time="2025-02-12T19:40:06.861700200">
+    <GameAction game-action-type="PLACE_WORKER" player-number="TWO" time="2025-02-13T20:04:23.722884600">
         <Location>
-            <Name>location_2R</Name>
-            <X>348.0</X>
-            <Y>327.2</Y>
+            <Name>location_1C2T</Name>
+            <X>248.8</X>
+            <Y>343.2</Y>
         </Location>
         <PlayerState>
             <FreeWorkers>1</FreeWorkers>
             <ResourceGroup>
-                <Berries>0</Berries>
+                <Berries>1</Berries>
                 <Resin>2</Resin>
                 <Pebbles>0</Pebbles>
-                <Twigs>0</Twigs>
+                <Twigs>2</Twigs>
                 <Points>0</Points>
             </ResourceGroup>
             <CardsInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Dungeon</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.School</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.University</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Wife</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Wanderer</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Innkeeper</CardInHand>
-            </CardsInHand>
-            <CardsInPlay/>
-            <BoardResources>
-                <BoardBerries>30</BoardBerries>
-                <BoardResin>23</BoardResin>
-                <BoardPebbles>20</BoardPebbles>
-                <BoardTwigs>30</BoardTwigs>
-                <DeckSize>95</DeckSize>
-            </BoardResources>
-        </PlayerState>
-    </GameAction>
-    <GameAction game-action-type="PLACE_WORKER" player-number="ONE" time="2025-02-12T19:41:38.372122600">
-        <Location>
-            <Name>specialLocation_3Pt</Name>
-            <X>252.0</X>
-            <Y>698.4</Y>
-        </Location>
-        <PlayerState>
-            <FreeWorkers>1</FreeWorkers>
-            <ResourceGroup>
-                <Berries>0</Berries>
-                <Resin>0</Resin>
-                <Pebbles>0</Pebbles>
-                <Twigs>0</Twigs>
-                <Points>3</Points>
-            </ResourceGroup>
-            <CardsInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Mine</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Shopkeeper</CardInHand>
-            </CardsInHand>
-            <CardsInPlay/>
-            <BoardResources>
-                <BoardBerries>30</BoardBerries>
-                <BoardResin>25</BoardResin>
-                <BoardPebbles>20</BoardPebbles>
-                <BoardTwigs>30</BoardTwigs>
-                <DeckSize>95</DeckSize>
-            </BoardResources>
-        </PlayerState>
-    </GameAction>
-    <GameAction game-action-type="PLACE_WORKER" player-number="TWO" time="2025-02-12T19:41:41.124953300">
-        <Location>
-            <Name>location_2R</Name>
-            <X>344.8</X>
-            <Y>327.2</Y>
-        </Location>
-        <PlayerState>
-            <FreeWorkers>1</FreeWorkers>
-            <ResourceGroup>
-                <Berries>0</Berries>
-                <Resin>2</Resin>
-                <Pebbles>0</Pebbles>
-                <Twigs>0</Twigs>
-                <Points>0</Points>
-            </ResourceGroup>
-            <CardsInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Courthouse</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Wife</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.ClockTower</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.University</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Innkeeper</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.FairGrounds</CardInHand>
-            </CardsInHand>
-            <CardsInPlay/>
-            <BoardResources>
-                <BoardBerries>30</BoardBerries>
-                <BoardResin>23</BoardResin>
-                <BoardPebbles>20</BoardPebbles>
-                <BoardTwigs>30</BoardTwigs>
-                <DeckSize>95</DeckSize>
-            </BoardResources>
-        </PlayerState>
-    </GameAction>
-    <GameAction game-action-type="PREPARE_FOR_SEASON" player-number="TWO" time="2025-02-12T20:07:50.060627300">
-        <Season>SPRING</Season>
-        <PlayerState>
-            <FreeWorkers>2</FreeWorkers>
-            <ResourceGroup>
-                <Berries>0</Berries>
-                <Resin>0</Resin>
-                <Pebbles>0</Pebbles>
-                <Twigs>0</Twigs>
-                <Points>0</Points>
-            </ResourceGroup>
-            <CardsInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Ruins</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.ResinRefinery</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.GeneralStore</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.FairGrounds</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.ClockTower</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Farm</CardInHand>
-            </CardsInHand>
-            <CardsInPlay/>
-            <BoardResources>
-                <BoardBerries>30</BoardBerries>
-                <BoardResin>25</BoardResin>
-                <BoardPebbles>20</BoardPebbles>
-                <BoardTwigs>30</BoardTwigs>
-                <DeckSize>95</DeckSize>
-            </BoardResources>
-        </PlayerState>
-    </GameAction>
-    <GameAction game-action-type="PREPARE_FOR_SEASON" player-number="ONE" time="2025-02-12T20:07:51.086200600">
-        <Season>SUMMER</Season>
-        <PlayerState>
-            <FreeWorkers>3</FreeWorkers>
-            <ResourceGroup>
-                <Berries>0</Berries>
-                <Resin>0</Resin>
-                <Pebbles>0</Pebbles>
-                <Twigs>0</Twigs>
-                <Points>0</Points>
-            </ResourceGroup>
-            <CardsInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Shepherd</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Dungeon</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.PostalPigeon</CardInHand>
                 <CardInHand>hr.algebra.everdell.models.cards.critters.Historian</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Wife</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Fool</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.Bard</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.critters.Queen</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.TwigBarge</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.Monastery</CardInHand>
+                <CardInHand>hr.algebra.everdell.models.cards.constructs.Theater</CardInHand>
             </CardsInHand>
             <CardsInPlay/>
             <BoardResources>
-                <BoardBerries>30</BoardBerries>
-                <BoardResin>25</BoardResin>
+                <BoardBerries>29</BoardBerries>
+                <BoardResin>21</BoardResin>
                 <BoardPebbles>20</BoardPebbles>
-                <BoardTwigs>30</BoardTwigs>
-                <DeckSize>95</DeckSize>
-            </BoardResources>
-        </PlayerState>
-    </GameAction>
-    <GameAction game-action-type="PREPARE_FOR_SEASON" player-number="TWO" time="2025-02-12T20:07:52.389837400">
-        <Season>SUMMER</Season>
-        <PlayerState>
-            <FreeWorkers>3</FreeWorkers>
-            <ResourceGroup>
-                <Berries>0</Berries>
-                <Resin>0</Resin>
-                <Pebbles>0</Pebbles>
-                <Twigs>0</Twigs>
-                <Points>0</Points>
-            </ResourceGroup>
-            <CardsInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Ruins</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.ResinRefinery</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.GeneralStore</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.FairGrounds</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.ClockTower</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Farm</CardInHand>
-            </CardsInHand>
-            <CardsInPlay/>
-            <BoardResources>
-                <BoardBerries>30</BoardBerries>
-                <BoardResin>25</BoardResin>
-                <BoardPebbles>20</BoardPebbles>
-                <BoardTwigs>30</BoardTwigs>
-                <DeckSize>95</DeckSize>
-            </BoardResources>
-        </PlayerState>
-    </GameAction>
-    <GameAction game-action-type="PREPARE_FOR_SEASON" player-number="ONE" time="2025-02-12T20:07:53.246811900">
-        <Season>AUTUMN</Season>
-        <PlayerState>
-            <FreeWorkers>3</FreeWorkers>
-            <ResourceGroup>
-                <Berries>0</Berries>
-                <Resin>0</Resin>
-                <Pebbles>0</Pebbles>
-                <Twigs>0</Twigs>
-                <Points>0</Points>
-            </ResourceGroup>
-            <CardsInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Shepherd</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Dungeon</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Historian</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Wife</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Fool</CardInHand>
-            </CardsInHand>
-            <CardsInPlay/>
-            <BoardResources>
-                <BoardBerries>30</BoardBerries>
-                <BoardResin>25</BoardResin>
-                <BoardPebbles>20</BoardPebbles>
-                <BoardTwigs>30</BoardTwigs>
-                <DeckSize>95</DeckSize>
-            </BoardResources>
-        </PlayerState>
-    </GameAction>
-    <GameAction game-action-type="PREPARE_FOR_SEASON" player-number="TWO" time="2025-02-12T20:07:53.730658800">
-        <Season>AUTUMN</Season>
-        <PlayerState>
-            <FreeWorkers>3</FreeWorkers>
-            <ResourceGroup>
-                <Berries>0</Berries>
-                <Resin>0</Resin>
-                <Pebbles>0</Pebbles>
-                <Twigs>0</Twigs>
-                <Points>0</Points>
-            </ResourceGroup>
-            <CardsInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Ruins</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.ResinRefinery</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.GeneralStore</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.FairGrounds</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.ClockTower</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Farm</CardInHand>
-            </CardsInHand>
-            <CardsInPlay/>
-            <BoardResources>
-                <BoardBerries>30</BoardBerries>
-                <BoardResin>25</BoardResin>
-                <BoardPebbles>20</BoardPebbles>
-                <BoardTwigs>30</BoardTwigs>
-                <DeckSize>95</DeckSize>
-            </BoardResources>
-        </PlayerState>
-    </GameAction>
-    <GameAction game-action-type="PLACE_WORKER" player-number="ONE" time="2025-02-12T20:07:59.440192100">
-        <Location>
-            <Name>specialLocation_2Pt</Name>
-            <X>204.8</X>
-            <Y>676.0</Y>
-        </Location>
-        <PlayerState>
-            <FreeWorkers>2</FreeWorkers>
-            <ResourceGroup>
-                <Berries>0</Berries>
-                <Resin>0</Resin>
-                <Pebbles>0</Pebbles>
-                <Twigs>0</Twigs>
-                <Points>2</Points>
-            </ResourceGroup>
-            <CardsInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Shepherd</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Dungeon</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.critters.Historian</CardInHand>
-            </CardsInHand>
-            <CardsInPlay/>
-            <BoardResources>
-                <BoardBerries>30</BoardBerries>
-                <BoardResin>25</BoardResin>
-                <BoardPebbles>20</BoardPebbles>
-                <BoardTwigs>30</BoardTwigs>
-                <DeckSize>95</DeckSize>
-            </BoardResources>
-        </PlayerState>
-    </GameAction>
-    <GameAction game-action-type="PREPARE_FOR_SEASON" player-number="TWO" time="2025-02-12T20:08:02.140168500">
-        <Season>WINTER</Season>
-        <PlayerState>
-            <FreeWorkers>3</FreeWorkers>
-            <ResourceGroup>
-                <Berries>0</Berries>
-                <Resin>0</Resin>
-                <Pebbles>0</Pebbles>
-                <Twigs>0</Twigs>
-                <Points>0</Points>
-            </ResourceGroup>
-            <CardsInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Ruins</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.ResinRefinery</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.GeneralStore</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.FairGrounds</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.ClockTower</CardInHand>
-                <CardInHand>hr.algebra.everdell.models.cards.constructs.Farm</CardInHand>
-            </CardsInHand>
-            <CardsInPlay/>
-            <BoardResources>
-                <BoardBerries>30</BoardBerries>
-                <BoardResin>25</BoardResin>
-                <BoardPebbles>20</BoardPebbles>
-                <BoardTwigs>30</BoardTwigs>
-                <DeckSize>95</DeckSize>
+                <BoardTwigs>25</BoardTwigs>
+                <DeckSize>92</DeckSize>
             </BoardResources>
         </PlayerState>
     </GameAction>

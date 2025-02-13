@@ -7,12 +7,14 @@ import java.util.List;
 
 public class CardUtils {
     public static void clearCardsFromCity(){
+        GameUtils.getCityController().clearCards();
         for (int i = GameState.getPlayerState().cardsInPlay.size()-1 ; i >=0 ; i--) {
             removeCardFromCity(GameState.getPlayerState().cardsInPlay.get(i));
         }
     }
 
     public static void clearCardsFromHand(){
+        GameUtils.getHandController().clearCards();
         for (int i = GameState.getPlayerState().cardsInHand.size()-1 ; i >=0 ; i--) {
             removeCardFromHand(GameState.getPlayerState().cardsInHand.get(i));
         }

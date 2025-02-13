@@ -67,7 +67,6 @@ public class EverdellApplication extends Application {
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                System.err.printf("Client connected from port %s%n", clientSocket.getPort());
                 Runnable task = () -> Platform.runLater(() -> processSerializableClient(clientSocket));
                 new Thread(task).start();
             }
@@ -96,7 +95,6 @@ public class EverdellApplication extends Application {
 
     public static void sendRequestFromPlayer(String hostName, Integer port) {
         try (Socket clientSocket = new Socket(hostName, port)){
-
             sendSerializableRequest(clientSocket);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

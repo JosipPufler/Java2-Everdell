@@ -84,10 +84,10 @@ public class EverdellMainController {
         location_1B1C.setUserData(new Location(new ResourceGroup(1, 0, 0, 0), 1, 0, false));
         location_1B.setUserData(new Location(new ResourceGroup(1, 0, 0, 0), 0, 0, true));
         location_haven.setUserData(LocationCreator.createHavenSpecialLocation());
-        location_journey_1.setUserData(LocationCreator.createJourneySpecialLocation(2));
-        location_journey_2.setUserData(LocationCreator.createJourneySpecialLocation(3));
-        location_journey_3.setUserData(LocationCreator.createJourneySpecialLocation(4));
-        location_journey_4.setUserData(LocationCreator.createJourneySpecialLocation(5));
+        location_journey_1.setUserData(LocationCreator.createJourneySpecialLocation(2, true));
+        location_journey_2.setUserData(LocationCreator.createJourneySpecialLocation(3, false));
+        location_journey_3.setUserData(LocationCreator.createJourneySpecialLocation(4, false));
+        location_journey_4.setUserData(LocationCreator.createJourneySpecialLocation(5, false));
 
         locations.addAll(List.of(location_journey_4, location_journey_3, location_journey_2, location_journey_1, location_haven, location_2T1C, location_3T, location_2R, location_1R1C, location_2C1Pt, location_1P, location_1B1C, location_1B));
 

@@ -1,11 +1,15 @@
 package hr.algebra.everdell.models;
 
 import hr.algebra.everdell.EverdellApplication;
+import hr.algebra.everdell.interfaces.Card;
 import hr.algebra.everdell.utils.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Dialog;
 import javafx.scene.shape.Circle;
 import lombok.Getter;
+
+import java.sql.Array;
+import java.util.ArrayList;
 
 public class GameState {
     private GameState(){}
@@ -35,8 +39,14 @@ public class GameState {
     }
 
     public static void loadGameState(GameStateTransferable gameStateTransferable){
+        ArrayList<Card> cardsInHand = new ArrayList<>(gameStateTransferable.opponentState.cardsInHand);
+        ArrayList<Card> cardsInPlay = new ArrayList<>(gameStateTransferable.opponentState.cardsInPlay);
         opponentState = gameStateTransferable.playerState;
         playerState = gameStateTransferable.opponentState;
+        CardUtils.clearCardsFromHand();
+        CardUtils.clearCardsFromCity();
+        CardUtils.addCardsToHand(cardsInHand);
+        CardUtils.addCardsToCity(cardsInPlay);
         resourceManager = gameStateTransferable.resourceManager;
         GameUtils.updatePlayer();
         GameUtils.updateMarkers(gameStateTransferable.markerGroup);
@@ -66,8 +76,13 @@ public class GameState {
                 DialogUtils.showGameOverAlert();
             }
         } else {
-            GameUtils.blockScreen(true);
-            GameUtils.sendUpdate();
+            if (!opponentState.getGameOver()){
+                GameUtils.blockScreen(true);
+                GameUtils.sendUpdate();
+            } else if (opponentState.getGameOver() && playerState.getGameOver()){
+                GameUtils.sendUpdate();
+                DialogUtils.showGameOverAlert();
+            }
         }
     }
 

@@ -32,9 +32,14 @@ public class LocationCreator {
         });
     }
 
-    public static SpecialLocation createJourneySpecialLocation(int points){
-        return new SpecialLocation(new ResourceGroup(0, 0, 0, 0), 0, points, true, (Supplier<Boolean> & Serializable)() -> {
-            if (GameState.getPlayerState().cardsInHand.size() >= points && GameState.getPlayerState().getCurrentSeason() == Season.AUTUMN){
+    public static SpecialLocation createJourneySpecialLocation(int points, Boolean open){
+        return new SpecialLocation(new ResourceGroup(0, 0, 0, 0), 0, points, open, (Supplier<Boolean> & Serializable)() -> {
+            if (GameState.getPlayerState().cardsInHand.size() == points){
+                CardUtils.clearCardsFromHand();
+                return true;
+            }
+
+            if (GameState.getPlayerState().cardsInHand.size() > points && GameState.getPlayerState().getCurrentSeason() == Season.AUTUMN){
                 List<Card> cardList = new ArrayList<>();
                 List<Card> cardsInHand = new ArrayList<>(GameState.getPlayerState().cardsInHand);
                 for (int i = 0 ; i<points; i++){
